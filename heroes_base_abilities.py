@@ -4,155 +4,76 @@ It is to be used to construct every hero type.
 """
 
 
+# ---------------------------------------------------------------------------- #
+#                                    Classes                                   #
+# ---------------------------------------------------------------------------- #
 class Hero:
     """
     Base Hero class
 
-    Raises:
-        ValueError: If the given health pool value is below 0.
-        ValueError: If the given damage value is below 0.
-        ValueError: If the size of the secondary pool is a negative number.
-        TypeError : If the selected type is not found in the predefined
+    Args:
+        hero_class  (str): Class of the hero.
+        hero_role   (str): Role of the hero.
 
     Returns:
         Hero: Hero instance with base attributes
     """
 
     # ---------------------------------------------------------------------------- #
-    def __init__(self, hp: int, dmg: int, second_pool: int, hero_type: str):
+    def __init__(self, hero_class: str, hero_role: str):
         """
         Constructor of the Hero class.
 
         Args:
-            hp          (int): Hero health pool
-            dmg         (int): Hero damage
-            second_pool (int): Secondary pool of the hero.
-            hero_type   (str): Type of the hero.
+            hero_class  (str): Class of the hero.
+            hero_role   (str): Role of the hero.
         """
-        self._health      = hp
-        self._damage      = dmg
-        self._second_pool = second_pool
-        self._hero_type: str   = hero_type
-
-    # ---------------------------------------------------------------------------- #
-    @property
-    def health(self):
-        """
-        Getter fo the health property.
-
-        Returns:
-            int: Current health pool of the hero
-        """
-        return self._health
-
-    # ---------------------------------------------------------------------------- #
-    @health.setter
-    def health(self, value: int):
-        """
-        Setter of the health pool property. If the given value is below 0, a ValueError is raised.
-
-        Args:
-            value (int): Health pool of the hero. Must be a value above 0.
-
-        Raises:
-            ValueError: If the given health pool value is below 0.
-        """
-
-        if value <= 0:
-            raise ValueError(
-                "Health must be above 0! Hero cannot be dead when created.")
-
-        self._health = value
-
-    # ---------------------------------------------------------------------------- #
-    @property
-    def damage(self):
-        """
-        Getter of the damage property.
-
-        Returns:
-            int: Damage of the hero
-        """
-        return self._damage
-
-    # ---------------------------------------------------------------------------- #
-    @damage.setter
-    def damage(self, value: int):
-        """
-        Setter of the damage property. If the given value is below 0, a ValueError is raised.
-
-        Args:
-            value (int): Damage of the hero. Must be a value above 0.
-
-        Raises:
-            ValueError: If the given damage value is below 0.
-        """
-
-        if value <= 0:
-            raise ValueError(
-                "Damage must be at least 1! Hero cannot do 0 damage.")
-
-        self._damage = value
-
-    # ---------------------------------------------------------------------------- #
-    @property
-    def second_pool(self):
-        """
-        Getter of the mana pool property.
-
-        Returns:
-            int: Current mana pool of the hero
-        """
-        return self._second_pool
-
-    # ---------------------------------------------------------------------------- #
-    @second_pool.setter
-    def second_pool(self, value: int):
-        """
-        Args:
-            value (int): size of the secondary pool
-
-        Raises:
-            ValueError: If the size of the secondary pool is a negative number.
-        """
-
-        if value < 0:
-            raise ValueError(
-                "Size of secondary pool must be at least 0!")
-
-        self._second_pool = value
+        self._health          = 0
+        self._physical_damage = 0
+        self._magic_damage    = 0
+        self._secondary_pool  = 0
+        self._hero_class      = hero_class
+        self._hero_role: str  = hero_role
 
     # ------------------------------------------------------------------------ #
-    @property
-    def hero_type(self):
+    def create_hero_based_on_role(self):
         """
-        Getter for the hero_type property.
-
-        Returns:
-            str: Type of the hero selected.
+        Method that creates a hero, based on the input from the user.
         """
-        return self._hero_type
+        class_and_role_map = {
+            "Paladin": {
+                "Healer"    : {"health": 700, "secondary_pool": 900, "magic_damage": 50, "physical_damage": 50},
+                "Melee DPS" : {"health": 800, "secondary_pool": 300, "magic_damage": 0, "physical_damage": 95},
+                "Tank"      : {"health": 1200, "secondary_pool": 300, "magic_damage": 0, "physical_damage": 55}
+            },
+            "Warrior": {
+                "Tank"      : {"health": 1500, "secondary_pool": 200, "magic_damage": 0, "physical_damage": 60},
+                "Melee DPS" : {"health": 1000, "secondary_pool": 300, "magic_damage": 0, "physical_damage": 80},
+            },
+            "Mage": {
+                "Ranged DPS": {"health": 600, "secondary_pool": 900, "magic_damage": 120, "physical_damage": 10},
+            },
+            "Priest": {
+                "Healer"    : {"health": 600, "secondary_pool": 900, "magic_damage": 60, "physical_damage": 10},
+                "Ranged DPS": {"health": 600, "secondary_pool": 900, "magic_damage": 100, "physical_damage": 10},
+            },
+            "Shaman": {
+                "Healer"    : {"health": 700, "secondary_pool": 900, "magic_damage": 50, "physical_damage": 10},
+                "Melee DPS" : {"health": 850, "secondary_pool": 300, "magic_damage": 70, "physical_damage": 45},
+                "Ranged DPS": {"health": 650, "secondary_pool": 700, "magic_damage": 110, "physical_damage": 10}
+            },
+            "Monk": {
+                "Healer"    : {"health": 700, "secondary_pool": 900, "magic_damage": 50, "physical_damage": 50},
+                "Melee DPS" : {"health": 800, "secondary_pool": 300, "magic_damage": 30, "physical_damage": 75},
+                "Tank"      : {"health": 1100, "secondary_pool": 200, "magic_damage": 0, "physical_damage": 55}
+            },
+        }
 
-    # ------------------------------------------------------------------------ #
-    @hero_type.setter
-    def hero_type(self, value: str):
-        """
-        Setter for the hero_type property.
+        default_attributes      = {"health": 1000, "secondary_pool": 500, "magic_damage": 30, "physical_damage": 40}
 
-        Args:
-            value (str): selected type
+        attributes              = class_and_role_map.get(self._hero_class, {}).get(self._hero_role, default_attributes)
 
-        Raises:
-            TypeError: If the selected type is not found in the predefined
-        """
-        possible_types = [
-            "Caster",
-            "Melee",
-            "Healer",
-            "Tank"
-        ]
-
-        if value.capitalize() not in possible_types:
-            raise TypeError(f"Hero type must be one of the following types - {possible_types}")
-
-        self._hero_type = value
+        self._health            = attributes["health"]
+        self._secondary_pool    = attributes["secondary_pool"]
+        self._magic_damage      = attributes["magic_damage"]
+        self._physical_damage   = attributes["physical_damage"]
