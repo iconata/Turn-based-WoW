@@ -3,7 +3,7 @@ This is a simple turn based terminal game, based on World of Warcraft.
 
 The game has:
 - 6 classes to choose from - Paladin, Warrior, Priest, Monk, Mage, Shaman
-- 4 roles for the classes - Caster, Healer, Melee, Tank
+- 4 roles for the classes - Ranged DPS, Healer, Melee DPS, Tank
 - The ability to read the input from terminal (to be implemented)
 - Turn-based play style (to be implemented)
 
