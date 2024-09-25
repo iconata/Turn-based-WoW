@@ -14,8 +14,8 @@ class CreateHero(Hero):
     """
 
     # ------------------------------------------------------------------------ #
-    def __init__(self, hp: int, dmg: int, second_pool: int, hero_type: str, hero_class: str):
-        super().__init__(hp, dmg, second_pool, hero_type)
+    def __init__(self, hero_class: str, hero_role: str):
+        super().__init__(hero_class, hero_role)
 
         self._hero_class = hero_class
 
