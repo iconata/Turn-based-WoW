@@ -24,6 +24,31 @@ class CommonSpellsMixin:
 
         percent_damage_reduction = 100
 
+    # ------------------------------------------------------------------------ #
+    def cast_judgement(self):
+        # TODO: add docstring
+        holy_power_generation = 2
+        self._holy_power     += holy_power_generation
+
+        self._check_holy_power(holy_power_generation)
+
+    # ------------------------------------------------------------------------ #
+    def display_amount_of_holy_power(self):
+        # TODO: add docstring
+        print(f"Holy power: {self._holy_power}")
+
+    # ------------------------------------------------------------------------ #
+    def _check_holy_power(self, holy_power_generated: int = 0):
+        # TODO: add docstring
+        # if the holy power becomes a negative number, it will be changed to 0. Negative power should not be possible.
+        if self._holy_power < 0:
+            self._holy_power = 0
+
+        # if the holy power becomes a larger than max_holy_power, value will be changed to the max.
+        elif self._holy_power + holy_power_generated >= self._max_holy_power:
+            print("MAX holy power!")
+            self._holy_power = self._max_holy_power
+
 
 # ---------------------------------------------------------------------------- #
 class RetributionPaladinSpells(CommonSpellsMixin):
@@ -32,14 +57,6 @@ class RetributionPaladinSpells(CommonSpellsMixin):
     def __init__(self):
         self._holy_power     = 0
         self._max_holy_power = 5
-
-    # ------------------------------------------------------------------------ #
-    def cast_judgement(self):
-        # TODO: add docstring
-        holy_power_generation = 2
-        self._holy_power     += holy_power_generation
-
-        self._check_holy_power(holy_power_generation)
 
     # ------------------------------------------------------------------------ #
     def cast_word_of_glory(self):
@@ -75,30 +92,32 @@ class RetributionPaladinSpells(CommonSpellsMixin):
         self._check_holy_power()
 
     # ------------------------------------------------------------------------ #
-    def display_amount_of_holy_power(self):
+    def cast_wake_of_ashes(self):
         # TODO: add docstring
-        print(f"Holy power: {self._holy_power}")
+        holy_power_generation = 3
+        self._holy_power     += holy_power_generation
 
-    # ------------------------------------------------------------------------ #
-    def _check_holy_power(self, holy_power_generated=0):
-        # TODO: add docstring
-        # if the holy power becomes a negative number, it will be changed to 0. Negative power should not be possible.
-        if self._holy_power < 0:
-            self._holy_power = 0
-
-        # if the holy power becomes a larger than max_holy_power, value will be changed to the max.
-        elif self._holy_power + holy_power_generated >= self._max_holy_power:
-            print("MAX holy power!")
-            self._holy_power = self._max_holy_power
-
-
-# ---------------------------------------------------------------------------- #
-class HolyPaladinSpells(CommonSpellsMixin):
-    def __init__(self):
-        pass  # placeholder
+        self._check_holy_power()
 
 
 # ---------------------------------------------------------------------------- #
 class ProtectionPaladinSpells(CommonSpellsMixin):
     def __init__(self):
-        pass  # placeholder
+        self._holy_power     = 0
+        self._max_holy_power = 5
+
+    # ------------------------------------------------------------------------ #
+    def cast_concecration(self):
+        cost = 2  # percent of mana pool
+
+    # ------------------------------------------------------------------------ #
+    def cast_blessed_hammer(self):
+        cost = 2  # percent of mana pool
+
+    # ------------------------------------------------------------------------ #
+    def cast_avengers_shield(self):
+        cost = 3  # percent of mana pool
+
+    # ------------------------------------------------------------------------ #
+    def cast_crusader_strike(self):
+        cost = 2  # percent of mana pool
