@@ -1,6 +1,6 @@
 import math
 
-from Heroes.hero_factory import BaseHeroStats
+from Heroes.hero_base_stats import BaseHeroStats
 
 
 # ---------------------------------------------------------------------------- #

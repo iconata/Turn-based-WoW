@@ -1,9 +1,7 @@
 """
-Base class with attributes, which are similar for every hero.
-It is to be used to construct every hero type.
+Hero Factory which creates a hero based on the input.
 """
 
-# TODO: implement factory design pattern and a better base class
 from Spells.paladin_spell_handler import RetributionPaladinSpells, ProtectionPaladinSpells
 from Spells.warrior_spell_handler import FuryWarriorSpells, ProtectionWarriorSpells
 from Spells.mage_spell_handler import FireMageSpells
@@ -15,39 +13,38 @@ from Spells.shaman_spell_handler import ElementalShamanSpells, EnhancementShaman
 # ---------------------------------------------------------------------------- #
 #                                    Classes                                   #
 # ---------------------------------------------------------------------------- #
-class BaseHeroStats:
-    def __init__(self):
-        self._health            = 1000
-        self._secondary_pool    = 500
-        self._spell_power       = 10
-        self._attack_power      = 10
-        self._damage_reduction  = 0
-
-
-# ---------------------------------------------------------------------------- #
 class HeroFactory:
     # ------------------------------------------------------------------------ #
-    def create_hero(self, type_and_role: tuple):
-        if type_and_role == ("Paladin", "Protection"):
-            return self.__create_protection_paladin()
-        elif type_and_role == ("Paladin", "Retribution"):
-            return self.__create_retribution_paladin()
-        elif type_and_role == ("Warrior", "Protection"):
-            return self.__create_fury_warrior()
-        elif type_and_role == ("Warrior", "Fury"):
-            return self.__create_protection_warrior()
-        elif type_and_role == ("Priest", "Shadow"):
-            return self.__create_shadow_priest()
-        elif type_and_role == ("Mage", "Fire"):
-            return self.__create_fire_mage()
-        elif type_and_role == ("Shaman", "Elemental"):
-            return self.__create_elemental_shaman()
-        elif type_and_role == ("Shaman", "Enhancement"):
-            return self.__create_enhancement_shaman()
-        elif type_and_role == ("Monk", "Brewmaster"):
-            return self.__create_brewmaster_monk()
-        elif type_and_role == ("Monk", "Windweaver"):
-            return self.__create_windwalker_monk()
+    def create_hero(self, hero_type: str, hero_role: str):
+        match hero_type:
+            case "Paladin":
+                match hero_role:
+                    case "Protection":
+                        return self.__create_protection_paladin()
+                    case "Retribution":
+                        return self.__create_retribution_paladin()
+            case "Warrior":
+                match hero_role:
+                    case "Protection":
+                        return self.__create_fury_warrior()
+                    case "Fury":
+                        return self.__create_protection_warrior()
+            case "Priest":
+                match hero_role:
+                    case "Shadow":
+                        return self.__create_shadow_priest()
+            case "Mage":
+                match hero_role:
+                    case "Elemental":
+                        return self.__create_elemental_shaman()
+                    case "Enhancement":
+                        return self.__create_enhancement_shaman()
+            case "Monk":
+                match hero_role:
+                    case "Brewmaster":
+                        return self.__create_brewmaster_monk()
+                    case "Windweaver":
+                        return self.__create_windwalker_monk()
 
     # ------------------------------------------------------------------------ #
     def __create_retribution_paladin(self):

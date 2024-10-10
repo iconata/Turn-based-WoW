@@ -3,7 +3,7 @@ Handler library, used to cast different types of Paladin spells, based on the se
 """
 import math
 
-from Heroes.hero_factory import BaseHeroStats
+from Heroes.hero_base_stats import BaseHeroStats
 
 
 # ---------------------------------------------------------------------------- #

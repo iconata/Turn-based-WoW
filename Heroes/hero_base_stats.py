@@ -1,49 +1,15 @@
 """
-This module creates a hero class, based on the input from the user.
+This module contains a base hero class, to hold basic hero attributes.
 """
 
-from heroes_base_abilities import Hero
 
-
-class CreateHero(Hero):
-    """
-    Create a Hero.
-
-    Args:
-        Hero (int, int, int, str, str): Initial attributes for each hero created.
-    """
-
-    # ------------------------------------------------------------------------ #
-    def __init__(self, hero_class: str, hero_role: str):
-        super().__init__(hero_class, hero_role)
-
-        self._hero_class = hero_class
-
-    # ------------------------------------------------------------------------ #
-    @property
-    def hero_class(self):
-        """
-        Getter of the hero class property.
-
-        Returns:
-            str: The current class of the hero.
-        """
-        return self._hero_class
-
-    # ------------------------------------------------------------------------ #
-    @hero_class.setter
-    def hero_class(self, selected_class: str):
-        *possible_classes, = [
-            "Paladin",
-            "Warrior",
-            "Shaman",
-            "Priest",
-            "Mage",
-            "Monk"
-        ]
-
-        if selected_class not in possible_classes:
-            raise TypeError(
-                f"Hero must be one of the predefined classes - {possible_classes}!")
-
-        self._hero_class = selected_class
+# ---------------------------------------------------------------------------- #
+#                                    Classes                                   #
+# ---------------------------------------------------------------------------- #
+class BaseHeroStats:
+    def __init__(self):
+        self._health            = 1000
+        self._secondary_pool    = 500
+        self._spell_power       = 10
+        self._attack_power      = 10
+        self._damage_reduction  = 0

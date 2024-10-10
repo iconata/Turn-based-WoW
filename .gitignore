@@ -245,3 +245,6 @@ fabric.properties
 .idea/codeStyles/codeStyleConfig.xml
 .idea/inspectionProfiles/profiles_settings.xml
 .idea/.gitignore
+
+# VS code
+.vscode/
