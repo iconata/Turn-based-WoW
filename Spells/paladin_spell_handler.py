@@ -79,14 +79,6 @@ class CommonSpellsMixin:
             self._current_health = self._max_health
 
     # ------------------------------------------------------------------------ #
-    def _is_mana_spent(self, spell_cost):
-        if spell_cost > self._secondary_pool:
-            return False
-        else:
-            self._secondary_pool -= spell_cost
-            return True
-
-    # ------------------------------------------------------------------------ #
     def _check_holy_power(self, holy_pow_gen: int = 0):
         """
         Checks the current amount of holy power available to the hero.
@@ -151,14 +143,13 @@ class RetributionPaladinSpells(CommonSpellsMixin, BaseHeroStats):
         Returns:
             tuple: cooldown of the spell, amount of turns for which it is active
         """
-        turns_active               = 2
-        cooldown                   = 4
+        turns_active = 2
+        cooldown = 4
         spell_cost                 = math.ceil(self._max_mana * 5 / 100)
         self._current_damage_red   = math.ceil(self._attack_power * 20 / 100)
-        if self._is_mana_spent(spell_cost):
-            return cooldown, turns_active
+        self._secondary_pool      -= spell_cost
 
-        raise ValueError(f"Not enough mana! You have {self._secondary_pool} and spell cost is {spell_cost}.")
+        return cooldown, turns_active
 
     # ------------------------------------------------------------------------ #
     def cast_blade_of_justice(self):
@@ -170,11 +161,11 @@ class RetributionPaladinSpells(CommonSpellsMixin, BaseHeroStats):
         Returns:
             tuple: damage of the spell, cooldown of the spell
         """
-        cooldown                = 3
-        holy_power_generation   = 1
-        spell_damage            = math.ceil(self._attack_power * 135 / 100)
-        spell_cost              = math.ceil(self._max_mana * 5 / 100)
-        self._is_mana_spent(spell_cost)
+        cooldown              = 3
+        holy_power_generation = 1
+        spell_damage          = math.ceil(self._attack_power * 135 / 100)
+        spell_cost            = math.ceil(self._max_mana * 5 / 100)
+        self._secondary_pool   -= spell_cost
         self._check_holy_power(holy_power_generation)
 
         return spell_damage, cooldown
@@ -192,7 +183,7 @@ class RetributionPaladinSpells(CommonSpellsMixin, BaseHeroStats):
         if self._is_holy_power_spent(holy_pow_req=cost):
             spell_damage          = math.ceil(self._attack_power * 161 / 100)
             spell_cost            = math.ceil(self._max_mana * 7 / 100)
-            self._is_mana_spent(spell_cost)
+            self._secondary_pool   -= spell_cost
 
             return spell_damage
         else:
@@ -207,12 +198,12 @@ class RetributionPaladinSpells(CommonSpellsMixin, BaseHeroStats):
         Returns:
             tuple: spell damage, cooldown of the spell.
         """
-        cooldown              = 6
+        cooldown = 6
         holy_power_generation = 3
         spell_damage          = math.ceil(self._attack_power * 293 / 100)
         spell_cost            = math.ceil(self._max_mana * 15 / 100)
+        self._secondary_pool   -= spell_cost
 
-        self._is_mana_spent(spell_cost)
         self._check_holy_power(holy_power_generation)
 
         return spell_damage, cooldown
@@ -242,10 +233,10 @@ class ProtectionPaladinSpells(CommonSpellsMixin, BaseHeroStats):
         Returns:
             tuple: spell damage per turn, turns for which the spell is active
         """
-        turns_active            = 3
-        spell_damage            = math.ceil(self._attack_power * 30 / 100)
-        spell_cost              = math.ceil(self._max_mana * 5 / 100)
-        self._is_mana_spent(spell_cost)
+        turns_active         = 3
+        spell_damage         = math.ceil(self._attack_power * 30 / 100)
+        spell_cost           = math.ceil(self._max_mana * 5 / 100)
+        self._secondary_pool  -= spell_cost
 
         return spell_damage, turns_active
 
@@ -264,8 +255,8 @@ class ProtectionPaladinSpells(CommonSpellsMixin, BaseHeroStats):
         spell_damage               = math.ceil(self._attack_power * 30 / 100)
         spell_cost                 = math.ceil(self._max_mana * 5 / 100)
         self._current_damage_red   = math.ceil(self._attack_power * 30 / 100)
+        self._secondary_pool        -= spell_cost
 
-        self._is_mana_spent(spell_cost)
         self._check_holy_power(holy_pow_gen=holy_power_generation)
 
         return spell_damage, cooldown, turns_active
@@ -273,17 +264,17 @@ class ProtectionPaladinSpells(CommonSpellsMixin, BaseHeroStats):
     # ------------------------------------------------------------------------ #
     def cast_shield_of_the_righteous(self):
         """
-        Slam the enemy with your shield, dealing holy damage.
+        Slam the enemy with your shield, dealing holy damage. 
         Cost - 3 Holy Power.
 
         Returns:
             int: spell damage
         """
-        holy_power_cost           = 3
+        holy_power_cost     = 3
         if self._is_holy_power_spent(holy_pow_req=holy_power_cost):
             spell_damage          = math.ceil(self._attack_power * 42 / 100)
             spell_cost            = math.ceil(self._max_mana * 5 / 100)
-            self._is_mana_spent(spell_cost)
+            self._secondary_pool -= spell_cost
 
             return spell_damage
         else:
@@ -300,7 +291,7 @@ class ProtectionPaladinSpells(CommonSpellsMixin, BaseHeroStats):
         holy_power_generation   = 1
         spell_damage            = math.ceil(self._attack_power * 110 / 100)
         spell_cost              = math.ceil(self._max_mana * 5 / 100)
-        self._is_mana_spent(spell_cost)
+        self._secondary_pool     -= spell_cost
         self._check_holy_power(holy_power_generation)
 
         return spell_damage
