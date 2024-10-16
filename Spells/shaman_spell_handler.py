@@ -6,7 +6,27 @@ from Heroes.hero_base_stats import BaseHeroStats
 # ---------------------------------------------------------------------------- #
 #                                    Classes                                   #
 # ---------------------------------------------------------------------------- #
-class EnhancementShamanSpells(BaseHeroStats):
+class CommonSpellsMixin:
+
+    # ------------------------------------------------------------------------ #
+    def cast_lighting_bolt(self):
+        pass
+
+    # ------------------------------------------------------------------------ #
+    def cast_flame_shock(self):
+        pass
+
+    # ------------------------------------------------------------------------ #
+    def cast_primordial_wave(self):
+        pass
+
+    # ------------------------------------------------------------------------ #
+    def cast_lava_burst(self):
+        pass
+
+
+# ---------------------------------------------------------------------------- #
+class EnhancementShamanSpells(BaseHeroStats, CommonSpellsMixin):
 
     # ------------------------------------------------------------------------ #
     # TODO: add docstring
@@ -27,9 +47,21 @@ class EnhancementShamanSpells(BaseHeroStats):
     def cast_strormstrike(self):
         pass
 
+    # ------------------------------------------------------------------------ #
+    def cast_lava_lash(self):
+        pass
+
+    # ------------------------------------------------------------------------ #
+    def cast_tempest(self):
+        pass
+
+    # ------------------------------------------------------------------------ #
+    def cast_feral_spirit(self):
+        pass
+
 
 # ---------------------------------------------------------------------------- #
-class ElementalShamanSpells(BaseHeroStats):
+class ElementalShamanSpells(BaseHeroStats, CommonSpellsMixin):
 
     # ------------------------------------------------------------------------ #
     # TODO: add docstring
@@ -46,5 +78,5 @@ class ElementalShamanSpells(BaseHeroStats):
         self._current_damage_red    = self._damage_reduction
 
     # ------------------------------------------------------------------------ #
-    def cast_strormstrike(self):
+    def cast_earth_shock(self):
         pass
