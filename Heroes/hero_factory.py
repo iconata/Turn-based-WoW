@@ -4,10 +4,10 @@ Hero Factory which creates a hero based on the input.
 
 from Spells.paladin_spell_handler import RetributionPaladinSpells, ProtectionPaladinSpells
 from Spells.warrior_spell_handler import FuryWarriorSpells, ProtectionWarriorSpells
-from Spells.mage_spell_handler import FireMageSpells
-from Spells.monk_spell_handler import WindwalkerMonkSpells, BrewmasterMonkSpells
-from Spells.priest_spell_handler import ShadowPriestSpells
-from Spells.shaman_spell_handler import ElementalShamanSpells, EnhancementShamanSpells
+from Spells.mage_spell_handler    import FireMageSpells
+from Spells.monk_spell_handler    import WindwalkerMonkSpells, BrewmasterMonkSpells
+from Spells.priest_spell_handler  import ShadowPriestSpells
+from Spells.shaman_spell_handler  import ElementalShamanSpells, EnhancementShamanSpells
 
 
 # ---------------------------------------------------------------------------- #

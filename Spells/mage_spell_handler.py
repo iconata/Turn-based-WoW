@@ -11,17 +11,16 @@ from Heroes.hero_base_stats import BaseHeroStats
 #                                    Classes                                   #
 # ---------------------------------------------------------------------------- #
 class FireMageSpells(BaseHeroStats):
-
     # ------------------------------------------------------------------------ #
     def __init__(self):
-        self._health                = 700
-        self._secondary_pool        = 900
-        self._spell_power           = 110
-        self._max_damage_red        = 100
-        self._max_health            = self._health
-        self._max_mana              = self._secondary_pool
-        self._base_damage_red       = self._damage_reduction
-        self._current_damage_red    = self._damage_reduction
+        self._health = 700
+        self._secondary_pool = 900
+        self._spell_power = 110
+        self._max_damage_red = 100
+        self._max_health = self._health
+        self._max_mana = self._secondary_pool
+        self._base_damage_red = self._damage_reduction
+        self._current_damage_red = self._damage_reduction
 
     # ------------------------------------------------------------------------ #
 
@@ -33,9 +32,9 @@ class FireMageSpells(BaseHeroStats):
             tuple: damage of the spell, cooldown of the spell
         """
         cooldown = 3
-        spell_cost             = math.ceil(self._max_mana * 2 / 100)
-        spell_damage           = math.ceil(self._spell_power  * 155 / 100)
-        self._secondary_pool  -= spell_cost
+        spell_cost = math.ceil(self._max_mana * 2 / 100)
+        spell_damage = math.ceil(self._spell_power * 155 / 100)
+        self._secondary_pool -= spell_cost
 
         return spell_damage, cooldown
 
@@ -48,11 +47,11 @@ class FireMageSpells(BaseHeroStats):
             tuple: damage of the spell, amount of damage reduction to be applied,
             turns for which the effect is active
         """
-        turns_active           = 3
-        damage_reduction       = 15
-        spell_cost             = math.ceil(self._max_mana * 1 / 100)
-        spell_damage           = math.ceil(self._spell_power  * 82 / 100)
-        self._secondary_pool  -= spell_cost
+        turns_active = 3
+        damage_reduction = 15
+        spell_cost = math.ceil(self._max_mana * 1 / 100)
+        spell_damage = math.ceil(self._spell_power * 82 / 100)
+        self._secondary_pool -= spell_cost
 
         return spell_damage, damage_reduction, turns_active
 
@@ -65,11 +64,11 @@ class FireMageSpells(BaseHeroStats):
         Returns:
             tuple: damage of the spell, cooldown of the spell, turns for which the spell is active
         """
-        turns_active           = 3
-        cooldown               = 5
-        spell_cost             = math.ceil(self._max_mana * 1 / 100)
-        spell_damage           = math.ceil(self._spell_power  * 57 / 100)
-        self._secondary_pool  -= spell_cost
+        turns_active = 3
+        cooldown = 5
+        spell_cost = math.ceil(self._max_mana * 1 / 100)
+        spell_damage = math.ceil(self._spell_power * 57 / 100)
+        self._secondary_pool -= spell_cost
 
         return spell_damage, cooldown, turns_active
 
@@ -83,10 +82,10 @@ class FireMageSpells(BaseHeroStats):
         Returns:
             tuple: cooldown of the spell, turns for which the spell is active
         """
-        turns_active           = 2
-        cooldown               = 5
-        spell_cost             = math.ceil(self._max_mana * 1 / 100)
-        self._secondary_pool  -= spell_cost
+        turns_active = 2
+        cooldown = 5
+        spell_cost = math.ceil(self._max_mana * 1 / 100)
+        self._secondary_pool -= spell_cost
 
         return cooldown, turns_active
 
@@ -99,10 +98,10 @@ class FireMageSpells(BaseHeroStats):
         Returns:
             tuple: cooldown of the spell, turns for which the spell is active
         """
-        turns_active           = 4
-        cooldown               = 4
-        self._spell_power     += math.ceil(self._spell_power * 10 / 100)
-        spell_cost             = math.ceil(self._max_mana * 4 / 100)
-        self._secondary_pool  -= spell_cost
+        turns_active = 4
+        cooldown = 4
+        self._spell_power += math.ceil(self._spell_power * 10 / 100)
+        spell_cost = math.ceil(self._max_mana * 4 / 100)
+        self._secondary_pool -= spell_cost
 
         return cooldown, turns_active

@@ -11,17 +11,16 @@ from Heroes.hero_base_stats import BaseHeroStats
 #                                    Classes                                   #
 # ---------------------------------------------------------------------------- #
 class ShadowPriestSpells(BaseHeroStats):
-
     # ------------------------------------------------------------------------ #
     def __init__(self):
-        self._health                = 750
-        self._secondary_pool        = 900
-        self._spell_power           = 90
-        self._max_damage_red        = 100
-        self._max_health            = self._health
-        self._max_mana              = self._secondary_pool
-        self._base_damage_red       = self._damage_reduction
-        self._current_damage_red    = self._damage_reduction
+        self._health = 750
+        self._secondary_pool = 900
+        self._spell_power = 90
+        self._max_damage_red = 100
+        self._max_health = self._health
+        self._max_mana = self._secondary_pool
+        self._base_damage_red = self._damage_reduction
+        self._current_damage_red = self._damage_reduction
 
     # ------------------------------------------------------------------------ #
     def cast_mind_blast(self):
@@ -32,9 +31,9 @@ class ShadowPriestSpells(BaseHeroStats):
             tuple: damage of the spell, cooldown of the spell
         """
         cooldown = 3
-        spell_cost             = math.ceil(self._max_mana * 4 / 100)
-        spell_damage           = math.ceil(self._spell_power  * 73 / 100)
-        self._secondary_pool  -= spell_cost
+        spell_cost = math.ceil(self._max_mana * 4 / 100)
+        spell_damage = math.ceil(self._spell_power * 73 / 100)
+        self._secondary_pool -= spell_cost
 
         return spell_damage, cooldown
 
@@ -49,9 +48,9 @@ class ShadowPriestSpells(BaseHeroStats):
             tuple: damage of the spell, cooldown of the spell
         """
         cooldown = 3
-        spell_cost             = math.ceil(self._max_mana * 1 / 100)
-        spell_damage           = math.ceil(self._spell_power  * 85 / 100)
-        self._secondary_pool  -= spell_cost
+        spell_cost = math.ceil(self._max_mana * 1 / 100)
+        spell_damage = math.ceil(self._spell_power * 85 / 100)
+        self._secondary_pool -= spell_cost
 
         return spell_damage, cooldown
 
@@ -65,24 +64,30 @@ class ShadowPriestSpells(BaseHeroStats):
             tuple: initial spell damage, damage over time, amount of health restored
             to the caster, cooldown of the spell, turns for which the spell is active
         """
-        cooldown               = 4
-        turns_active           = 3
-        spell_cost             = math.ceil(self._max_mana   * 10 / 100)
-        initial_spell_damage   = math.ceil(self._spell_power    * 155 / 100)
-        health_leech           = math.ceil(initial_spell_damage * 30 / 100)
-        damage_over_time       = math.ceil(initial_spell_damage * 13 / 100)
-        self._secondary_pool  -= spell_cost
+        cooldown = 4
+        turns_active = 3
+        spell_cost = math.ceil(self._max_mana * 10 / 100)
+        initial_spell_damage = math.ceil(self._spell_power * 155 / 100)
+        health_leech = math.ceil(initial_spell_damage * 30 / 100)
+        damage_over_time = math.ceil(initial_spell_damage * 13 / 100)
+        self._secondary_pool -= spell_cost
 
-        return initial_spell_damage, damage_over_time, health_leech, cooldown, turns_active
+        return (
+            initial_spell_damage,
+            damage_over_time,
+            health_leech,
+            cooldown,
+            turns_active,
+        )
 
     # ------------------------------------------------------------------------ #
     def cast_flash_heal(self):
         """
         Quick healing spell, healing for moderate amount.
         """
-        spell_cost             = math.ceil(self._max_mana * 10 / 100)
-        amount_to_heal         = math.ceil(self._spell_power  * 203 / 100)
-        self._secondary_pool  -= spell_cost
+        spell_cost = math.ceil(self._max_mana * 10 / 100)
+        amount_to_heal = math.ceil(self._spell_power * 203 / 100)
+        self._secondary_pool -= spell_cost
         self._heal_up(amount_to_heal)
 
     # ------------------------------------------------------------------------ #
@@ -94,9 +99,9 @@ class ShadowPriestSpells(BaseHeroStats):
             tuple: amount of damage that will be absorbed, cooldown of the spell
         """
         cooldown = 5
-        spell_cost             = math.ceil(self._max_mana * 10 / 100)
-        damage_to_absorb       = math.ceil(self._spell_power  * 336 / 100)
-        self._secondary_pool  -= spell_cost
+        spell_cost = math.ceil(self._max_mana * 10 / 100)
+        damage_to_absorb = math.ceil(self._spell_power * 336 / 100)
+        self._secondary_pool -= spell_cost
 
         return damage_to_absorb, cooldown
 
