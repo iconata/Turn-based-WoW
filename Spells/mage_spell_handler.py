@@ -11,8 +11,18 @@ from Heroes.hero_base_stats import BaseHeroStats
 #                                    Classes                                   #
 # ---------------------------------------------------------------------------- #
 class FireMageSpells(BaseHeroStats):
-    # ------------------------------------------------------------------------ #
+    """
+    Fire Mage Spells Handler
+    This class contains all the spells and abilities of the Fire Mage.
+    It inherits from the BaseHeroStats class, which contains the base stats of the hero.
+    The Fire Mage is a ranged damage dealer, specializing in fire magic.
+
+    Args:
+        BaseHeroStats (cls): Base class for all heroes, containing base stats and methods.
+    """
+
     def __init__(self):
+        super().__init__()
         self._health = 700
         self._secondary_pool = 900
         self._spell_power = 110

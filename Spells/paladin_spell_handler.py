@@ -11,7 +11,11 @@ from Heroes.hero_base_stats import BaseHeroStats
 #                                    Classes                                   #
 # ---------------------------------------------------------------------------- #
 class CommonSpellsMixin:
-    # ------------------------------------------------------------------------ #
+    """
+    Common Spells Mixin
+    This class contains the common spells and abilities of the Paladin.
+    """
+
     def cast_divine_shield(self) -> tuple:
         """
         Powerfull protection spell, which block all incoming damage for 2 turns.
@@ -110,8 +114,12 @@ class CommonSpellsMixin:
 
 # ---------------------------------------------------------------------------- #
 class RetributionPaladinSpells(CommonSpellsMixin, BaseHeroStats):
-    # ------------------------------------------------------------------------ #
+    """
+    Class that handles the Retribution Paladin spells.
+    """
+
     def __init__(self):
+        super().__init__()
         self._curr_holy_power = 0
         self._max_holy_power = 5
         self._health = 800
@@ -201,7 +209,12 @@ class RetributionPaladinSpells(CommonSpellsMixin, BaseHeroStats):
 
 # ---------------------------------------------------------------------------- #
 class ProtectionPaladinSpells(CommonSpellsMixin, BaseHeroStats):
+    """
+    Class that handles the Protection Paladin spells.
+    """
+
     def __init__(self):
+        super().__init__()
         self._curr_holy_power = 0
         self._max_holy_power = 5
         self._health = 1200

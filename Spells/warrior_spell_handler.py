@@ -8,6 +8,7 @@ class FuryWarriorSpells(BaseHeroStats):
     # ------------------------------------------------------------------------ #
     def __init__(self):
         # TODO: add docstring and implementation
+        super().__init__()
         self._curr_rage = 0
         self._health = 1000
         self._secondary_pool = 200
@@ -44,6 +45,7 @@ class ProtectionWarriorSpells(BaseHeroStats):
     # ------------------------------------------------------------------------ #
     def __init__(self):
         # TODO: add docstring and implementation
+        super().__init__()
         self._curr_rage = 0
         self._health = 1500
         self._secondary_pool = 200

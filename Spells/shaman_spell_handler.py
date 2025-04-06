@@ -7,7 +7,11 @@ from Heroes.hero_base_stats import BaseHeroStats
 #                                    Classes                                   #
 # ---------------------------------------------------------------------------- #
 class CommonSpellsMixin:
-    # ------------------------------------------------------------------------ #
+    """
+    Common Spells Mixin
+    This class contains the common spells and abilities of the Shaman.
+    """
+
     def cast_lighting_bolt(self):
         raise NotImplementedError
 
@@ -26,9 +30,13 @@ class CommonSpellsMixin:
 
 # ---------------------------------------------------------------------------- #
 class EnhancementShamanSpells(BaseHeroStats, CommonSpellsMixin):
-    # ------------------------------------------------------------------------ #
-    # TODO: add docstring
+    """
+    Enhancement Shaman Spells
+    This class contains the spells and abilities of the Enhancement Shaman.
+    """
+
     def __init__(self):
+        super().__init__()
         self._curr_maelstrom_stacks = 0
         self._max_maelstrom_stacks = 5
         self._health = 850
@@ -60,9 +68,13 @@ class EnhancementShamanSpells(BaseHeroStats, CommonSpellsMixin):
 
 # ---------------------------------------------------------------------------- #
 class ElementalShamanSpells(BaseHeroStats, CommonSpellsMixin):
-    # ------------------------------------------------------------------------ #
-    # TODO: add docstring
+    """
+    Elemental Shaman Spells
+    This class contains the spells and abilities of the Elemental Shaman.
+    """
+
     def __init__(self):
+        super().__init__()
         self._curr_maelstrom_stacks = 0
         self._max_maelstrom_stacks = 5
         self._health = 750
