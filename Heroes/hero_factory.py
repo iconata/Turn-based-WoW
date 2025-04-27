@@ -2,12 +2,15 @@
 Hero Factory which creates a hero based on the input.
 """
 
-from Spells.paladin_spell_handler import RetributionPaladinSpells, ProtectionPaladinSpells
+from Spells.paladin_spell_handler import (
+    RetributionPaladinSpells,
+    ProtectionPaladinSpells,
+)
 from Spells.warrior_spell_handler import FuryWarriorSpells, ProtectionWarriorSpells
-from Spells.mage_spell_handler    import FireMageSpells
-from Spells.monk_spell_handler    import WindwalkerMonkSpells, BrewmasterMonkSpells
-from Spells.priest_spell_handler  import ShadowPriestSpells
-from Spells.shaman_spell_handler  import ElementalShamanSpells, EnhancementShamanSpells
+from Spells.mage_spell_handler import FireMageSpells
+from Spells.monk_spell_handler import WindwalkerMonkSpells, BrewmasterMonkSpells
+from Spells.priest_spell_handler import ShadowPriestSpells
+from Spells.shaman_spell_handler import ElementalShamanSpells, EnhancementShamanSpells
 
 
 # ---------------------------------------------------------------------------- #
@@ -17,33 +20,33 @@ class HeroFactory:
     # ------------------------------------------------------------------------ #
     def create_hero(self, hero_type: str, hero_role: str):
         match hero_type:
-            case "Paladin":
+            case 'Paladin':
                 match hero_role:
-                    case "Protection":
+                    case 'Protection':
                         return self.__create_protection_paladin()
-                    case "Retribution":
+                    case 'Retribution':
                         return self.__create_retribution_paladin()
-            case "Warrior":
+            case 'Warrior':
                 match hero_role:
-                    case "Protection":
+                    case 'Protection':
                         return self.__create_fury_warrior()
-                    case "Fury":
+                    case 'Fury':
                         return self.__create_protection_warrior()
-            case "Priest":
+            case 'Priest':
                 match hero_role:
-                    case "Shadow":
+                    case 'Shadow':
                         return self.__create_shadow_priest()
-            case "Mage":
+            case 'Mage':
                 match hero_role:
-                    case "Elemental":
+                    case 'Elemental':
                         return self.__create_elemental_shaman()
-                    case "Enhancement":
+                    case 'Enhancement':
                         return self.__create_enhancement_shaman()
-            case "Monk":
+            case 'Monk':
                 match hero_role:
-                    case "Brewmaster":
+                    case 'Brewmaster':
                         return self.__create_brewmaster_monk()
-                    case "Windweaver":
+                    case 'Windweaver':
                         return self.__create_windwalker_monk()
 
     # ------------------------------------------------------------------------ #
@@ -63,6 +66,7 @@ class HeroFactory:
         cls_instance = FuryWarriorSpells()
 
         return cls_instance
+
     # ------------------------------------------------------------------------ #
 
     def __create_protection_warrior(self):

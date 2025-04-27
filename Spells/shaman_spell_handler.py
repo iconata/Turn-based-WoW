@@ -15,7 +15,7 @@ class CommonSpellsMixin:
     # ------------------------------------------------------------------------ #
     @staticmethod
     def __is_flame_shock_active(active_spells: list) -> bool:
-        if "flame_shock" in active_spells:
+        if 'flame_shock' in active_spells:
             return True
 
         return False
@@ -177,7 +177,9 @@ class EnhancementShamanSpells(BaseHeroStats, CommonSpellsMixin):
         cooldown = 8
         turns_active = 4
         spell_cost = math.ceil(self._max_mana * 5 / 100)
-        spell_damage = math.ceil(self._attack_power * 80 / 100) + math.ceil(self._spell_power * 80 / 100)
+        spell_damage = math.ceil(self._attack_power * 80 / 100) + math.ceil(
+            self._spell_power * 80 / 100
+        )
         self._secondary_pool -= spell_cost
 
         return spell_damage, cooldown, turns_active

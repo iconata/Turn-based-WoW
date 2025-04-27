@@ -1,12 +1,14 @@
 import unittest
-from Spells.paladin_spell_handler import ProtectionPaladinSpells, RetributionPaladinSpells
+from Spells.paladin_spell_handler import (
+    ProtectionPaladinSpells,
+    RetributionPaladinSpells,
+)
 
 
 # ---------------------------------------------------------------------------- #
 #                                    Classes                                   #
 # ---------------------------------------------------------------------------- #
 class TestRetributionPaladinSpells(unittest.TestCase):
-
     # ------------------------------------------------------------------------ #
     def setUp(self) -> None:
         self.cls_instance = RetributionPaladinSpells()
@@ -38,5 +40,5 @@ class TestRetributionPaladinSpells(unittest.TestCase):
 # ---------------------------------------------------------------------------- #
 #                                     Main                                     #
 # ---------------------------------------------------------------------------- #
-if __name__ == "__main__":
+if __name__ == '__main__':
     unittest.main()

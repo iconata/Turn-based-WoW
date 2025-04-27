@@ -63,7 +63,7 @@ class CommonSpellsMixin:
         """
         Outputs the current spell power in the terminal
         """
-        print(f"Holy power: {self._curr_holy_power}")
+        print(f'Holy power: {self._curr_holy_power}')
 
     # ------------------------------------------------------------------------ #
     def _heal_up(self, heal_amount) -> None:

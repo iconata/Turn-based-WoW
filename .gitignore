@@ -214,6 +214,7 @@ cmake-build-*/
 
 # File-based project format
 *.iws
+*.toml
 
 # IntelliJ
 out/

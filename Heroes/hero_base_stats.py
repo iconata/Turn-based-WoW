@@ -17,3 +17,10 @@ class BaseHeroStats:
         self._spell_power = 10
         self._attack_power = 10
         self._damage_reduction = 0
+        self._spell_attributes = {
+            'spell_cost': 0,
+            'spell_damage': 0,
+            'cooldown': 0,
+            'turns_active': 0,
+            'damage_reduction': 0,
+        }
