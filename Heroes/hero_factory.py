@@ -2,10 +2,7 @@
 Hero Factory which creates a hero based on the input.
 """
 
-from Spells.paladin_spell_handler import (
-    RetributionPaladinSpells,
-    ProtectionPaladinSpells,
-)
+from Spells.paladin_spell_handler import RetributionPaladinSpells, ProtectionPaladinSpells
 from Spells.warrior_spell_handler import FuryWarriorSpells, ProtectionWarriorSpells
 from Spells.mage_spell_handler import FireMageSpells
 from Spells.monk_spell_handler import WindwalkerMonkSpells, BrewmasterMonkSpells
@@ -36,7 +33,7 @@ class HeroFactory:
                 match hero_role:
                     case 'Shadow':
                         return self.__create_shadow_priest()
-            case 'Mage':
+            case 'Shaman':
                 match hero_role:
                     case 'Elemental':
                         return self.__create_elemental_shaman()
@@ -48,6 +45,10 @@ class HeroFactory:
                         return self.__create_brewmaster_monk()
                     case 'Windweaver':
                         return self.__create_windwalker_monk()
+            case 'Mage':
+                match hero_role:
+                    case 'Fire':
+                        return self.__create_fire_mage()
 
     # ------------------------------------------------------------------------ #
     def __create_retribution_paladin(self):
