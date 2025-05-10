@@ -4,13 +4,13 @@ Handler library, used to cast different types of Paladin spells, based on the se
 
 import math
 
-from Heroes.hero_base_stats import BaseHeroStats
+from Heroes.hero_base_stats import IBaseHero
 
 
 # ---------------------------------------------------------------------------- #
 #                                    Classes                                   #
 # ---------------------------------------------------------------------------- #
-class CommonSpellsMixin:
+class CommonSpellsMixin(IBaseHero):
     """
     Common Spells Mixin
     This class contains the common spells and abilities of the Paladin.
@@ -24,8 +24,9 @@ class CommonSpellsMixin:
         Returns:
             tuple: cooldown of the spell and for how many turns it is active
         """
+        max_damage_reduction = 100
         cooldown = 15
-        self._current_damage_red = self._max_damage_red
+        self._current_damage_red = max_damage_reduction
         turns_active = 2
 
         return cooldown, turns_active
@@ -40,10 +41,10 @@ class CommonSpellsMixin:
         """
         cooldown = 3
         holy_power_generation = 1
-        spell_damage = math.ceil(self._attack_power * 61 / 100)
-        spell_cost = math.ceil(self._current_mana * 5 / 100)
-        self._current_mana -= spell_cost
-        self._add_holy_power(holy_power_generation)
+        spell_damage = math.ceil(self.attack_power * 61 / 100)
+        spell_cost = math.ceil(self.max_secondary_pool * 5 / 100)
+        self._curr_mana -= spell_cost
+        self.add_specific_stat(holy_power_generation)
 
         return spell_damage, cooldown
 
@@ -66,7 +67,7 @@ class CommonSpellsMixin:
         print(f'Holy power: {self._curr_holy_power}')
 
     # ------------------------------------------------------------------------ #
-    def _heal_up(self, heal_amount) -> None:
+    def heal_up(self, heal_amount) -> None:
         """
         Main healing spell logic. Checks the current health of the hero and also the incoming amount.
         If the incoming amount is overhealing, the current health will be set to the max health.
@@ -80,7 +81,7 @@ class CommonSpellsMixin:
             self._health = self._max_health
 
     # ------------------------------------------------------------------------ #
-    def _add_holy_power(self, holy_pow_gen: int = 0) -> None:
+    def add_specific_stat(self, stat_value: int = 0) -> None:
         """
         Checks the current amount of holy power available to the hero.
         If the holy power goes beyond the max holy power, the current holy power is set to the max
@@ -89,13 +90,13 @@ class CommonSpellsMixin:
             holy_pow_gen (int, optional): _description_. Defaults to 0.
         """
 
-        self._curr_holy_power += holy_pow_gen
+        self._curr_holy_power += stat_value
 
         if self._curr_holy_power >= self._max_holy_power:
             self._curr_holy_power = self._max_holy_power
 
     # ------------------------------------------------------------------------ #
-    def _is_holy_power_spent(self, holy_pow_req: int) -> bool:
+    def is_specific_stat_spent(self, stat_value: int) -> bool:
         """
         Boolean check if the hero has enough holy power for the spell that was casted.
 
@@ -105,15 +106,15 @@ class CommonSpellsMixin:
         Returns:
             bool: returns True if there's enough spell power for the spell, otherwise returns False
         """
-        if self._curr_holy_power >= holy_pow_req:
-            self._curr_holy_power -= holy_pow_req
+        if self._curr_holy_power >= stat_value:
+            self._curr_holy_power -= stat_value
             return True
         else:
             return False
 
 
 # ---------------------------------------------------------------------------- #
-class RetributionPaladinSpells(CommonSpellsMixin, BaseHeroStats):
+class RetributionPaladinSpells(CommonSpellsMixin):
     """
     Class that handles the Retribution Paladin spells.
     """
@@ -122,14 +123,10 @@ class RetributionPaladinSpells(CommonSpellsMixin, BaseHeroStats):
         super().__init__()
         self._curr_holy_power = 0
         self._max_holy_power = 5
-        self._health = 800
-        self._secondary_pool = 300
-        self._spell_power = 30
-        self._attack_power = 75
-        self._max_health = self._health
-        self._max_mana = self._secondary_pool
-        self._base_damage_red = self._damage_reduction
-        self._current_damage_red = self._damage_reduction
+        self._curr_health = self._health
+        self._curr_mana = self.max_secondary_pool
+        self._base_damage_red = self.damage_reduction
+        self._current_damage_red = self.damage_reduction
         self._max_damage_red = 100
 
     # ------------------------------------------------------------------------ #
@@ -143,9 +140,9 @@ class RetributionPaladinSpells(CommonSpellsMixin, BaseHeroStats):
         """
         turns_active = 2
         cooldown = 4
-        spell_cost = math.ceil(self._max_mana * 5 / 100)
-        self._current_damage_red = math.ceil(self._attack_power * 20 / 100)
-        self._secondary_pool -= spell_cost
+        spell_cost = math.ceil(self.max_secondary_pool * 5 / 100)
+        self._current_damage_red = math.ceil(self.attack_power * 20 / 100)
+        self._curr_mana -= spell_cost
 
         return cooldown, turns_active
 
@@ -161,10 +158,10 @@ class RetributionPaladinSpells(CommonSpellsMixin, BaseHeroStats):
         """
         cooldown = 3
         holy_power_generation = 1
-        spell_damage = math.ceil(self._attack_power * 135 / 100)
-        spell_cost = math.ceil(self._max_mana * 5 / 100)
-        self._secondary_pool -= spell_cost
-        self._add_holy_power(holy_power_generation)
+        spell_damage = math.ceil(self.attack_power * 135 / 100)
+        spell_cost = math.ceil(self.max_secondary_pool * 5 / 100)
+        self.max_secondary_pool -= spell_cost
+        self.add_specific_stat(holy_power_generation)
 
         return spell_damage, cooldown
 
@@ -178,10 +175,10 @@ class RetributionPaladinSpells(CommonSpellsMixin, BaseHeroStats):
             tuple: damage of the spell
         """
         cost = 3
-        if self._is_holy_power_spent(holy_pow_req=cost):
-            spell_damage = math.ceil(self._attack_power * 161 / 100)
-            spell_cost = math.ceil(self._max_mana * 7 / 100)
-            self._secondary_pool -= spell_cost
+        if self.is_specific_stat_spent(cost):
+            spell_damage = math.ceil(self.attack_power * 161 / 100)
+            spell_cost = math.ceil(self.max_secondary_pool * 7 / 100)
+            self.max_secondary_pool -= spell_cost
 
             return spell_damage
         else:
@@ -197,18 +194,18 @@ class RetributionPaladinSpells(CommonSpellsMixin, BaseHeroStats):
             tuple: spell damage, cooldown of the spell.
         """
         cooldown = 6
-        holy_power_generation = 3
-        spell_damage = math.ceil(self._attack_power * 293 / 100)
-        spell_cost = math.ceil(self._max_mana * 15 / 100)
-        self._secondary_pool -= spell_cost
+        holy_power_generated = 3
+        spell_damage = math.ceil(self.attack_power * 293 / 100)
+        spell_cost = math.ceil(self.max_secondary_pool * 15 / 100)
+        self.max_secondary_pool -= spell_cost
 
-        self._add_holy_power(holy_power_generation)
+        self.add_specific_stat(holy_power_generated)
 
         return spell_damage, cooldown
 
 
 # ---------------------------------------------------------------------------- #
-class ProtectionPaladinSpells(CommonSpellsMixin, BaseHeroStats):
+class ProtectionPaladinSpells(CommonSpellsMixin):
     """
     Class that handles the Protection Paladin spells.
     """
@@ -223,8 +220,8 @@ class ProtectionPaladinSpells(CommonSpellsMixin, BaseHeroStats):
         self._attack_power = 45
         self._max_health = self._health
         self._max_mana = self._secondary_pool
-        self._base_damage_red = self._damage_reduction
-        self._current_damage_red = self._damage_reduction
+        self._base_damage_red = self.damage_reduction
+        self._current_damage_red = self.damage_reduction
         self._max_damage_red = 100
 
     # ------------------------------------------------------------------------ #

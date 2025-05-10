@@ -53,12 +53,20 @@ class HeroFactory:
     # ------------------------------------------------------------------------ #
     def __create_retribution_paladin(self):
         cls_instance = RetributionPaladinSpells()
+        cls_instance.max_health = 1200
+        cls_instance.max_secondary_pool = 300
+        cls_instance.spell_power = 30
+        cls_instance.attack_power = 45
 
         return cls_instance
 
     # ------------------------------------------------------------------------ #
     def __create_protection_paladin(self):
         cls_instance = ProtectionPaladinSpells()
+        cls_instance.max_health = 800
+        cls_instance.max_secondary_pool = 300
+        cls_instance.spell_power = 30
+        cls_instance.attack_power = 75
 
         return cls_instance
 

@@ -22,7 +22,6 @@ Steps to create a strategy pattern:
 """
 
 
-
 # ---------------------------------------------------------------------------- #
 #                                    Classes                                   #
 # ---------------------------------------------------------------------------- #
@@ -33,12 +32,12 @@ class IBaseHero(ABC):
     """
 
     def __init__(self):
-        self._health = 1000
-        self._secondary_pool = 500
-        self._spell_power = 10
-        self._attack_power = 10
-        self._damage_reduction = 0
-        self._spell_attributes = {
+        self.max_health = 1000
+        self.max_secondary_pool = 500
+        self.spell_power = 10
+        self.attack_power = 10
+        self.damage_reduction = 0
+        self.spell_attributes = {
             'spell_cost': 0,
             'spell_damage': 0,
             'cooldown': 0,
@@ -47,16 +46,48 @@ class IBaseHero(ABC):
         }
 
     @abstractmethod
-    def heal_up(self) -> None:
-        pass
+    def heal_up(self, heal_amount: int) -> None:
+        """
+        Healing method, which is to be implemented in the child class.
+
+        Args:
+            heal_amount (int): amount to heal
+
+        Raises:
+            NotImplementedError: if the abstract method is not implemented in the child class, raise an Exception.
+        """
+        raise NotImplementedError
 
     @abstractmethod
-    def is_specific_stat_spent(self, value: int) -> bool:
-        pass
+    def is_specific_stat_spent(self, stat_value: int) -> bool:
+        """
+        Checker if class specific stat is enough and if it can be cast. Every child class should
+        implement and make use of the specific class attribute. For example - Paladin uses holy power, Warrior - rage.
+
+        Args:
+            stat_value (int): _description_
+
+        Returns:
+            bool: True if spent, else False
+
+        Raises:
+            NotImplementedError: if the abstract method is not implemented in the child class, raise an Exception.
+        """
+        raise NotImplementedError
 
     @abstractmethod
-    def add_specific_stat(self, value: int) -> None:
-        pass
+    def add_specific_stat(self, stat_value: int) -> None:
+        """
+        Adds the passed, class specific stat to the total amount. Each child class should implement it and check
+        if by adding the value, the max amount of the stat will be exceed.
+
+        Args:
+            stat_value (int): class specific stat to be added
+
+        Raises:
+            NotImplementedError: if the abstract method is not implemented in the child class, raise an Exception.
+        """
+        raise NotImplementedError
 
 
 class ICommonGetters(ABC):
