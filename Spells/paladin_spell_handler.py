@@ -10,12 +10,24 @@ from Heroes.hero_base_stats import IBaseHero
 # ---------------------------------------------------------------------------- #
 #                                    Classes                                   #
 # ---------------------------------------------------------------------------- #
-class CommonSpellsMixin(IBaseHero):
+class PaladinCommonSpells(IBaseHero):
     """
     Common Spells Mixin
     This class contains the common spells and abilities of the Paladin.
     """
 
+    # ------------------------------------------------------------------------ #
+    def __init__(self):
+        super().__init__()
+        self._curr_holy_power = 0
+        self._max_holy_power = 5
+        self._curr_health = self.max_health
+        self._curr_mana = self.max_secondary_pool
+        self._base_damage_red = self.damage_reduction
+        self._current_damage_red = self.damage_reduction
+        self._max_damage_red = 100
+
+    # ------------------------------------------------------------------------ #
     def cast_divine_shield(self) -> tuple:
         """
         Powerfull protection spell, which block all incoming damage for 2 turns.
@@ -57,14 +69,14 @@ class CommonSpellsMixin(IBaseHero):
         cost = 3
         amount_to_heal = math.ceil(self._spell_power * 346 / 100)
         if self._is_holy_power_spent(holy_pow_req=cost):
-            self._heal_up(amount_to_heal)
+            self.heal_up(amount_to_heal)
 
     # ------------------------------------------------------------------------ #
     def display_amount_of_holy_power(self):
         """
         Outputs the current spell power in the terminal
         """
-        print(f'Holy power: {self._curr_holy_power}')
+        print(f"Holy power: {self._curr_holy_power}")
 
     # ------------------------------------------------------------------------ #
     def heal_up(self, heal_amount) -> None:
@@ -75,10 +87,10 @@ class CommonSpellsMixin(IBaseHero):
         Args:
             heal_amount (int): value of the incoming heal
         """
-        self._health += heal_amount
+        self._curr_health += heal_amount
 
-        if self._health > self._max_health:
-            self._health = self._max_health
+        if self._curr_health > self.max_health:
+            self._curr_health = self.max_health
 
     # ------------------------------------------------------------------------ #
     def add_specific_stat(self, stat_value: int = 0) -> None:
@@ -114,20 +126,13 @@ class CommonSpellsMixin(IBaseHero):
 
 
 # ---------------------------------------------------------------------------- #
-class RetributionPaladinSpells(CommonSpellsMixin):
+class RetributionPaladinSpells(PaladinCommonSpells):
     """
     Class that handles the Retribution Paladin spells.
     """
 
     def __init__(self):
         super().__init__()
-        self._curr_holy_power = 0
-        self._max_holy_power = 5
-        self._curr_health = self._health
-        self._curr_mana = self.max_secondary_pool
-        self._base_damage_red = self.damage_reduction
-        self._current_damage_red = self.damage_reduction
-        self._max_damage_red = 100
 
     # ------------------------------------------------------------------------ #
     def cast_divine_protection(self) -> tuple:
@@ -205,24 +210,21 @@ class RetributionPaladinSpells(CommonSpellsMixin):
 
 
 # ---------------------------------------------------------------------------- #
-class ProtectionPaladinSpells(CommonSpellsMixin):
+class ProtectionPaladinSpells(PaladinCommonSpells):
     """
     Class that handles the Protection Paladin spells.
     """
 
     def __init__(self):
         super().__init__()
-        self._curr_holy_power = 0
-        self._max_holy_power = 5
-        self._health = 1200
-        self._secondary_pool = 300
-        self._spell_power = 30
-        self._attack_power = 45
-        self._max_health = self._health
-        self._max_mana = self._secondary_pool
-        self._base_damage_red = self.damage_reduction
-        self._current_damage_red = self.damage_reduction
-        self._max_damage_red = 100
+
+        # self._curr_holy_power = 0
+        # self._max_holy_power = 5
+        # self._curr_health = self.health
+        # self._max_mana = self._secondary_pool
+        # self._base_damage_red = self.damage_reduction
+        # self._current_damage_red = self.damage_reduction
+        # self._max_damage_red = 100
 
     # ------------------------------------------------------------------------ #
     def cast_consecration(self) -> tuple:
@@ -234,9 +236,9 @@ class ProtectionPaladinSpells(CommonSpellsMixin):
             tuple: spell damage per turn, turns for which the spell is active
         """
         turns_active = 3
-        spell_damage = math.ceil(self._attack_power * 30 / 100)
-        spell_cost = math.ceil(self._max_mana * 5 / 100)
-        self._secondary_pool -= spell_cost
+        spell_damage = math.ceil(self.attack_power * 30 / 100)
+        spell_cost = math.ceil(self.max_secondary_pool * 5 / 100)
+        self._curr_mana -= spell_cost
 
         return spell_damage, turns_active
 
@@ -252,10 +254,10 @@ class ProtectionPaladinSpells(CommonSpellsMixin):
         turns_active = 1
         holy_power_generation = 1
         cooldown = 2
-        spell_damage = math.ceil(self._attack_power * 30 / 100)
-        spell_cost = math.ceil(self._max_mana * 5 / 100)
-        self._current_damage_red = math.ceil(self._attack_power * 30 / 100)
-        self._secondary_pool -= spell_cost
+        spell_damage = math.ceil(self.attack_power * 30 / 100)
+        spell_cost = math.ceil(self.max_secondary_pool * 5 / 100)
+        self._current_damage_red = math.ceil(self.attack_power * 30 / 100)
+        self._curr_mana -= spell_cost
 
         self._add_holy_power(holy_pow_gen=holy_power_generation)
 
@@ -272,9 +274,9 @@ class ProtectionPaladinSpells(CommonSpellsMixin):
         """
         holy_power_cost = 3
         if self._is_holy_power_spent(holy_pow_req=holy_power_cost):
-            spell_damage = math.ceil(self._attack_power * 42 / 100)
-            spell_cost = math.ceil(self._max_mana * 5 / 100)
-            self._secondary_pool -= spell_cost
+            spell_damage = math.ceil(self.attack_power * 42 / 100)
+            spell_cost = math.ceil(self.max_secondary_pool * 5 / 100)
+            self._curr_mana -= spell_cost
 
             return spell_damage
         else:
@@ -289,9 +291,9 @@ class ProtectionPaladinSpells(CommonSpellsMixin):
             int: damage of the spell
         """
         holy_power_generation = 1
-        spell_damage = math.ceil(self._attack_power * 110 / 100)
+        spell_damage = math.ceil(self.attack_power * 110 / 100)
         spell_cost = math.ceil(self._max_mana * 5 / 100)
-        self._secondary_pool -= spell_cost
-        self._add_holy_power(holy_power_generation)
+        self._curr_mana -= spell_cost
+        self.add_specific_stat(holy_power_generation)
 
         return spell_damage

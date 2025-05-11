@@ -1,6 +1,6 @@
 import math
 
-from Heroes.hero_base_stats import BaseHeroStats
+from Heroes.hero_base_stats import IBaseHero
 
 
 # ---------------------------------------------------------------------------- #
@@ -53,13 +53,13 @@ class CommonSpellsMixin:
 
 
 # ---------------------------------------------------------------------------- #
-class FuryWarriorSpells(BaseHeroStats, CommonSpellsMixin):
+class FuryWarriorSpells(IBaseHero, CommonSpellsMixin):
     # ------------------------------------------------------------------------ #
     def __init__(self):
         """
         Fury Warrior Spells.
         This class contains the spells and abilities of the Fury Warrior.
-        It inherits from the BaseHeroStats class and implements the spells and abilities of the Fury Warrior.
+        It inherits from the IBaseHero class and implements the spells and abilities of the Fury Warrior.
         """
 
         super().__init__()
@@ -85,9 +85,9 @@ class FuryWarriorSpells(BaseHeroStats, CommonSpellsMixin):
         self.check_max_rage(rage_generated)
 
         spell_attributes = {
-            'spell_cost': None,
-            'spell_damage': math.ceil(self._attack_power * 140 / 100),
-            'cooldown': 8,
+            "spell_cost": None,
+            "spell_damage": math.ceil(self._attack_power * 140 / 100),
+            "cooldown": 8,
         }
 
         return spell_attributes
@@ -103,11 +103,15 @@ class FuryWarriorSpells(BaseHeroStats, CommonSpellsMixin):
         """
 
         spell_attributes = {
-            'spell_cost': 80,
-            'spell_damage': math.ceil(self._attack_power * 230 / 100),
+            "spell_cost": 80,
+            "spell_damage": math.ceil(self._attack_power * 230 / 100),
         }
 
-        return spell_attributes if self.is_rage_spent(spell_attributes['spell_cost']) else None
+        return (
+            spell_attributes
+            if self.is_rage_spent(spell_attributes["spell_cost"])
+            else None
+        )
 
     # ------------------------------------------------------------------------ #
     def cast_bloodbath(self) -> dict:
@@ -125,9 +129,9 @@ class FuryWarriorSpells(BaseHeroStats, CommonSpellsMixin):
         self.check_max_health(health_restored)
 
         spell_attributes = {
-            'spell_cost': None,
-            'spell_damage': math.ceil(self._attack_power * 390 / 100),
-            'cooldown': 3,
+            "spell_cost": None,
+            "spell_damage": math.ceil(self._attack_power * 390 / 100),
+            "cooldown": 3,
         }
 
         return spell_attributes
@@ -145,22 +149,22 @@ class FuryWarriorSpells(BaseHeroStats, CommonSpellsMixin):
         self.check_max_rage(rage_generated)
 
         spell_attributes = {
-            'spell_cost': None,
-            'spell_damage': math.ceil(self._attack_power * 400 / 100),
-            'cooldown': 4,
+            "spell_cost": None,
+            "spell_damage": math.ceil(self._attack_power * 400 / 100),
+            "cooldown": 4,
         }
 
         return spell_attributes
 
 
 # ---------------------------------------------------------------------------- #
-class ProtectionWarriorSpells(BaseHeroStats, CommonSpellsMixin):
+class ProtectionWarriorSpells(IBaseHero, CommonSpellsMixin):
     # ------------------------------------------------------------------------ #
     def __init__(self):
         """
         Protection Warrior Spells.
         This class contains the spells and abilities of the Protection Warrior.
-        It inherits from the BaseHeroStats class and implements the spells and abilities of the Protection Warrior.
+        It inherits from the IBaseHero class and implements the spells and abilities of the Protection Warrior.
         """
 
         super().__init__()
@@ -186,9 +190,9 @@ class ProtectionWarriorSpells(BaseHeroStats, CommonSpellsMixin):
         self.check_max_rage(rage_generated)
 
         spell_attributes = {
-            'spell_cost': None,
-            'spell_damage': math.ceil(self._attack_power * 50 / 100),
-            'cooldown': 7,
+            "spell_cost": None,
+            "spell_damage": math.ceil(self._attack_power * 50 / 100),
+            "cooldown": 7,
         }
 
         return spell_attributes
@@ -204,9 +208,9 @@ class ProtectionWarriorSpells(BaseHeroStats, CommonSpellsMixin):
 
         if self.is_rage_spent(spell_cost=30):
             spell_attributes = {
-                'spell_cost': 30,
-                'damage_reduction': self._max_damage_red,
-                'cooldown': 2,
+                "spell_cost": 30,
+                "damage_reduction": self._max_damage_red,
+                "cooldown": 2,
             }
 
             return spell_attributes
@@ -225,8 +229,10 @@ class ProtectionWarriorSpells(BaseHeroStats, CommonSpellsMixin):
         rage_generated = 10
         self.check_max_rage(rage_generated)
 
-        self._spell_attributes['spell_damage'] = math.ceil(self._attack_power * 240 / 100)
-        self._spell_attributes['cooldown'] = 10
+        self._spell_attributes["spell_damage"] = math.ceil(
+            self._attack_power * 240 / 100
+        )
+        self._spell_attributes["cooldown"] = 10
 
         return self._spell_attributes
 
@@ -243,9 +249,9 @@ class ProtectionWarriorSpells(BaseHeroStats, CommonSpellsMixin):
         self.check_max_rage(rage_generated)
 
         spell_attributes = {
-            'spell_cost': None,
-            'spell_damage': math.ceil(self._attack_power * 420 / 100),
-            'cooldown': 8,
+            "spell_cost": None,
+            "spell_damage": math.ceil(self._attack_power * 420 / 100),
+            "cooldown": 8,
         }
 
         return spell_attributes
@@ -263,9 +269,9 @@ class ProtectionWarriorSpells(BaseHeroStats, CommonSpellsMixin):
         self.check_max_rage(rage_generated)
 
         spell_attributes = {
-            'spell_cost': None,
-            'spell_damage': math.ceil(self._attack_power * 130 / 100),
-            'cooldown': 2,
+            "spell_cost": None,
+            "spell_damage": math.ceil(self._attack_power * 130 / 100),
+            "cooldown": 2,
         }
 
         return spell_attributes
@@ -283,10 +289,10 @@ class ProtectionWarriorSpells(BaseHeroStats, CommonSpellsMixin):
         if self.is_rage_spent(spell_cost=35):
             self._current_damage_red += 50
             spell_attributes = {
-                'spell_cost': 35,
-                'damage_reduction': self._current_damage_red,
-                'cooldown': 0,
-                'turns_active': 1,
+                "spell_cost": 35,
+                "damage_reduction": self._current_damage_red,
+                "cooldown": 0,
+                "turns_active": 1,
             }
 
             return spell_attributes

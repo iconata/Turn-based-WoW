@@ -1,6 +1,7 @@
 """
 This module contains a base hero class, to hold basic hero attributes.
 """
+
 from abc import ABC, abstractmethod
 
 """
@@ -37,12 +38,13 @@ class IBaseHero(ABC):
         self.spell_power = 10
         self.attack_power = 10
         self.damage_reduction = 0
+        self.max_damage_reduction = 100
         self.spell_attributes = {
-            'spell_cost': 0,
-            'spell_damage': 0,
-            'cooldown': 0,
-            'turns_active': 0,
-            'damage_reduction': 0,
+            "spell_cost": 0,
+            "spell_damage": 0,
+            "cooldown": 0,
+            "turns_active": 0,
+            "damage_reduction": 0,
         }
 
     @abstractmethod
@@ -96,27 +98,27 @@ class ICommonGetters(ABC):
     """
 
     @abstractmethod
-    def get_health(self, hero_instance: IBaseHero) -> int:
+    def get_current_health(self, hero_instance: IBaseHero) -> int:
         pass
 
     @abstractmethod
-    def get_secondary_pool(self, hero_instance: IBaseHero) -> int:
+    def get_current_secondary_pool(self, hero_instance: IBaseHero) -> int:
         pass
 
     @abstractmethod
-    def get_spell_power(self, hero_instance: IBaseHero) -> int:
+    def get_current_spell_power(self, hero_instance: IBaseHero) -> int:
         pass
 
     @abstractmethod
-    def get_attack_power(self, hero_instance: IBaseHero) -> int:
+    def get_current_attack_power(self, hero_instance: IBaseHero) -> int:
         pass
 
     @abstractmethod
-    def get_damage_reduction(self, hero_instance: IBaseHero) -> int:
+    def get_current_damage_reduction(self, hero_instance: IBaseHero) -> int:
         pass
 
     @abstractmethod
-    def get_spell_attributes(self, hero_instance: IBaseHero) -> dict:
+    def get_current_spell_attributes(self, hero_instance: IBaseHero) -> dict:
         pass
 
 
@@ -144,6 +146,7 @@ class ICommonSetters(ABC):
     @abstractmethod
     def set_spell_attributes(self, value: dict, hero_instance: IBaseHero) -> None:
         pass
+
 
 class ICommonCheckers(ABC):
     @abstractmethod

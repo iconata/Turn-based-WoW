@@ -4,13 +4,13 @@ Handler library, which contains all Priest spells
 
 import math
 
-from Heroes.hero_base_stats import BaseHeroStats
+from Heroes.hero_base_stats import IBaseHero
 
 
 # ---------------------------------------------------------------------------- #
 #                                    Classes                                   #
 # ---------------------------------------------------------------------------- #
-class ShadowPriestSpells(BaseHeroStats):
+class ShadowPriestSpells(IBaseHero):
     # ------------------------------------------------------------------------ #
     def __init__(self):
         self._health = 750

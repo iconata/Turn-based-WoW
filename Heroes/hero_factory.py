@@ -2,7 +2,10 @@
 Hero Factory which creates a hero based on the input.
 """
 
-from Spells.paladin_spell_handler import RetributionPaladinSpells, ProtectionPaladinSpells
+from Spells.paladin_spell_handler import (
+    RetributionPaladinSpells,
+    ProtectionPaladinSpells,
+)
 from Spells.warrior_spell_handler import FuryWarriorSpells, ProtectionWarriorSpells
 from Spells.mage_spell_handler import FireMageSpells
 from Spells.monk_spell_handler import WindwalkerMonkSpells, BrewmasterMonkSpells
@@ -17,56 +20,56 @@ class HeroFactory:
     # ------------------------------------------------------------------------ #
     def create_hero(self, hero_type: str, hero_role: str):
         match hero_type:
-            case 'Paladin':
+            case "Paladin":
                 match hero_role:
-                    case 'Protection':
+                    case "Protection":
                         return self.__create_protection_paladin()
-                    case 'Retribution':
+                    case "Retribution":
                         return self.__create_retribution_paladin()
-            case 'Warrior':
+            case "Warrior":
                 match hero_role:
-                    case 'Protection':
+                    case "Protection":
                         return self.__create_fury_warrior()
-                    case 'Fury':
+                    case "Fury":
                         return self.__create_protection_warrior()
-            case 'Priest':
+            case "Priest":
                 match hero_role:
-                    case 'Shadow':
+                    case "Shadow":
                         return self.__create_shadow_priest()
-            case 'Shaman':
+            case "Shaman":
                 match hero_role:
-                    case 'Elemental':
+                    case "Elemental":
                         return self.__create_elemental_shaman()
-                    case 'Enhancement':
+                    case "Enhancement":
                         return self.__create_enhancement_shaman()
-            case 'Monk':
+            case "Monk":
                 match hero_role:
-                    case 'Brewmaster':
+                    case "Brewmaster":
                         return self.__create_brewmaster_monk()
-                    case 'Windweaver':
+                    case "Windweaver":
                         return self.__create_windwalker_monk()
-            case 'Mage':
+            case "Mage":
                 match hero_role:
-                    case 'Fire':
+                    case "Fire":
                         return self.__create_fire_mage()
 
     # ------------------------------------------------------------------------ #
     def __create_retribution_paladin(self):
         cls_instance = RetributionPaladinSpells()
-        cls_instance.max_health = 1200
+        cls_instance.max_health = 800
         cls_instance.max_secondary_pool = 300
         cls_instance.spell_power = 30
-        cls_instance.attack_power = 45
+        cls_instance.attack_power = 75
 
         return cls_instance
 
     # ------------------------------------------------------------------------ #
     def __create_protection_paladin(self):
         cls_instance = ProtectionPaladinSpells()
-        cls_instance.max_health = 800
+        cls_instance.max_health = 1200
         cls_instance.max_secondary_pool = 300
         cls_instance.spell_power = 30
-        cls_instance.attack_power = 75
+        cls_instance.attack_power = 45
 
         return cls_instance
 
@@ -98,12 +101,19 @@ class HeroFactory:
     # ------------------------------------------------------------------------ #
     def __create_enhancement_shaman(self):
         cls_instance = EnhancementShamanSpells()
+        cls_instance.max_health = 850
+        cls_instance.max_secondary_pool = 300
+        cls_instance.attack_power = 35
+        cls_instance.spell_power = 60
 
         return cls_instance
 
     # ------------------------------------------------------------------------ #
     def __create_elemental_shaman(self):
         cls_instance = ElementalShamanSpells()
+        cls_instance.max_health = 750
+        cls_instance.max_secondary_pool = 750
+        cls_instance.spell_power = 100
 
         return cls_instance
 

@@ -1,21 +1,30 @@
 import math
 
-from Heroes.hero_base_stats import BaseHeroStats
+from Heroes.hero_base_stats import IBaseHero
 
 
 # ---------------------------------------------------------------------------- #
 #                                    Classes                                   #
 # ---------------------------------------------------------------------------- #
-class CommonSpellsMixin:
+class ShamanCommonSpells(IBaseHero):
     """
     Common Spells Mixin
     This class contains the common spells and abilities of the Shaman.
     """
 
     # ------------------------------------------------------------------------ #
+    def __init__(self):
+        super().__init__()
+        self._curr_maelstrom_stacks = 0
+        self._max_maelstrom_stacks = 5
+        self._curr_health = self.max_health
+        self._curr_mana = self.max_secondary_pool
+        self._current_damage_red = self.damage_reduction
+
+    # ------------------------------------------------------------------------ #
     @staticmethod
     def __is_flame_shock_active(active_spells: list) -> bool:
-        if 'flame_shock' in active_spells:
+        if "flame_shock" in active_spells:
             return True
 
         return False
@@ -92,7 +101,7 @@ class CommonSpellsMixin:
 
 
 # ---------------------------------------------------------------------------- #
-class EnhancementShamanSpells(BaseHeroStats, CommonSpellsMixin):
+class EnhancementShamanSpells(ShamanCommonSpells):
     """
     Enhancement Shaman Spells
     This class contains the spells and abilities of the Enhancement Shaman.
@@ -100,17 +109,6 @@ class EnhancementShamanSpells(BaseHeroStats, CommonSpellsMixin):
 
     def __init__(self):
         super().__init__()
-        self._curr_maelstrom_stacks = 0
-        self._max_maelstrom_stacks = 5
-        self._health = 850
-        self._secondary_pool = 300
-        self._attack_power = 35
-        self._spell_power = 60
-        self._max_damage_red = 100
-        self._max_health = self._health
-        self._max_mana = self._secondary_pool
-        self._base_damage_red = self._damage_reduction
-        self._current_damage_red = self._damage_reduction
 
     # ------------------------------------------------------------------------ #
     def cast_stormstrike(self) -> tuple:
@@ -186,7 +184,7 @@ class EnhancementShamanSpells(BaseHeroStats, CommonSpellsMixin):
 
 
 # ---------------------------------------------------------------------------- #
-class ElementalShamanSpells(BaseHeroStats, CommonSpellsMixin):
+class ElementalShamanSpells(ShamanCommonSpells):
     """
     Elemental Shaman Spells
     This class contains the spells and abilities of the Elemental Shaman.
@@ -194,16 +192,6 @@ class ElementalShamanSpells(BaseHeroStats, CommonSpellsMixin):
 
     def __init__(self):
         super().__init__()
-        self._curr_maelstrom_stacks = 0
-        self._max_maelstrom_stacks = 5
-        self._health = 750
-        self._secondary_pool = 750
-        self._spell_power = 100
-        self._max_damage_red = 100
-        self._max_health = self._health
-        self._max_mana = self._secondary_pool
-        self._base_damage_red = self._damage_reduction
-        self._current_damage_red = self._damage_reduction
 
     # ------------------------------------------------------------------------ #
     def cast_earth_shock(self):

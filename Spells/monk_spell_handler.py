@@ -1,6 +1,6 @@
 import math
 
-from Heroes.hero_base_stats import BaseHeroStats
+from Heroes.hero_base_stats import IBaseHero
 
 
 # ---------------------------------------------------------------------------- #
@@ -85,7 +85,7 @@ class CommonSpellsMixin:
 
 
 # ---------------------------------------------------------------------------- #
-class WindwalkerMonkSpells(BaseHeroStats, CommonSpellsMixin):
+class WindwalkerMonkSpells(IBaseHero, CommonSpellsMixin):
     # ------------------------------------------------------------------------ #
     """
     Windwalker Monk Spells
@@ -93,7 +93,7 @@ class WindwalkerMonkSpells(BaseHeroStats, CommonSpellsMixin):
     The Windwalker Monk is a melee DPS spec that uses chi to cast spells and abilities.
 
     Args:
-        BaseHeroStats (cls): _base class for all hero stats
+        IBaseHero (cls): _base class for all hero stats
         CommonSpellsMixin (cls): _mixin class for common spells
     """
 
@@ -173,7 +173,7 @@ class WindwalkerMonkSpells(BaseHeroStats, CommonSpellsMixin):
 
 
 # ---------------------------------------------------------------------------- #
-class BrewmasterMonkSpells(BaseHeroStats, CommonSpellsMixin):
+class BrewmasterMonkSpells(IBaseHero, CommonSpellsMixin):
     # ------------------------------------------------------------------------ #
     """
     Brewmaster Monk Spells
@@ -181,7 +181,7 @@ class BrewmasterMonkSpells(BaseHeroStats, CommonSpellsMixin):
     The Brewmaster Monk is a tank spec that uses chi to cast spells and abilities.
 
     Args:
-        BaseHeroStats (cls): _base class for all hero stats
+        IBaseHero (cls): _base class for all hero stats
         CommonSpellsMixin (cls): _mixin class for common spells
     """
 
