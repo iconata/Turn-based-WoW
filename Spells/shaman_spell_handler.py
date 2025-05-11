@@ -39,8 +39,8 @@ class ShamanCommonSpells(IBaseHero):
 
         """
         cooldown = 1
-        spell_cost = math.ceil(self._max_mana * 4 / 100)
-        spell_damage = math.ceil(self._spell_power * 131 / 100)
+        spell_cost = math.ceil(self.max_secondary_pool * 4 / 100)
+        spell_damage = math.ceil(self.spell_power * 131 / 100)
         self._secondary_pool -= spell_cost
 
         return spell_damage, cooldown
@@ -57,8 +57,8 @@ class ShamanCommonSpells(IBaseHero):
         cooldown = 5
         turns_active = 3
         spell_cost = math.ceil(self._max_mana * 5 / 100)
-        initial_spell_damage = math.ceil(self._spell_power * 30 / 100)
-        damage_over_time = math.ceil(self._spell_power * 120 / 100)
+        initial_spell_damage = math.ceil(self.spell_power * 30 / 100)
+        damage_over_time = math.ceil(self.spell_power * 120 / 100)
         self._secondary_pool -= spell_cost
 
         return initial_spell_damage, damage_over_time, cooldown, turns_active
@@ -73,8 +73,8 @@ class ShamanCommonSpells(IBaseHero):
 
         """
         cooldown = 7
-        spell_cost = math.ceil(self._max_mana * 5 / 100)
-        spell_damage = math.ceil(self._spell_power * 525 / 100)
+        spell_cost = math.ceil(self.max_secondary_pool * 5 / 100)
+        spell_damage = math.ceil(self.spell_power * 525 / 100)
         self._secondary_pool -= spell_cost
 
         return spell_damage, cooldown
@@ -90,14 +90,60 @@ class ShamanCommonSpells(IBaseHero):
 
         """
         cooldown = 2
-        spell_cost = math.ceil(self._max_mana * 5 / 100)
-        spell_damage = math.ceil(self._spell_power * 140 / 100)
+        spell_cost = math.ceil(self.max_secondary_pool * 5 / 100)
+        spell_damage = math.ceil(self.spell_power * 140 / 100)
         self._secondary_pool -= spell_cost
 
         if self.__is_flame_shock_active(active_spells):
             spell_damage *= 2
 
         return spell_damage, cooldown
+
+    # ------------------------------------------------------------------------ #
+    def heal_up(self, heal_amount) -> None:
+        """
+        Main healing spell logic. Checks the current health of the hero and also the incoming amount.
+        If the incoming amount is overhealing, the current health will be set to the max health.
+
+        Args:
+            heal_amount (int): value of the incoming heal
+        """
+        self._curr_health += heal_amount
+
+        if self._curr_health > self.max_health:
+            self._curr_health = self.max_health
+
+    # ------------------------------------------------------------------------ #
+    def add_specific_stat(self, stat_value: int = 0) -> None:
+        """
+        Checks the current amount of maelstrom stacks available to the hero.
+        If the maelstrom stacks goes beyond the max maelstrom stacks, the current maelstrom stacks are set to the max
+
+        Args:
+            stat_value (int): Add the maelstrom stack to the amount currently available.
+        """
+
+        self._curr_maelstrom_stacks += stat_value
+
+        if self._curr_maelstrom_stacks >= self._max_maelstrom_stacks:
+            self._curr_maelstrom_stacks = self._max_maelstrom_stacks
+
+    # ------------------------------------------------------------------------ #
+    def is_specific_stat_spent(self, stat_value: int) -> bool:
+        """
+        Boolean check if the hero has enough maelstrom stacks for the spell that was casted.
+
+        Args:
+            stat_value (int): cost of the spell
+
+        Returns:
+            bool: returns True if there are enough maelstrom stacks for the spell, otherwise returns False
+        """
+        if self._curr_maelstrom_stacks >= stat_value:
+            self._curr_maelstrom_stacks -= stat_value
+            return True
+        else:
+            return False
 
 
 # ---------------------------------------------------------------------------- #
@@ -122,8 +168,8 @@ class EnhancementShamanSpells(ShamanCommonSpells):
         """
 
         cooldown = 2
-        spell_cost = math.ceil(self._max_mana * 5 / 100)
-        spell_damage = math.ceil(self._attack_power * 400 / 100)
+        spell_cost = math.ceil(self.max_secondary_pool * 5 / 100)
+        spell_damage = math.ceil(self.attack_power * 400 / 100)
         self._secondary_pool -= spell_cost
 
         return spell_damage, cooldown
@@ -139,8 +185,8 @@ class EnhancementShamanSpells(ShamanCommonSpells):
         """
 
         cooldown = 2
-        spell_cost = math.ceil(self._max_mana * 3 / 100)
-        spell_damage = math.ceil(self._attack_power * 240 / 100)
+        spell_cost = math.ceil(self.max_secondary_pool * 3 / 100)
+        spell_damage = math.ceil(self.attack_power * 240 / 100)
         self._secondary_pool -= spell_cost
 
         return spell_damage, cooldown
@@ -156,8 +202,8 @@ class EnhancementShamanSpells(ShamanCommonSpells):
         """
 
         cooldown = 5
-        spell_cost = math.ceil(self._max_mana * 3 / 100)
-        spell_damage = math.ceil(self._spell_power * 310 / 100)
+        spell_cost = math.ceil(self.max_secondary_pool * 3 / 100)
+        spell_damage = math.ceil(self.attack_power * 310 / 100)
         self._secondary_pool -= spell_cost
 
         return spell_damage, cooldown
@@ -174,9 +220,9 @@ class EnhancementShamanSpells(ShamanCommonSpells):
 
         cooldown = 8
         turns_active = 4
-        spell_cost = math.ceil(self._max_mana * 5 / 100)
-        spell_damage = math.ceil(self._attack_power * 80 / 100) + math.ceil(
-            self._spell_power * 80 / 100
+        spell_cost = math.ceil(self.max_secondary_pool * 5 / 100)
+        spell_damage = math.ceil(self.attack_power * 80 / 100) + math.ceil(
+            self.spell_power * 80 / 100
         )
         self._secondary_pool -= spell_cost
 
@@ -203,8 +249,8 @@ class ElementalShamanSpells(ShamanCommonSpells):
         """
 
         cooldown = 3
-        spell_cost = math.ceil(self._max_mana * 10 / 100)
-        spell_damage = math.ceil(self._spell_power * 550 / 100)
+        spell_cost = math.ceil(self.max_secondary_pool * 10 / 100)
+        spell_damage = math.ceil(self.spell_power * 550 / 100)
         self._secondary_pool -= spell_cost
 
         return spell_damage, cooldown

@@ -6,22 +6,30 @@ from Heroes.hero_base_stats import IBaseHero
 # ---------------------------------------------------------------------------- #
 #                                    Classes                                   #
 # ---------------------------------------------------------------------------- #
-class CommonSpellsMixin:
+class WarriorCommonSpells(IBaseHero):
     """
     Common Spells Mixin
     This class contains the common spells and abilities of the Warrior.
     """
 
     # ------------------------------------------------------------------------ #
-    def is_rage_spent(self, spell_cost: float) -> bool:
-        if self._curr_rage >= spell_cost:
-            self._curr_rage -= spell_cost
+    def __init__(self):
+        super().__init__()
+        self._curr_rage = 0
+        self._curr_health = self.max_health
+        self._max_rage = self.max_secondary_pool
+        self._current_damage_red = self.damage_reduction
+
+    # ------------------------------------------------------------------------ #
+    def is_specific_stat_spent(self, stat_value: int) -> bool:
+        if self._curr_rage >= stat_value:
+            self._curr_rage -= stat_value
             return True
 
         return False
 
     # ------------------------------------------------------------------------ #
-    def check_max_health(self, heal_ammount: float) -> None:
+    def heal_up(self, heal_ammount: float) -> None:
         """
         Check if the amount of incoming heal will overheal and the max health will
         be exceeded. If so, set the health to the max health.
@@ -31,29 +39,29 @@ class CommonSpellsMixin:
             heal_ammount (float): amount of incoming heal
         """
 
-        if self._health + heal_ammount > self._max_health:
-            self._health = self._max_health
+        if self._curr_health + heal_ammount > self.max_health:
+            self._curr_health = self.max_health
         else:
-            self._health += heal_ammount
+            self._curr_health += heal_ammount
 
     # ------------------------------------------------------------------------ #
-    def check_max_rage(self, rage_ammount: int) -> None:
+    def add_specific_stat(self, stat_value: int) -> None:
         """
         Checks if the amount of generated rage will exceed the max rage.
         If so, set the rage to the max rage.
 
         Args:
-            rage_ammount (int): amount of generated rage
+            stat_value (int): amount of generated rage
         """
 
-        if self._curr_rage + rage_ammount > self._max_rage:
+        if self._curr_rage + stat_value > self._max_rage:
             self._curr_rage = self._max_rage
         else:
-            self._curr_rage += rage_ammount
+            self._curr_rage += stat_value
 
 
 # ---------------------------------------------------------------------------- #
-class FuryWarriorSpells(IBaseHero, CommonSpellsMixin):
+class FuryWarriorSpells(WarriorCommonSpells):
     # ------------------------------------------------------------------------ #
     def __init__(self):
         """
@@ -63,14 +71,6 @@ class FuryWarriorSpells(IBaseHero, CommonSpellsMixin):
         """
 
         super().__init__()
-        self._curr_rage = 0
-        self._health = 1000
-        self._secondary_pool = 200
-        self._attack_power = 70
-        self._max_health = self._health
-        self._max_rage = self._secondary_pool
-        self._current_damage_red = self._damage_reduction
-        self._max_damage_red = 100
 
     # ------------------------------------------------------------------------ #
     def cast_bladestorm(self) -> dict:
@@ -84,13 +84,11 @@ class FuryWarriorSpells(IBaseHero, CommonSpellsMixin):
         rage_generated = 10
         self.check_max_rage(rage_generated)
 
-        spell_attributes = {
-            "spell_cost": None,
-            "spell_damage": math.ceil(self._attack_power * 140 / 100),
-            "cooldown": 8,
-        }
+        self.spell_attributes["spell_cost"] = None
+        self.spell_attributes["spell_damage"] = math.ceil(self.attack_power * 140 / 100)
+        self.spell_attributes["cooldown"] = 8
 
-        return spell_attributes
+        return self.spell_attributes
 
     # ------------------------------------------------------------------------ #
     def cast_rampage(self) -> dict:
@@ -102,14 +100,12 @@ class FuryWarriorSpells(IBaseHero, CommonSpellsMixin):
             dict: spell_cost, spell_damage
         """
 
-        spell_attributes = {
-            "spell_cost": 80,
-            "spell_damage": math.ceil(self._attack_power * 230 / 100),
-        }
+        self.spell_attributes["spell_cost"] = 80
+        self.spell_attributes["spell_damage"] = math.ceil(self.attack_power * 230 / 100)
 
         return (
-            spell_attributes
-            if self.is_rage_spent(spell_attributes["spell_cost"])
+            self.spell_attributes
+            if self.is_rage_spent(self.spell_attributes["spell_cost"])
             else None
         )
 
@@ -123,18 +119,16 @@ class FuryWarriorSpells(IBaseHero, CommonSpellsMixin):
             dict: spell_cost, spell_damage, cooldown
         """
         rage_generated = 8
-        health_restored = math.ceil(self._health * 3 / 100)
+        health_restored = math.ceil(self.max_health * 3 / 100)
 
         self.check_max_rage(rage_generated)
         self.check_max_health(health_restored)
 
-        spell_attributes = {
-            "spell_cost": None,
-            "spell_damage": math.ceil(self._attack_power * 390 / 100),
-            "cooldown": 3,
-        }
+        self.spell_attributes["spell_cost"] = None
+        self.spell_attributes["spell_damage"] = math.ceil(self.attack_power * 390 / 100)
+        self.spell_attributes["cooldown"] = 3
 
-        return spell_attributes
+        return self.spell_attributes
 
     # ------------------------------------------------------------------------ #
     def cast_raging_blow(self) -> dict:
@@ -148,17 +142,15 @@ class FuryWarriorSpells(IBaseHero, CommonSpellsMixin):
         rage_generated = 12
         self.check_max_rage(rage_generated)
 
-        spell_attributes = {
-            "spell_cost": None,
-            "spell_damage": math.ceil(self._attack_power * 400 / 100),
-            "cooldown": 4,
-        }
+        self.spell_attributes["spell_cost"] = None
+        self.spell_attributes["spell_damage"] = math.ceil(self.attack_power * 400 / 100)
+        self.spell_attributes["cooldown"] = 4
 
-        return spell_attributes
+        return self.spell_attributes
 
 
 # ---------------------------------------------------------------------------- #
-class ProtectionWarriorSpells(IBaseHero, CommonSpellsMixin):
+class ProtectionWarriorSpells(WarriorCommonSpells):
     # ------------------------------------------------------------------------ #
     def __init__(self):
         """
@@ -168,14 +160,6 @@ class ProtectionWarriorSpells(IBaseHero, CommonSpellsMixin):
         """
 
         super().__init__()
-        self._curr_rage = 0
-        self._health = 1500
-        self._secondary_pool = 200
-        self._attack_power = 50
-        self._max_health = self._health
-        self._max_rage = self._secondary_pool
-        self._current_damage_red = self._damage_reduction
-        self._max_damage_red = 100
 
     # ------------------------------------------------------------------------ #
     def cast_charge(self) -> dict:
@@ -189,13 +173,11 @@ class ProtectionWarriorSpells(IBaseHero, CommonSpellsMixin):
         rage_generated = 20
         self.check_max_rage(rage_generated)
 
-        spell_attributes = {
-            "spell_cost": None,
-            "spell_damage": math.ceil(self._attack_power * 50 / 100),
-            "cooldown": 7,
-        }
+        self.spell_attributes["spell_cost"] = None
+        self.spell_attributes["spell_damage"] = math.ceil(self.attack_power * 50 / 100)
+        self.spell_attributes["cooldown"] = 7
 
-        return spell_attributes
+        return self.spell_attributes
 
     # ------------------------------------------------------------------------ #
     def cast_shield_block(self) -> dict:
@@ -207,13 +189,11 @@ class ProtectionWarriorSpells(IBaseHero, CommonSpellsMixin):
         """
 
         if self.is_rage_spent(spell_cost=30):
-            spell_attributes = {
-                "spell_cost": 30,
-                "damage_reduction": self._max_damage_red,
-                "cooldown": 2,
-            }
+            self.spell_attributes["spell_cost"] = 30
+            self.spell_attributes["damage_reduction"] = self.max_damage_reduction
+            self.spell_attributes["cooldown"] = 2
 
-            return spell_attributes
+            return self.spell_attributes
         else:
             return None
 
@@ -229,12 +209,10 @@ class ProtectionWarriorSpells(IBaseHero, CommonSpellsMixin):
         rage_generated = 10
         self.check_max_rage(rage_generated)
 
-        self._spell_attributes["spell_damage"] = math.ceil(
-            self._attack_power * 240 / 100
-        )
-        self._spell_attributes["cooldown"] = 10
+        self.spell_attributes["spell_damage"] = math.ceil(self.attack_power * 240 / 100)
+        self.spell_attributes["cooldown"] = 10
 
-        return self._spell_attributes
+        return self.spell_attributes
 
     # ------------------------------------------------------------------------ #
     def cast_shield_charge(self) -> dict:
@@ -248,13 +226,11 @@ class ProtectionWarriorSpells(IBaseHero, CommonSpellsMixin):
         rage_generated = 20
         self.check_max_rage(rage_generated)
 
-        spell_attributes = {
-            "spell_cost": None,
-            "spell_damage": math.ceil(self._attack_power * 420 / 100),
-            "cooldown": 8,
-        }
+        self.spell_attributes["spell_cost"] = None
+        self.spell_attributes["spell_damage"] = math.ceil(self.attack_power * 420 / 100)
+        self.spell_attributes["cooldown"] = 8
 
-        return spell_attributes
+        return self.spell_attributes
 
     # ------------------------------------------------------------------------ #
     def cast_sheild_slam(self) -> dict:
@@ -268,13 +244,13 @@ class ProtectionWarriorSpells(IBaseHero, CommonSpellsMixin):
         rage_generated = 15
         self.check_max_rage(rage_generated)
 
-        spell_attributes = {
-            "spell_cost": None,
-            "spell_damage": math.ceil(self._attack_power * 130 / 100),
-            "cooldown": 2,
-        }
+        self.spell_attributes["spell_cost"] = None
+        self.spell_attributes["spell_damage"] = math.ceil(
+            self._attack_power * 130 / 100
+        )
+        self.spell_attributes["cooldown"] = 2
 
-        return spell_attributes
+        return self.spell_attributes
 
     # ------------------------------------------------------------------------ #
     def cast_ignore_pain(self) -> dict:
@@ -288,14 +264,12 @@ class ProtectionWarriorSpells(IBaseHero, CommonSpellsMixin):
 
         if self.is_rage_spent(spell_cost=35):
             self._current_damage_red += 50
-            spell_attributes = {
-                "spell_cost": 35,
-                "damage_reduction": self._current_damage_red,
-                "cooldown": 0,
-                "turns_active": 1,
-            }
+            self.spell_attributes["spell_cost"] = 35
+            self.spell_attributes["damage_reduction"] = self._current_damage_red
+            self.spell_attributes["cooldown"] = 0
+            self.spell_attributes["turns_active"] = 1
 
-            return spell_attributes
+            return self.spell_attributes
         else:
             return None
 

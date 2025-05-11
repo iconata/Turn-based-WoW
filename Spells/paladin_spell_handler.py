@@ -99,7 +99,7 @@ class PaladinCommonSpells(IBaseHero):
         If the holy power goes beyond the max holy power, the current holy power is set to the max
 
         Args:
-            holy_pow_gen (int, optional): _description_. Defaults to 0.
+            stat_value (int, optional): Adds the generated holy power to the currently available.
         """
 
         self._curr_holy_power += stat_value
@@ -113,7 +113,7 @@ class PaladinCommonSpells(IBaseHero):
         Boolean check if the hero has enough holy power for the spell that was casted.
 
         Args:
-            holy_pow_req (int): cost of the spell
+            stat_value (int): cost of the spell
 
         Returns:
             bool: returns True if there's enough spell power for the spell, otherwise returns False
