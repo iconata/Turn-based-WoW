@@ -18,7 +18,6 @@ class WarriorCommonSpells(IBaseHero):
         self._curr_rage = 0
         self._curr_health = self.max_health
         self._max_rage = self.max_secondary_pool
-        self._current_damage_red = self.damage_reduction
 
     # ------------------------------------------------------------------------ #
     def is_specific_stat_spent(self, stat_value: int) -> bool:
@@ -263,9 +262,8 @@ class ProtectionWarriorSpells(WarriorCommonSpells):
         """
 
         if self.is_rage_spent(spell_cost=35):
-            self._current_damage_red += 50
             self.spell_attributes["spell_cost"] = 35
-            self.spell_attributes["damage_reduction"] = self._current_damage_red
+            self.spell_attributes["damage_reduction"] = 50
             self.spell_attributes["cooldown"] = 0
             self.spell_attributes["turns_active"] = 1
 

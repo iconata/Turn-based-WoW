@@ -45,6 +45,9 @@ class IBaseHero(ABC):
             "cooldown": 0,
             "turns_active": 0,
             "damage_reduction": 0,
+            "initial_spell_damage": 0,
+            "health_leech": 0,
+            "damage_over_time": 0,
         }
 
     @abstractmethod

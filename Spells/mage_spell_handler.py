@@ -21,66 +21,87 @@ class FireMageSpells(IBaseHero):
         IBaseHero (cls): Base class for all heroes, containing base stats and methods.
     """
 
+    # ------------------------------------------------------------------------ #
     def __init__(self):
         super().__init__()
-        self._health = 700
-        self._secondary_pool = 900
-        self._spell_power = 110
-        self._max_damage_red = 100
-        self._max_health = self._health
-        self._max_mana = self._secondary_pool
-        self._base_damage_red = self._damage_reduction
-        self._current_damage_red = self._damage_reduction
+        self._curr_fire_stacks = 0
+        self._max_fire_stacks = 8
+        self._curr_health = self.max_health
+        self._curr_mana = self.max_secondary_pool
 
     # ------------------------------------------------------------------------ #
-
     def cast_fireball(self):
         """
-        Hurl a fireball to the target, dealing significant fire damage.
+        Hurl a fireball to the target, dealing significant fire damage. Heals you for 1% of your max health.
+        Generated 1 fire stack.
 
         Returns:
             tuple: damage of the spell, cooldown of the spell
         """
-        cooldown = 3
-        spell_cost = math.ceil(self._max_mana * 2 / 100)
+        generated_fire_stack = 1
         spell_damage = math.ceil(self._spell_power * 155 / 100)
-        self._secondary_pool -= spell_cost
+        heal_amount = math.ceil(self.max_health * 1 / 100)
+        self.heal_up(heal_amount)
+        self.add_specific_stat(generated_fire_stack)
 
-        return spell_damage, cooldown
+        if self.is_specific_stat_spent(self._max_fire_stacks):
+            spell_damage = (math.ceil(self._spell_power * 155 / 100)) * 2
+
+        self.spell_attributes["cooldown"] = 3
+        self.spell_attributes["spell_cost"] = math.ceil(self._max_mana * 2 / 100)
+        self.spell_attributes["spell_damage"] = spell_damage
+        self._curr_mana -= self.spell_attributes["spell_cost"]
+
+        return self.spell_attributes
 
     # ------------------------------------------------------------------------ #
     def cast_fire_blast(self):
         """
         Blast the target with fire, decreasing their damage reduction by 15% for 3 turns.
+        Generates 1 fire stack.
 
         Returns:
             tuple: damage of the spell, amount of damage reduction to be applied,
             turns for which the effect is active
         """
-        turns_active = 3
-        damage_reduction = 15
-        spell_cost = math.ceil(self._max_mana * 1 / 100)
+        generated_fire_stack = 1
         spell_damage = math.ceil(self._spell_power * 82 / 100)
-        self._secondary_pool -= spell_cost
+        self.add_specific_stat(generated_fire_stack)
 
-        return spell_damage, damage_reduction, turns_active
+        if self.is_specific_stat_spent(self._max_fire_stacks):
+            spell_damage = (math.ceil(self._spell_power * 82 / 100)) * 2
+
+        self.spell_attributes["turns_active"] = 3
+        self.spell_attributes["damage_reduction"] = 15
+        self.spell_attributes["spell_cost"] = math.ceil(self._max_mana * 1 / 100)
+        self.spell_attributes["spell_damage"] = spell_damage
+        self._curr_mana -= self.spell_attributes["spell_cost"]
+
+        return self.spell_attributes
 
     # ------------------------------------------------------------------------ #
     def cast_flamestrike(self):
         """
         Ignite the ground under the feet of your target, making them take damage over time for 3 turns.
-        Cooldown - 5 turns.
+        Cooldown - 5 turns. Generates 1 fire stack.
 
         Returns:
             tuple: damage of the spell, cooldown of the spell, turns for which the spell is active
         """
-        turns_active = 3
-        cooldown = 5
-        spell_cost = math.ceil(self._max_mana * 1 / 100)
+        generated_fire_stack = 1
         spell_damage = math.ceil(self._spell_power * 57 / 100)
-        self._secondary_pool -= spell_cost
+        self.add_specific_stat(generated_fire_stack)
 
-        return spell_damage, cooldown, turns_active
+        if self.is_specific_stat_spent(self._max_fire_stacks):
+            spell_damage = (math.ceil(self._spell_power * 57 / 100)) * 2
+
+        self.spell_attributes["turns_active"] = 3
+        self.spell_attributes["cooldown"] = 5
+        self.spell_attributes["spell_cost"] = math.ceil(self._max_mana * 1 / 100)
+        self.spell_attributes["spell_damage"] = spell_damage
+        self._curr_mana -= self.spell_attributes["spell_cost"]
+
+        return self.spell_attributes
 
     # ------------------------------------------------------------------------ #
     def cast_polymorph(self):
@@ -92,26 +113,79 @@ class FireMageSpells(IBaseHero):
         Returns:
             tuple: cooldown of the spell, turns for which the spell is active
         """
-        turns_active = 2
-        cooldown = 5
-        spell_cost = math.ceil(self._max_mana * 1 / 100)
-        self._secondary_pool -= spell_cost
+        self.spell_attributes["turns_active"] = 2
+        self.spell_attributes["cooldown"] = 5
+        self.spell_attributes["spell_cost"] = math.ceil(
+            self.max_secondary_pool * 1 / 100
+        )
+        self._curr_mana -= self.spell_attributes["spell_cost"]
 
-        return cooldown, turns_active
+        return self.spell_attributes
 
     # ------------------------------------------------------------------------ #
     def cast_arcane_intellect(self):
         """
-        Your arcane understanding, increases your spell power by 10% for 4 turns.
+        Your arcane understanding, increases your spell power by 10% for 4 turns
+        and restoring 20% of you max mana
+        .
         Cooldown - 4 turns.
 
         Returns:
             tuple: cooldown of the spell, turns for which the spell is active
         """
-        turns_active = 4
-        cooldown = 4
-        self._spell_power += math.ceil(self._spell_power * 10 / 100)
-        spell_cost = math.ceil(self._max_mana * 4 / 100)
-        self._secondary_pool -= spell_cost
+        self.spell_attributes["turns_active"] = 4
+        self.spell_attributes["cooldown"] = 4
+        self.spell_power += math.ceil(self.spell_power * 10 / 100)
+        self.spell_attributes["spell_cost"] = math.ceil(
+            self.max_secondary_pool * 4 / 100
+        )
+        self._curr_mana -= self.spell_attributes["spell_cost"]
 
-        return cooldown, turns_active
+        return self.spell_attributes
+
+    # ------------------------------------------------------------------------ #
+    def heal_up(self, heal_amount) -> None:
+        """
+        Main healing spell logic. Checks the current health of the hero and also the incoming amount.
+        If the incoming amount is overhealing, the current health will be set to the max health.
+
+        Args:
+            heal_amount (int): value of the incoming heal
+        """
+        self._curr_health += heal_amount
+
+        if self._curr_health > self.max_health:
+            self._curr_health = self.max_health
+
+    # ------------------------------------------------------------------------ #
+    def add_specific_stat(self, stat_value: int = 0) -> None:
+        """
+        Checks the current amount of fire stacks available to the hero.
+        If the current fire stacks goes beyond the max fire stacks, the current fire stacks are set to the max
+
+        Args:
+            stat_value (int, optional): Adds the generated fire stacks to the currently available.
+        """
+
+        self._curr_fire_stacks += stat_value
+
+        if self._curr_fire_stacks >= self._max_fire_stacks:
+            self._curr_fire_stacks = self._max_fire_stacks
+
+    # ------------------------------------------------------------------------ #
+    def is_specific_stat_spent(self, stat_value: int) -> bool:
+        """
+        Boolean check if the hero has enough fire stacks to double the damage of next spell cast.
+
+        Args:
+            stat_value (int): cost of the spell
+
+        Returns:
+            bool: returns True if the stacks are enough to double the damage, otherwise returns False
+        """
+
+        if self._curr_fire_stacks == stat_value:
+            self._curr_fire_stacks = 0
+            return True
+        else:
+            return False

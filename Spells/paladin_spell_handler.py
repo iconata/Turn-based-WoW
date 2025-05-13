@@ -23,9 +23,6 @@ class PaladinCommonSpells(IBaseHero):
         self._max_holy_power = 5
         self._curr_health = self.max_health
         self._curr_mana = self.max_secondary_pool
-        self._base_damage_red = self.damage_reduction
-        self._current_damage_red = self.damage_reduction
-        self._max_damage_red = 100
 
     # ------------------------------------------------------------------------ #
     def cast_divine_shield(self) -> tuple:
@@ -36,12 +33,11 @@ class PaladinCommonSpells(IBaseHero):
         Returns:
             tuple: cooldown of the spell and for how many turns it is active
         """
-        max_damage_reduction = 100
-        cooldown = 15
-        self._current_damage_red = max_damage_reduction
-        turns_active = 2
+        self.spell_attributes["cooldown"] = 15
+        self.spell_attributes["damage_reduction"] = self.max_damage_reduction
+        self.spell_attributes["turns_active"] = 2
 
-        return cooldown, turns_active
+        return self.spell_attributes
 
     # ------------------------------------------------------------------------ #
     def cast_judgement(self) -> tuple:
@@ -51,14 +47,16 @@ class PaladinCommonSpells(IBaseHero):
         Returns:
             tuple: damage of the spell, cooldown of the spell
         """
-        cooldown = 3
         holy_power_generation = 1
-        spell_damage = math.ceil(self.attack_power * 61 / 100)
-        spell_cost = math.ceil(self.max_secondary_pool * 5 / 100)
-        self._curr_mana -= spell_cost
+        self.spell_attributes["cooldown"] = 3
+        self.spell_attributes["spell_damage"] = math.ceil(self.attack_power * 61 / 100)
+        self.spell_attributes["spell_cost"] = math.ceil(
+            self.max_secondary_pool * 5 / 100
+        )
+        self._curr_mana -= self.spell_attributes["spell_cost"]
         self.add_specific_stat(holy_power_generation)
 
-        return spell_damage, cooldown
+        return self.spell_attributes
 
     # ------------------------------------------------------------------------ #
     def cast_word_of_glory(self):
@@ -68,15 +66,8 @@ class PaladinCommonSpells(IBaseHero):
         """
         cost = 3
         amount_to_heal = math.ceil(self._spell_power * 346 / 100)
-        if self._is_holy_power_spent(holy_pow_req=cost):
+        if self.is_specific_stat_spent(cost):
             self.heal_up(amount_to_heal)
-
-    # ------------------------------------------------------------------------ #
-    def display_amount_of_holy_power(self):
-        """
-        Outputs the current spell power in the terminal
-        """
-        print(f"Holy power: {self._curr_holy_power}")
 
     # ------------------------------------------------------------------------ #
     def heal_up(self, heal_amount) -> None:
@@ -143,13 +134,17 @@ class RetributionPaladinSpells(PaladinCommonSpells):
         Returns:
             tuple: cooldown of the spell, amount of turns for which it is active
         """
-        turns_active = 2
-        cooldown = 4
-        spell_cost = math.ceil(self.max_secondary_pool * 5 / 100)
-        self._current_damage_red = math.ceil(self.attack_power * 20 / 100)
-        self._curr_mana -= spell_cost
+        self.spell_attributes["damage_reduction"] = math.ceil(
+            self.attack_power * 20 / 100
+        )
+        self.spell_attributes["cooldown"] = 4
+        self.spell_attributes["turns_active"] = 2
+        self.spell_attributes["spell_cost"] = math.ceil(
+            self.max_secondary_pool * 5 / 100
+        )
+        self._curr_mana -= self.spell_attributes["spell_cost"]
 
-        return cooldown, turns_active
+        return self.spell_attributes
 
     # ------------------------------------------------------------------------ #
     def cast_blade_of_justice(self) -> tuple:
@@ -161,14 +156,16 @@ class RetributionPaladinSpells(PaladinCommonSpells):
         Returns:
             tuple: damage of the spell, cooldown of the spell
         """
-        cooldown = 3
         holy_power_generation = 1
-        spell_damage = math.ceil(self.attack_power * 135 / 100)
-        spell_cost = math.ceil(self.max_secondary_pool * 5 / 100)
-        self.max_secondary_pool -= spell_cost
+        self.spell_attributes["cooldown"] = 3
+        self.spell_attributes["spell_damage"] = math.ceil(self.attack_power * 135 / 100)
+        self.spell_attributes["spell_cost"] = math.ceil(
+            self.max_secondary_pool * 5 / 100
+        )
+        self._curr_mana -= self.spell_attributes["spell_cost"]
         self.add_specific_stat(holy_power_generation)
 
-        return spell_damage, cooldown
+        return self.spell_attributes
 
     # ------------------------------------------------------------------------ #
     def cast_final_verdict(self) -> int:
@@ -177,17 +174,21 @@ class RetributionPaladinSpells(PaladinCommonSpells):
         Cost - 3 Holy Power.
 
         Returns:
-            tuple: damage of the spell
+            tuple: damage of the spell or None if the hero does not have enough holy power
         """
         cost = 3
         if self.is_specific_stat_spent(cost):
-            spell_damage = math.ceil(self.attack_power * 161 / 100)
-            spell_cost = math.ceil(self.max_secondary_pool * 7 / 100)
-            self.max_secondary_pool -= spell_cost
+            self.spell_attributes["spell_damage"] = math.ceil(
+                self.attack_power * 161 / 100
+            )
+            self.spell_attributes["spell_cost"] = math.ceil(
+                self.max_secondary_pool * 7 / 100
+            )
+            self._curr_mana -= self.spell_attributes["spell_cost"]
 
-            return spell_damage
+            return self.spell_attributes
         else:
-            pass  # TODO: do something
+            return None
 
     # ------------------------------------------------------------------------ #
     def cast_wake_of_ashes(self) -> tuple:
@@ -198,15 +199,17 @@ class RetributionPaladinSpells(PaladinCommonSpells):
         Returns:
             tuple: spell damage, cooldown of the spell.
         """
-        cooldown = 6
         holy_power_generated = 3
-        spell_damage = math.ceil(self.attack_power * 293 / 100)
-        spell_cost = math.ceil(self.max_secondary_pool * 15 / 100)
-        self.max_secondary_pool -= spell_cost
+        self.spell_attributes["cooldown"] = 6
+        self.spell_attributes["spell_damage"] = math.ceil(self.attack_power * 293 / 100)
+        self.spell_attributes["spell_cost"] = math.ceil(
+            self.max_secondary_pool * 15 / 100
+        )
+        self._curr_mana -= self.spell_attributes["spell_cost"]
 
         self.add_specific_stat(holy_power_generated)
 
-        return spell_damage, cooldown
+        return self.spell_attributes
 
 
 # ---------------------------------------------------------------------------- #
@@ -218,14 +221,6 @@ class ProtectionPaladinSpells(PaladinCommonSpells):
     def __init__(self):
         super().__init__()
 
-        # self._curr_holy_power = 0
-        # self._max_holy_power = 5
-        # self._curr_health = self.health
-        # self._max_mana = self._secondary_pool
-        # self._base_damage_red = self.damage_reduction
-        # self._current_damage_red = self.damage_reduction
-        # self._max_damage_red = 100
-
     # ------------------------------------------------------------------------ #
     def cast_consecration(self) -> tuple:
         """
@@ -235,12 +230,14 @@ class ProtectionPaladinSpells(PaladinCommonSpells):
         Returns:
             tuple: spell damage per turn, turns for which the spell is active
         """
-        turns_active = 3
-        spell_damage = math.ceil(self.attack_power * 30 / 100)
-        spell_cost = math.ceil(self.max_secondary_pool * 5 / 100)
-        self._curr_mana -= spell_cost
+        self.spell_attributes["turns_active"] = 3
+        self.spell_attributes["spell_damage"] = math.ceil(self.attack_power * 30 / 100)
+        self.spell_attributes["spell_cost"] = math.ceil(
+            self.max_secondary_pool * 5 / 100
+        )
+        self._curr_mana -= self.spell_attributes["spell_cost"]
 
-        return spell_damage, turns_active
+        return self.spell_attributes
 
     # ------------------------------------------------------------------------ #
     def cast_blessed_hammer(self) -> tuple:
@@ -251,17 +248,19 @@ class ProtectionPaladinSpells(PaladinCommonSpells):
         Returns:
             tuple: damage of the spell, cooldown of the spell, turns for which is active
         """
-        turns_active = 1
         holy_power_generation = 1
-        cooldown = 2
-        spell_damage = math.ceil(self.attack_power * 30 / 100)
-        spell_cost = math.ceil(self.max_secondary_pool * 5 / 100)
-        self._current_damage_red = math.ceil(self.attack_power * 30 / 100)
-        self._curr_mana -= spell_cost
+        self.spell_attributes["turns_active"] = 1
+        self.spell_attributes["cooldown"] = 2
+        self.spell_attributes["spell_damage"] = math.ceil(self.attack_power * 30 / 100)
+        self.spell_attributes["spell_cost"] = math.ceil(
+            self.max_secondary_pool * 5 / 100
+        )
+        self.damage_reduction = math.ceil(self.attack_power * 30 / 100)
+        self._curr_mana -= self.spell_attributes["spell_cost"]
 
-        self._add_holy_power(holy_pow_gen=holy_power_generation)
+        self.add_specific_stat(holy_power_generation)
 
-        return spell_damage, cooldown, turns_active
+        return self.spell_attributes
 
     # ------------------------------------------------------------------------ #
     def cast_shield_of_the_righteous(self) -> int:
@@ -270,17 +269,21 @@ class ProtectionPaladinSpells(PaladinCommonSpells):
         Cost - 3 Holy Power.
 
         Returns:
-            int: spell damage
+            int: spell damage or None if the hero does not have enough holy power
         """
         holy_power_cost = 3
         if self._is_holy_power_spent(holy_pow_req=holy_power_cost):
-            spell_damage = math.ceil(self.attack_power * 42 / 100)
-            spell_cost = math.ceil(self.max_secondary_pool * 5 / 100)
-            self._curr_mana -= spell_cost
+            self.spell_attributes["spell_damage"] = math.ceil(
+                self.attack_power * 42 / 100
+            )
+            self.spell_attributes["spell_cost"] = math.ceil(
+                self.max_secondary_pool * 5 / 100
+            )
+            self._curr_mana -= self.spell_attributes["spell_cost"]
 
-            return spell_damage
+            return self.spell_attributes
         else:
-            pass  # placeholder
+            return None
 
     # ------------------------------------------------------------------------ #
     def cast_crusader_strike(self) -> int:
@@ -291,9 +294,9 @@ class ProtectionPaladinSpells(PaladinCommonSpells):
             int: damage of the spell
         """
         holy_power_generation = 1
-        spell_damage = math.ceil(self.attack_power * 110 / 100)
-        spell_cost = math.ceil(self._max_mana * 5 / 100)
-        self._curr_mana -= spell_cost
+        self.spell_attributes["spell_damage"] = math.ceil(self.attack_power * 110 / 100)
+        self.spell_attributes["spell_cost"] = math.ceil(self._max_mana * 5 / 100)
+        self._curr_mana -= self.spell_attributes["spell_cost"]
         self.add_specific_stat(holy_power_generation)
 
-        return spell_damage
+        return self.spell_attributes
