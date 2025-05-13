@@ -13,7 +13,7 @@ class WarriorCommonSpells(IBaseHero):
     """
 
     # ------------------------------------------------------------------------ #
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self._curr_rage = 0
         self._curr_health = self.max_health
@@ -62,7 +62,7 @@ class WarriorCommonSpells(IBaseHero):
 # ---------------------------------------------------------------------------- #
 class FuryWarriorSpells(WarriorCommonSpells):
     # ------------------------------------------------------------------------ #
-    def __init__(self):
+    def __init__(self) -> None:
         """
         Fury Warrior Spells.
         This class contains the spells and abilities of the Fury Warrior.
@@ -72,7 +72,7 @@ class FuryWarriorSpells(WarriorCommonSpells):
         super().__init__()
 
     # ------------------------------------------------------------------------ #
-    def cast_bladestorm(self) -> dict:
+    def cast_bladestorm(self) -> dict[str, int]:
         """
         Become and unstoppable storm of destructive force, striking your enemy,
         dealing Physiscal damage.
@@ -90,7 +90,7 @@ class FuryWarriorSpells(WarriorCommonSpells):
         return self.spell_attributes
 
     # ------------------------------------------------------------------------ #
-    def cast_rampage(self) -> dict:
+    def cast_rampage(self) -> dict[str, int] | None:
         """
         Enrages you and unleashes a flurry of brutal attacks, dealing Physical damage.
         The spell requires 80 rage to cast.
@@ -109,7 +109,7 @@ class FuryWarriorSpells(WarriorCommonSpells):
         )
 
     # ------------------------------------------------------------------------ #
-    def cast_bloodbath(self) -> dict:
+    def cast_bloodbath(self) -> dict[str, int]:
         """
         Assault the target in a bloodthirsty craze, dealing Physical damage and
         restoring 3% of your health.
@@ -130,7 +130,7 @@ class FuryWarriorSpells(WarriorCommonSpells):
         return self.spell_attributes
 
     # ------------------------------------------------------------------------ #
-    def cast_raging_blow(self) -> dict:
+    def cast_raging_blow(self) -> dict[str, int]:
         """
         A might blow with both weapons, that deals Physical damage.
 
@@ -151,7 +151,7 @@ class FuryWarriorSpells(WarriorCommonSpells):
 # ---------------------------------------------------------------------------- #
 class ProtectionWarriorSpells(WarriorCommonSpells):
     # ------------------------------------------------------------------------ #
-    def __init__(self):
+    def __init__(self) -> None:
         """
         Protection Warrior Spells.
         This class contains the spells and abilities of the Protection Warrior.
@@ -161,7 +161,7 @@ class ProtectionWarriorSpells(WarriorCommonSpells):
         super().__init__()
 
     # ------------------------------------------------------------------------ #
-    def cast_charge(self) -> dict:
+    def cast_charge(self) -> dict[str, int]:
         """
         Charge to an enemy dealing physical damage and generating 20 rage.
 
@@ -179,7 +179,7 @@ class ProtectionWarriorSpells(WarriorCommonSpells):
         return self.spell_attributes
 
     # ------------------------------------------------------------------------ #
-    def cast_shield_block(self) -> dict:
+    def cast_shield_block(self) -> dict[str, int] | None:
         """
         Raise your shield, blocking 100% of incoming damage for 2 turns.
 
@@ -197,7 +197,7 @@ class ProtectionWarriorSpells(WarriorCommonSpells):
             return None
 
     # ------------------------------------------------------------------------ #
-    def cast_champions_spear(self) -> dict:
+    def cast_champions_spear(self) -> dict[str, int]:
         """
         Throw a spear at the target, dealing Physical damage and generating 10 rage.
 
@@ -214,7 +214,7 @@ class ProtectionWarriorSpells(WarriorCommonSpells):
         return self.spell_attributes
 
     # ------------------------------------------------------------------------ #
-    def cast_shield_charge(self) -> dict:
+    def cast_shield_charge(self) -> dict[str, int]:
         """
         Charge to an enemy with your shield, dealing Physical damage and generating 20 rage.
 
@@ -232,7 +232,7 @@ class ProtectionWarriorSpells(WarriorCommonSpells):
         return self.spell_attributes
 
     # ------------------------------------------------------------------------ #
-    def cast_sheild_slam(self) -> dict:
+    def cast_sheild_slam(self) -> dict[str, int]:
         """
         Slams the target with your shield, dealing Physical damage and generating 15 rage.
 
@@ -252,7 +252,7 @@ class ProtectionWarriorSpells(WarriorCommonSpells):
         return self.spell_attributes
 
     # ------------------------------------------------------------------------ #
-    def cast_ignore_pain(self) -> dict:
+    def cast_ignore_pain(self) -> dict[str, int] | None:
         """
         Fight through the pain, ingoring 50% of incoming damage for 1 turn.
         This spell costs 35 rage to cast.

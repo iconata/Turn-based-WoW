@@ -17,7 +17,7 @@ class PaladinCommonSpells(IBaseHero):
     """
 
     # ------------------------------------------------------------------------ #
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self._curr_holy_power = 0
         self._max_holy_power = 5
@@ -25,7 +25,7 @@ class PaladinCommonSpells(IBaseHero):
         self._curr_mana = self.max_secondary_pool
 
     # ------------------------------------------------------------------------ #
-    def cast_divine_shield(self) -> tuple:
+    def cast_divine_shield(self) -> dict[str, int]:
         """
         Powerfull protection spell, which block all incoming damage for 2 turns.
         Cooldown - 15 turns.
@@ -40,7 +40,7 @@ class PaladinCommonSpells(IBaseHero):
         return self.spell_attributes
 
     # ------------------------------------------------------------------------ #
-    def cast_judgement(self) -> tuple:
+    def cast_judgement(self) -> dict[str, int]:
         """
         Judges the target, dealing damage based on the hero's attack power. Generates 1 Holy Power.
 
@@ -59,7 +59,7 @@ class PaladinCommonSpells(IBaseHero):
         return self.spell_attributes
 
     # ------------------------------------------------------------------------ #
-    def cast_word_of_glory(self):
+    def cast_word_of_glory(self) -> None:
         """
         Fairly strong healing spell, healing for percent amount of the hero's spell power.
         Because of the spell cost, the internal logic will check if there's enough holy power so the spell can be cast.
@@ -122,11 +122,11 @@ class RetributionPaladinSpells(PaladinCommonSpells):
     Class that handles the Retribution Paladin spells.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
     # ------------------------------------------------------------------------ #
-    def cast_divine_protection(self) -> tuple:
+    def cast_divine_protection(self) -> dict[str, int]:
         """
         Protection spell, which reduces the amount of incoming damage by 20%.
         Cooldown - 4 turns.
@@ -147,7 +147,7 @@ class RetributionPaladinSpells(PaladinCommonSpells):
         return self.spell_attributes
 
     # ------------------------------------------------------------------------ #
-    def cast_blade_of_justice(self) -> tuple:
+    def cast_blade_of_justice(self) -> dict[str, int]:
         """
         Pierce the target with a blade of light, dealing percent damage based on the hero's attack power.
         Generates 3 Holy Power.
@@ -168,7 +168,7 @@ class RetributionPaladinSpells(PaladinCommonSpells):
         return self.spell_attributes
 
     # ------------------------------------------------------------------------ #
-    def cast_final_verdict(self) -> int:
+    def cast_final_verdict(self) -> dict[str, int] | None:
         """
         Powerfull spell, dealing percent damage based on the hero's attack power.
         Cost - 3 Holy Power.
@@ -191,7 +191,7 @@ class RetributionPaladinSpells(PaladinCommonSpells):
             return None
 
     # ------------------------------------------------------------------------ #
-    def cast_wake_of_ashes(self) -> tuple:
+    def cast_wake_of_ashes(self) -> dict[str, int]:
         """
         Lash out at your enemies, dealing heavy weapon damage. Generates 3 Holy Power.
         Cooldown - 6 turns.
@@ -222,7 +222,7 @@ class ProtectionPaladinSpells(PaladinCommonSpells):
         super().__init__()
 
     # ------------------------------------------------------------------------ #
-    def cast_consecration(self) -> tuple:
+    def cast_consecration(self) -> dict[str, int]:
         """
         Ignite the ground beneath you, dealing damage over time to your enemies.
         Turns active - 3.
@@ -240,7 +240,7 @@ class ProtectionPaladinSpells(PaladinCommonSpells):
         return self.spell_attributes
 
     # ------------------------------------------------------------------------ #
-    def cast_blessed_hammer(self) -> tuple:
+    def cast_blessed_hammer(self) -> dict[str, int]:
         """
         Hurl a blessed hammer to your enemies, dealing holy damage and reducing
         damage taked by 30% from your attack power for 1 turn.
@@ -263,7 +263,7 @@ class ProtectionPaladinSpells(PaladinCommonSpells):
         return self.spell_attributes
 
     # ------------------------------------------------------------------------ #
-    def cast_shield_of_the_righteous(self) -> int:
+    def cast_shield_of_the_righteous(self) -> dict[str, int] | None:
         """
         Slam the enemy with your shield, dealing holy damage.
         Cost - 3 Holy Power.
@@ -286,7 +286,7 @@ class ProtectionPaladinSpells(PaladinCommonSpells):
             return None
 
     # ------------------------------------------------------------------------ #
-    def cast_crusader_strike(self) -> int:
+    def cast_crusader_strike(self) -> dict[str, int]:
         """
         Strike the target, dealing holy damage. Generates 1 Holy Power.
 

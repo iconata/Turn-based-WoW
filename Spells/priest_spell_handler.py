@@ -65,18 +65,19 @@ class ShadowPriestSpells(IBaseHero):
             tuple: initial spell damage, damage over time, amount of health restored
             to the caster, cooldown of the spell, turns for which the spell is active
         """
-        initial_spell_damage = math.ceil(self._spell_power * 155 / 100)
         self.spell_attributes["cooldown"] = 4
         self.spell_attributes["turns_active"] = 3
         self.spell_attributes["spell_cost"] = math.ceil(
             self.max_secondary_pool * 10 / 100
         )
-        self.spell_attributes["initial_spell_damage"] = initial_spell_damage
+        self.spell_attributes["initial_spell_damage"] = math.ceil(
+            self._spell_power * 155 / 100
+        )
         self.spell_attributes["health_leech"] = math.ceil(
-            initial_spell_damage * 30 / 100
+            self.spell_attributes["initial_spell_damage"] * 30 / 100
         )
         self.spell_attributes["damage_over_time"] = math.ceil(
-            initial_spell_damage * 13 / 100
+            self.spell_attributes["initial_spell_damage"] * 13 / 100
         )
         self._secondary_pool -= self.spell_attributes["spell_cost"]
 
@@ -87,25 +88,33 @@ class ShadowPriestSpells(IBaseHero):
         """
         Quick healing spell, healing for moderate amount. Healing restores you state of mind, removing 20 insanity.
         """
-        spell_cost = math.ceil(self.max_secondary_pool * 10 / 100)
+        self.spell_attributes["spell_cost"] = math.ceil(
+            self.max_secondary_pool * 10 / 100
+        )
         amount_to_heal = math.ceil(self.spell_power * 203 / 100)
-        self._curr_mana -= spell_cost
+        self._curr_mana -= self.spell_attributes["spell_cost"]
         self.heal_up(amount_to_heal)
+        self.remove_specific_stat(stat_value=20)
+
+        return self.spell_attributes
 
     # ------------------------------------------------------------------------ #
-    def cast_power_word_shield(self):
+    def cast_power_word_shield(self) -> dict[str, int]:
         """
         Powerfull word that creates a shield around the caster, absorbing a fixed amount of incoming damage.
 
         Returns:
             tuple: amount of damage that will be absorbed, cooldown of the spell
         """
-        cooldown = 5
-        spell_cost = math.ceil(self.max_secondary_pool * 10 / 100)
-        damage_to_absorb = math.ceil(self._spell_power * 336 / 100)
-        self._secondary_pool -= spell_cost
+        self.spell_attributes["cooldown"] = 5
+        self.spell_attributes["spell_cost"] = math.ceil(
+            self.max_secondary_pool * 10 / 100
+        )
+        self.spell_attributes["damage_reduction"] = self.max_damage_reduction
+        self.spell_attributes["turns_active"] = 2
+        self._curr_mana -= self.spell_attributes["spell_cost"]
 
-        return damage_to_absorb, cooldown
+        return self.spell_attributes
 
     # ------------------------------------------------------------------------ #
     def heal_up(self, heal_amount) -> None:

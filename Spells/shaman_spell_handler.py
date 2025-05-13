@@ -29,7 +29,7 @@ class ShamanCommonSpells(IBaseHero):
         return False
 
     # ------------------------------------------------------------------------ #
-    def cast_lighting_bolt(self) -> tuple:
+    def cast_lighting_bolt(self) -> dict[str, int]:
         """
         Hurls a bolt of lightning at the target, dealing nature damage.
 
@@ -47,7 +47,7 @@ class ShamanCommonSpells(IBaseHero):
         return self.spell_attributes
 
     # ------------------------------------------------------------------------ #
-    def cast_flame_shock(self) -> tuple:
+    def cast_flame_shock(self) -> dict[str, int]:
         """
         Sears the target with fire, causing initial damage and then dealing damage over time.
 
@@ -69,7 +69,7 @@ class ShamanCommonSpells(IBaseHero):
         return self.spell_attributes
 
     # ------------------------------------------------------------------------ #
-    def cast_primordial_wave(self) -> tuple:
+    def cast_primordial_wave(self) -> dict[str, int]:
         """
         Blast the target with a Primordial Wave of energy, dealing elemental damage.
 
@@ -87,7 +87,7 @@ class ShamanCommonSpells(IBaseHero):
         return self.spell_attributes
 
     # ------------------------------------------------------------------------ #
-    def cast_lava_burst(self, active_spells: list) -> tuple:
+    def cast_lava_burst(self, active_spells: list) -> dict[str, int]:
         """
         Hurls a molten lava ball towards the target, dealing fire damage. Lava Burst will
         always critically strike if the target is affected by Flame Shock.
@@ -162,11 +162,11 @@ class EnhancementShamanSpells(ShamanCommonSpells):
     This class contains the spells and abilities of the Enhancement Shaman.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
     # ------------------------------------------------------------------------ #
-    def cast_stormstrike(self) -> tuple:
+    def cast_stormstrike(self) -> dict[str, int]:
         """
         Energizes both weapons with lightning and delivers a massive blow to your target,
         dealing Physical damage.
@@ -186,7 +186,7 @@ class EnhancementShamanSpells(ShamanCommonSpells):
         return self.spell_attributes
 
     # ------------------------------------------------------------------------ #
-    def cast_lava_lash(self) -> tuple:
+    def cast_lava_lash(self) -> dict[str, int]:
         """
         Charges your off-hand weapon with lava and burns your target, dealing Fire damage.
 
@@ -205,7 +205,7 @@ class EnhancementShamanSpells(ShamanCommonSpells):
         return self.spell_attributes
 
     # ------------------------------------------------------------------------ #
-    def cast_tempest(self) -> tuple:
+    def cast_tempest(self) -> dict[str, int]:
         """
         Calls down a tremendous lightning strike, dealing Nature damage to you target.
 
@@ -224,7 +224,7 @@ class EnhancementShamanSpells(ShamanCommonSpells):
         return self.spell_attributes
 
     # ------------------------------------------------------------------------ #
-    def cast_feral_spirit(self) -> tuple:
+    def cast_feral_spirit(self) -> dict[str, int]:
         """
         Summon two Spirit Wolves to fight by your side for 4 turns.
 

@@ -22,7 +22,7 @@ class FireMageSpells(IBaseHero):
     """
 
     # ------------------------------------------------------------------------ #
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self._curr_fire_stacks = 0
         self._max_fire_stacks = 8
@@ -30,7 +30,7 @@ class FireMageSpells(IBaseHero):
         self._curr_mana = self.max_secondary_pool
 
     # ------------------------------------------------------------------------ #
-    def cast_fireball(self):
+    def cast_fireball(self) -> dict[str, int]:
         """
         Hurl a fireball to the target, dealing significant fire damage. Heals you for 1% of your max health.
         Generated 1 fire stack.
@@ -55,7 +55,7 @@ class FireMageSpells(IBaseHero):
         return self.spell_attributes
 
     # ------------------------------------------------------------------------ #
-    def cast_fire_blast(self):
+    def cast_fire_blast(self) -> dict[str, int]:
         """
         Blast the target with fire, decreasing their damage reduction by 15% for 3 turns.
         Generates 1 fire stack.
@@ -80,7 +80,7 @@ class FireMageSpells(IBaseHero):
         return self.spell_attributes
 
     # ------------------------------------------------------------------------ #
-    def cast_flamestrike(self):
+    def cast_flamestrike(self) -> dict[str, int]:
         """
         Ignite the ground under the feet of your target, making them take damage over time for 3 turns.
         Cooldown - 5 turns. Generates 1 fire stack.
@@ -104,7 +104,7 @@ class FireMageSpells(IBaseHero):
         return self.spell_attributes
 
     # ------------------------------------------------------------------------ #
-    def cast_polymorph(self):
+    def cast_polymorph(self) -> dict[str, int]:
         """
         Pacify the target for 2 turns, making them unable to cast any spells.
         Any damage suffered by the target will break the effect.
@@ -123,7 +123,7 @@ class FireMageSpells(IBaseHero):
         return self.spell_attributes
 
     # ------------------------------------------------------------------------ #
-    def cast_arcane_intellect(self):
+    def cast_arcane_intellect(self) -> dict[str, int]:
         """
         Your arcane understanding, increases your spell power by 10% for 4 turns
         and restoring 20% of you max mana

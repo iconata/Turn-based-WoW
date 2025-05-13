@@ -63,7 +63,7 @@ class MonkCommonSpells(IBaseHero):
         self._health = min(self._health, self._max_health)
 
     # ------------------------------------------------------------------------ #
-    def cast_spinning_crane_kick(self) -> tuple:
+    def cast_spinning_crane_kick(self) -> dict[str, int]:
         """
         Spin while kicking in the air, dealing damage to all enemies in the area.
 
@@ -106,11 +106,11 @@ class WindwalkerMonkSpells(MonkCommonSpells):
         CommonSpellsMixin (cls): _mixin class for common spells
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
     # ------------------------------------------------------------------------ #
-    def cast_tiger_palm(self):
+    def cast_tiger_palm(self) -> dict[str, int]:
         """
         Strike with the palm of you hand, dealing physical damage to the target. Generates 2 chi.
 
@@ -129,7 +129,7 @@ class WindwalkerMonkSpells(MonkCommonSpells):
         return self.spell_attributes
 
     # ------------------------------------------------------------------------ #
-    def cast_rising_sun_kick(self) -> tuple:
+    def cast_rising_sun_kick(self) -> dict[str, int]:
         """
         Kick upwards, dealing damage to the target, dealing physical damage
 
@@ -146,7 +146,7 @@ class WindwalkerMonkSpells(MonkCommonSpells):
         return self.spell_attributes
 
     # ------------------------------------------------------------------------ #
-    def cast_fists_of_fury(self) -> tuple:
+    def cast_fists_of_fury(self) -> dict[str, int]:
         """
         Pummel all targets in front of you, dealing physical damage.
 
@@ -163,7 +163,7 @@ class WindwalkerMonkSpells(MonkCommonSpells):
         return self.spell_attributes
 
     # ------------------------------------------------------------------------ #
-    def cast_whirling_dragon_punch(self) -> tuple:
+    def cast_whirling_dragon_punch(self) -> dict[str, int]:
         """
         Perform a devastationg whirling upward stike, dealing damage to all targets in front of you.
 
@@ -189,11 +189,11 @@ class BrewmasterMonkSpells(MonkCommonSpells):
         CommonSpellsMixin (cls): _mixin class for common spells
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
     # ------------------------------------------------------------------------ #
-    def cast_rushing_jade_wind(self) -> tuple:
+    def cast_rushing_jade_wind(self) -> dict[str, int]:
         """
         Summon a swirling wind around you, dealing damage to all enemies in the area.
 
@@ -210,7 +210,7 @@ class BrewmasterMonkSpells(MonkCommonSpells):
         return self.spell_attributes
 
     # ------------------------------------------------------------------------ #
-    def cast_chi_burst(self) -> tuple:
+    def cast_chi_burst(self) -> dict[str, int]:
         """
         Launch a burst of chi energy, dealing damage to all enemies in the area.
 
@@ -223,7 +223,7 @@ class BrewmasterMonkSpells(MonkCommonSpells):
         return self.spell_attributes
 
     # ------------------------------------------------------------------------ #
-    def cast_keg_smash(self) -> tuple:
+    def cast_keg_smash(self) -> dict[str, int]:
         """
         Smash the target with your keg, dealing damage to the target and reducing the damage taken by 30% for 1 turn.
 
@@ -242,7 +242,7 @@ class BrewmasterMonkSpells(MonkCommonSpells):
         return self.spell_attributes
 
     # ------------------------------------------------------------------------ #
-    def cast_blackout_kick(self) -> tuple:
+    def cast_blackout_kick(self) -> dict[str, int]:
         """
         Kick the target with a blast of chi, dealing damage to the target.
 
@@ -259,7 +259,7 @@ class BrewmasterMonkSpells(MonkCommonSpells):
         return self.spell_attributes
 
     # ------------------------------------------------------------------------ #
-    def cast_breath_of_fire(self) -> tuple:
+    def cast_breath_of_fire(self) -> dict[str, int]:
         """
         Breath fire on the target, dealing fire damage infront of the hero.
 
