@@ -3,6 +3,7 @@ This module contains a base hero class, to hold basic hero attributes.
 """
 
 from abc import ABC, abstractmethod
+from typing import Any
 
 """
 Steps to create a strategy pattern:
@@ -32,7 +33,7 @@ class IBaseHero(ABC):
     as all common spells.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.max_health = 1000
         self.max_secondary_pool = 500
         self.spell_power = 10
@@ -49,6 +50,22 @@ class IBaseHero(ABC):
             "health_leech": 0,
             "damage_over_time": 0,
         }
+
+    @abstractmethod
+    def create_hero(self, hero_instance) -> Any:
+        """
+        Create a hero based on the instance provided.
+
+        Args:
+            hero_instance (IBaseHero): class instance
+
+        Raises:
+            NotImplementedError: the method must be implemented in the child class
+
+        Returns:
+            Any: class instance
+        """
+        raise NotImplementedError
 
     @abstractmethod
     def heal_up(self, heal_amount: int) -> None:

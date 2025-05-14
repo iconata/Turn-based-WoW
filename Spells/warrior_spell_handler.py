@@ -20,6 +20,20 @@ class WarriorCommonSpells(IBaseHero):
         self._max_rage = self.max_secondary_pool
 
     # ------------------------------------------------------------------------ #
+    def create_hero(self, hero_instance):
+        if isinstance(hero_instance, FuryWarriorSpells):
+            hero_instance.max_health = 1000
+            hero_instance.max_secondary_pool = 200
+            hero_instance.attack_power = 70
+
+        elif isinstance(hero_instance, ProtectionWarriorSpells):
+            hero_instance.max_health = 1500
+            hero_instance.max_secondary_pool = 200
+            hero_instance.attack_power = 50
+
+        return hero_instance
+
+    # ------------------------------------------------------------------------ #
     def is_specific_stat_spent(self, stat_value: int) -> bool:
         if self._curr_rage >= stat_value:
             self._curr_rage -= stat_value
@@ -28,7 +42,7 @@ class WarriorCommonSpells(IBaseHero):
         return False
 
     # ------------------------------------------------------------------------ #
-    def heal_up(self, heal_ammount: float) -> None:
+    def heal_up(self, heal_amount: float) -> None:
         """
         Check if the amount of incoming heal will overheal and the max health will
         be exceeded. If so, set the health to the max health.
@@ -38,10 +52,10 @@ class WarriorCommonSpells(IBaseHero):
             heal_ammount (float): amount of incoming heal
         """
 
-        if self._curr_health + heal_ammount > self.max_health:
+        if self._curr_health + heal_amount > self.max_health:
             self._curr_health = self.max_health
         else:
-            self._curr_health += heal_ammount
+            self._curr_health += heal_amount
 
     # ------------------------------------------------------------------------ #
     def add_specific_stat(self, stat_value: int) -> None:
@@ -61,16 +75,11 @@ class WarriorCommonSpells(IBaseHero):
 
 # ---------------------------------------------------------------------------- #
 class FuryWarriorSpells(WarriorCommonSpells):
-    # ------------------------------------------------------------------------ #
-    def __init__(self) -> None:
-        """
-        Fury Warrior Spells.
-        This class contains the spells and abilities of the Fury Warrior.
-        It inherits from the IBaseHero class and implements the spells and abilities of the Fury Warrior.
-        """
-
-        super().__init__()
-
+    """
+    Fury Warrior Spells.
+    This class contains the spells and abilities of the Fury Warrior.
+    It inherits from the IBaseHero class and implements the spells and abilities of the Fury Warrior.
+    """
     # ------------------------------------------------------------------------ #
     def cast_bladestorm(self) -> dict[str, int]:
         """
@@ -81,7 +90,7 @@ class FuryWarriorSpells(WarriorCommonSpells):
             dict: spell damage, cooldown
         """
         rage_generated = 10
-        self.check_max_rage(rage_generated)
+        self.add_specific_stat(rage_generated)
 
         self.spell_attributes["spell_cost"] = None
         self.spell_attributes["spell_damage"] = math.ceil(self.attack_power * 140 / 100)
@@ -104,7 +113,7 @@ class FuryWarriorSpells(WarriorCommonSpells):
 
         return (
             self.spell_attributes
-            if self.is_rage_spent(self.spell_attributes["spell_cost"])
+            if self.is_specific_stat_spent(self.spell_attributes["spell_cost"])
             else None
         )
 
@@ -120,8 +129,8 @@ class FuryWarriorSpells(WarriorCommonSpells):
         rage_generated = 8
         health_restored = math.ceil(self.max_health * 3 / 100)
 
-        self.check_max_rage(rage_generated)
-        self.check_max_health(health_restored)
+        self.add_specific_stat(rage_generated)
+        self.heal_up(health_restored)
 
         self.spell_attributes["spell_cost"] = None
         self.spell_attributes["spell_damage"] = math.ceil(self.attack_power * 390 / 100)
@@ -139,7 +148,7 @@ class FuryWarriorSpells(WarriorCommonSpells):
         """
 
         rage_generated = 12
-        self.check_max_rage(rage_generated)
+        self.add_specific_stat(rage_generated)
 
         self.spell_attributes["spell_cost"] = None
         self.spell_attributes["spell_damage"] = math.ceil(self.attack_power * 400 / 100)
@@ -150,16 +159,11 @@ class FuryWarriorSpells(WarriorCommonSpells):
 
 # ---------------------------------------------------------------------------- #
 class ProtectionWarriorSpells(WarriorCommonSpells):
-    # ------------------------------------------------------------------------ #
-    def __init__(self) -> None:
-        """
-        Protection Warrior Spells.
-        This class contains the spells and abilities of the Protection Warrior.
-        It inherits from the IBaseHero class and implements the spells and abilities of the Protection Warrior.
-        """
-
-        super().__init__()
-
+    """
+    Protection Warrior Spells.
+    This class contains the spells and abilities of the Protection Warrior.
+    It inherits from the IBaseHero class and implements the spells and abilities of the Protection Warrior.
+    """
     # ------------------------------------------------------------------------ #
     def cast_charge(self) -> dict[str, int]:
         """
@@ -170,7 +174,7 @@ class ProtectionWarriorSpells(WarriorCommonSpells):
         """
 
         rage_generated = 20
-        self.check_max_rage(rage_generated)
+        self.add_specific_stat(rage_generated)
 
         self.spell_attributes["spell_cost"] = None
         self.spell_attributes["spell_damage"] = math.ceil(self.attack_power * 50 / 100)
@@ -186,15 +190,16 @@ class ProtectionWarriorSpells(WarriorCommonSpells):
         Returns:
             dict: spell_cost, damage_reduction, cooldown
         """
+        spell_cost = 30
 
-        if self.is_rage_spent(spell_cost=30):
+        if self.is_specific_stat_spent(spell_cost):
             self.spell_attributes["spell_cost"] = 30
             self.spell_attributes["damage_reduction"] = self.max_damage_reduction
             self.spell_attributes["cooldown"] = 2
 
             return self.spell_attributes
-        else:
-            return None
+
+        return None
 
     # ------------------------------------------------------------------------ #
     def cast_champions_spear(self) -> dict[str, int]:
@@ -206,7 +211,7 @@ class ProtectionWarriorSpells(WarriorCommonSpells):
         """
 
         rage_generated = 10
-        self.check_max_rage(rage_generated)
+        self.add_specific_stat(rage_generated)
 
         self.spell_attributes["spell_damage"] = math.ceil(self.attack_power * 240 / 100)
         self.spell_attributes["cooldown"] = 10
@@ -223,7 +228,7 @@ class ProtectionWarriorSpells(WarriorCommonSpells):
         """
 
         rage_generated = 20
-        self.check_max_rage(rage_generated)
+        self.add_specific_stat(rage_generated)
 
         self.spell_attributes["spell_cost"] = None
         self.spell_attributes["spell_damage"] = math.ceil(self.attack_power * 420 / 100)
@@ -241,11 +246,11 @@ class ProtectionWarriorSpells(WarriorCommonSpells):
         """
 
         rage_generated = 15
-        self.check_max_rage(rage_generated)
+        self.add_specific_stat(rage_generated)
 
         self.spell_attributes["spell_cost"] = None
         self.spell_attributes["spell_damage"] = math.ceil(
-            self._attack_power * 130 / 100
+            self.attack_power * 130 / 100
         )
         self.spell_attributes["cooldown"] = 2
 
@@ -260,16 +265,17 @@ class ProtectionWarriorSpells(WarriorCommonSpells):
         Returns:
             dict: spell_cost, damage_reduction, cooldown, turns_active
         """
+        spell_cost = 35
 
-        if self.is_rage_spent(spell_cost=35):
+        if self.is_specific_stat_spent(spell_cost):
             self.spell_attributes["spell_cost"] = 35
             self.spell_attributes["damage_reduction"] = 50
             self.spell_attributes["cooldown"] = 0
             self.spell_attributes["turns_active"] = 1
 
             return self.spell_attributes
-        else:
-            return None
+
+        return None
 
 
 # -------------------------------- End of file ------------------------------- #

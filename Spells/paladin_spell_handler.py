@@ -25,6 +25,22 @@ class PaladinCommonSpells(IBaseHero):
         self._curr_mana = self.max_secondary_pool
 
     # ------------------------------------------------------------------------ #
+    def create_hero(self, hero_instance):# -> RetributionPaladinSpells | ProtectionPaladinSpells | Any:
+        if isinstance(hero_instance, RetributionPaladinSpells):
+            hero_instance.max_health = 800
+            hero_instance.max_secondary_pool = 300
+            hero_instance.spell_power = 30
+            hero_instance.attack_power = 75
+
+        elif isinstance(hero_instance, ProtectionPaladinSpells):
+            hero_instance.max_health = 1200
+            hero_instance.max_secondary_pool = 300
+            hero_instance.spell_power = 30
+            hero_instance.attack_power = 45
+
+        return hero_instance
+
+    # ------------------------------------------------------------------------ #
     def cast_divine_shield(self) -> dict[str, int]:
         """
         Powerfull protection spell, which block all incoming damage for 2 turns.
@@ -65,7 +81,7 @@ class PaladinCommonSpells(IBaseHero):
         Because of the spell cost, the internal logic will check if there's enough holy power so the spell can be cast.
         """
         cost = 3
-        amount_to_heal = math.ceil(self._spell_power * 346 / 100)
+        amount_to_heal = math.ceil(self.spell_power * 346 / 100)
         if self.is_specific_stat_spent(cost):
             self.heal_up(amount_to_heal)
 
@@ -121,10 +137,6 @@ class RetributionPaladinSpells(PaladinCommonSpells):
     """
     Class that handles the Retribution Paladin spells.
     """
-
-    def __init__(self) -> None:
-        super().__init__()
-
     # ------------------------------------------------------------------------ #
     def cast_divine_protection(self) -> dict[str, int]:
         """
@@ -217,10 +229,6 @@ class ProtectionPaladinSpells(PaladinCommonSpells):
     """
     Class that handles the Protection Paladin spells.
     """
-
-    def __init__(self):
-        super().__init__()
-
     # ------------------------------------------------------------------------ #
     def cast_consecration(self) -> dict[str, int]:
         """
@@ -272,7 +280,7 @@ class ProtectionPaladinSpells(PaladinCommonSpells):
             int: spell damage or None if the hero does not have enough holy power
         """
         holy_power_cost = 3
-        if self._is_holy_power_spent(holy_pow_req=holy_power_cost):
+        if self.is_specific_stat_spent(holy_power_cost):
             self.spell_attributes["spell_damage"] = math.ceil(
                 self.attack_power * 42 / 100
             )
@@ -295,7 +303,7 @@ class ProtectionPaladinSpells(PaladinCommonSpells):
         """
         holy_power_generation = 1
         self.spell_attributes["spell_damage"] = math.ceil(self.attack_power * 110 / 100)
-        self.spell_attributes["spell_cost"] = math.ceil(self._max_mana * 5 / 100)
+        self.spell_attributes["spell_cost"] = math.ceil(self.max_secondary_pool * 5 / 100)
         self._curr_mana -= self.spell_attributes["spell_cost"]
         self.add_specific_stat(holy_power_generation)
 

@@ -39,16 +39,16 @@ class FireMageSpells(IBaseHero):
             tuple: damage of the spell, cooldown of the spell
         """
         generated_fire_stack = 1
-        spell_damage = math.ceil(self._spell_power * 155 / 100)
+        spell_damage = math.ceil(self.spell_power * 155 / 100)
         heal_amount = math.ceil(self.max_health * 1 / 100)
         self.heal_up(heal_amount)
         self.add_specific_stat(generated_fire_stack)
 
         if self.is_specific_stat_spent(self._max_fire_stacks):
-            spell_damage = (math.ceil(self._spell_power * 155 / 100)) * 2
+            spell_damage = (math.ceil(self.spell_power * 155 / 100)) * 2
 
         self.spell_attributes["cooldown"] = 3
-        self.spell_attributes["spell_cost"] = math.ceil(self._max_mana * 2 / 100)
+        self.spell_attributes["spell_cost"] = math.ceil(self.max_secondary_pool * 2 / 100)
         self.spell_attributes["spell_damage"] = spell_damage
         self._curr_mana -= self.spell_attributes["spell_cost"]
 
@@ -65,15 +65,15 @@ class FireMageSpells(IBaseHero):
             turns for which the effect is active
         """
         generated_fire_stack = 1
-        spell_damage = math.ceil(self._spell_power * 82 / 100)
+        spell_damage = math.ceil(self.spell_power * 82 / 100)
         self.add_specific_stat(generated_fire_stack)
 
         if self.is_specific_stat_spent(self._max_fire_stacks):
-            spell_damage = (math.ceil(self._spell_power * 82 / 100)) * 2
+            spell_damage = (math.ceil(self.spell_power * 82 / 100)) * 2
 
         self.spell_attributes["turns_active"] = 3
         self.spell_attributes["damage_reduction"] = 15
-        self.spell_attributes["spell_cost"] = math.ceil(self._max_mana * 1 / 100)
+        self.spell_attributes["spell_cost"] = math.ceil(self.max_secondary_pool * 1 / 100)
         self.spell_attributes["spell_damage"] = spell_damage
         self._curr_mana -= self.spell_attributes["spell_cost"]
 
@@ -89,15 +89,15 @@ class FireMageSpells(IBaseHero):
             tuple: damage of the spell, cooldown of the spell, turns for which the spell is active
         """
         generated_fire_stack = 1
-        spell_damage = math.ceil(self._spell_power * 57 / 100)
+        spell_damage = math.ceil(self.spell_power * 57 / 100)
         self.add_specific_stat(generated_fire_stack)
 
         if self.is_specific_stat_spent(self._max_fire_stacks):
-            spell_damage = (math.ceil(self._spell_power * 57 / 100)) * 2
+            spell_damage = (math.ceil(self.spell_power * 57 / 100)) * 2
 
         self.spell_attributes["turns_active"] = 3
         self.spell_attributes["cooldown"] = 5
-        self.spell_attributes["spell_cost"] = math.ceil(self._max_mana * 1 / 100)
+        self.spell_attributes["spell_cost"] = math.ceil(self.max_secondary_pool * 1 / 100)
         self.spell_attributes["spell_damage"] = spell_damage
         self._curr_mana -= self.spell_attributes["spell_cost"]
 
@@ -189,3 +189,12 @@ class FireMageSpells(IBaseHero):
             return True
         else:
             return False
+
+    # ------------------------------------------------------------------------ #
+    def create_hero(self, hero_instance):
+        if isinstance(hero_instance, FireMageSpells):
+            hero_instance.max_health = 700
+            hero_instance.max_secondary_pool = 900
+            hero_instance.spell_power = 110
+
+        return hero_instance

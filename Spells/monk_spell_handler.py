@@ -21,6 +21,20 @@ class MonkCommonSpells(IBaseHero):
         self._curr_energy = self.max_secondary_pool
 
     # ------------------------------------------------------------------------ #
+    def create_hero(self, hero_instance):
+        if isinstance(hero_instance, WindwalkerMonkSpells):
+            hero_instance.max_health = 800
+            hero_instance.max_secondary_pool = 300
+            hero_instance.attack_power = 65
+
+        elif isinstance(hero_instance, BrewmasterMonkSpells):
+            hero_instance.max_health = 1100
+            hero_instance.max_secondary_pool = 200
+            hero_instance.attack_power = 45
+
+        return hero_instance
+
+    # ------------------------------------------------------------------------ #
     def is_specific_stat_spent(self, stat_value: int) -> bool:
         """
         Check if the player has enough chi to cast a spell.
@@ -51,16 +65,16 @@ class MonkCommonSpells(IBaseHero):
         self._curr_chi = min(self._curr_chi, self._max_chi)
 
     # ------------------------------------------------------------------------ #
-    def heal_up(self, heal_ammount: int) -> None:
+    def heal_up(self, heal_amount: int) -> None:
         """
         Heal the target for a certain amount of health.
 
         Args:
             heal_ammount (int): The amount of health to heal.
         """
-        self._health += heal_ammount
+        self._curr_health += heal_amount
 
-        self._health = min(self._health, self._max_health)
+        self._curr_health = min(self._curr_health, self.max_health)
 
     # ------------------------------------------------------------------------ #
     def cast_spinning_crane_kick(self) -> dict[str, int]:
@@ -72,7 +86,7 @@ class MonkCommonSpells(IBaseHero):
         """
         self.spell_attributes["cooldown"] = 2
         self.spell_attributes["spell_cost"] = 40
-        self.spell_attributes["spell_damage"] = math.ceil(self._attack_power * 40 / 100)
+        self.spell_attributes["spell_damage"] = math.ceil(self.attack_power * 40 / 100)
         self._curr_energy -= self.spell_attributes["spell_cost"]
 
         return self.spell_attributes
@@ -87,7 +101,7 @@ class MonkCommonSpells(IBaseHero):
         """
 
         energy_cost = 30
-        amount_to_heal = math.ceil(self._spell_power * 258 / 100)
+        amount_to_heal = math.ceil(self.spell_power * 258 / 100)
         if energy_cost >= self._curr_energy:
             self._curr_energy -= energy_cost
             self.heal_up(amount_to_heal)
@@ -105,9 +119,6 @@ class WindwalkerMonkSpells(MonkCommonSpells):
         IBaseHero (cls): _base class for all hero stats
         CommonSpellsMixin (cls): _mixin class for common spells
     """
-
-    def __init__(self) -> None:
-        super().__init__()
 
     # ------------------------------------------------------------------------ #
     def cast_tiger_palm(self) -> dict[str, int]:
@@ -188,9 +199,6 @@ class BrewmasterMonkSpells(MonkCommonSpells):
         IBaseHero (cls): _base class for all hero stats
         CommonSpellsMixin (cls): _mixin class for common spells
     """
-
-    def __init__(self) -> None:
-        super().__init__()
 
     # ------------------------------------------------------------------------ #
     def cast_rushing_jade_wind(self) -> dict[str, int]:

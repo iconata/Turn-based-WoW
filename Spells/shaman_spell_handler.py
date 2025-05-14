@@ -21,6 +21,21 @@ class ShamanCommonSpells(IBaseHero):
         self._curr_mana = self.max_secondary_pool
 
     # ------------------------------------------------------------------------ #
+    def create_hero(self, hero_instance):
+        if isinstance(hero_instance, ElementalShamanSpells):
+            hero_instance.max_health = 750
+            hero_instance.max_secondary_pool = 750
+            hero_instance.spell_power = 100
+
+        elif isinstance(hero_instance, EnhancementShamanSpells):
+            hero_instance.max_health = 850
+            hero_instance.max_secondary_pool = 300
+            hero_instance.attack_power = 35
+            hero_instance.spell_power = 60
+
+        return hero_instance
+
+    # ------------------------------------------------------------------------ #
     @staticmethod
     def __is_flame_shock_active(active_spells: list) -> bool:
         if "flame_shock" in active_spells:
@@ -57,7 +72,7 @@ class ShamanCommonSpells(IBaseHero):
         """
         self.spell_attributes["cooldown"] = 5
         self.spell_attributes["turns_active"] = 3
-        self.spell_attributes["spell_cost"] = math.ceil(self._max_mana * 5 / 100)
+        self.spell_attributes["spell_cost"] = math.ceil(self.max_secondary_pool * 5 / 100)
         self.spell_attributes["initial_spell_damage"] = math.ceil(
             self.spell_power * 30 / 100
         )
@@ -162,9 +177,6 @@ class EnhancementShamanSpells(ShamanCommonSpells):
     This class contains the spells and abilities of the Enhancement Shaman.
     """
 
-    def __init__(self) -> None:
-        super().__init__()
-
     # ------------------------------------------------------------------------ #
     def cast_stormstrike(self) -> dict[str, int]:
         """
@@ -252,9 +264,6 @@ class ElementalShamanSpells(ShamanCommonSpells):
     Elemental Shaman Spells
     This class contains the spells and abilities of the Elemental Shaman.
     """
-
-    def __init__(self):
-        super().__init__()
 
     # ------------------------------------------------------------------------ #
     def cast_earth_shock(self):
