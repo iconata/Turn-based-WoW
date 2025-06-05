@@ -25,7 +25,7 @@ class PaladinCommonSpells(IBaseHero):
         self._curr_mana = self.max_secondary_pool
 
     # ------------------------------------------------------------------------ #
-    def create_hero(self, hero_instance):# -> RetributionPaladinSpells | ProtectionPaladinSpells | Any:
+    def create_hero(self, hero_instance: IBaseHero):
         if isinstance(hero_instance, RetributionPaladinSpells):
             hero_instance.max_health = 800
             hero_instance.max_secondary_pool = 300
@@ -86,7 +86,7 @@ class PaladinCommonSpells(IBaseHero):
             self.heal_up(amount_to_heal)
 
     # ------------------------------------------------------------------------ #
-    def heal_up(self, heal_amount) -> None:
+    def heal_up(self, heal_amount: int) -> None:
         """
         Main healing spell logic. Checks the current health of the hero and also the incoming amount.
         If the incoming amount is overhealing, the current health will be set to the max health.
@@ -137,6 +137,7 @@ class RetributionPaladinSpells(PaladinCommonSpells):
     """
     Class that handles the Retribution Paladin spells.
     """
+
     # ------------------------------------------------------------------------ #
     def cast_divine_protection(self) -> dict[str, int]:
         """
@@ -229,6 +230,7 @@ class ProtectionPaladinSpells(PaladinCommonSpells):
     """
     Class that handles the Protection Paladin spells.
     """
+
     # ------------------------------------------------------------------------ #
     def cast_consecration(self) -> dict[str, int]:
         """
@@ -303,7 +305,9 @@ class ProtectionPaladinSpells(PaladinCommonSpells):
         """
         holy_power_generation = 1
         self.spell_attributes["spell_damage"] = math.ceil(self.attack_power * 110 / 100)
-        self.spell_attributes["spell_cost"] = math.ceil(self.max_secondary_pool * 5 / 100)
+        self.spell_attributes["spell_cost"] = math.ceil(
+            self.max_secondary_pool * 5 / 100
+        )
         self._curr_mana -= self.spell_attributes["spell_cost"]
         self.add_specific_stat(holy_power_generation)
 

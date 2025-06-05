@@ -3,29 +3,30 @@ Handler class, which contains the logic behind the battles.
 Heroes can attack to deal damage or heal, deflect or parry to mitigate some of the damage dealt.
 """
 
+from Heroes.hero_base_stats import IBaseHero
+
 
 # ---------------------------------------------------------------------------- #
 #                                    Classes                                   #
 # ---------------------------------------------------------------------------- #
-class BattleHandler:
+class Attacking:
 
     # ------------------------------------------------------------------------ #
-    def __init__(self, first_hero, second_hero) -> None:
-        self._first_hero  = first_hero
-        self._second_hero = second_hero
+    def __init__(self, attacker: IBaseHero, defender: IBaseHero) -> None:
+        self._attacker = attacker
+        self._defender = defender
 
     # ------------------------------------------------------------------------ #
-    def attack(self, value: int):
-        pass
+    def attack(self, selected_spell):
+        is_spell_valid = hasattr(self._attacker, selected_spell)
+
+        if is_spell_valid:
+            result = is_spell_valid()
+
+            self._defender.curr_health -= result["spell_damage"]
+
+        return self._defender
 
     # ------------------------------------------------------------------------ #
-    def heal(self, value: int):
-        pass
-
-    # ------------------------------------------------------------------------ #
-    def deflect(self, value: int):
-        pass
-
-    # ------------------------------------------------------------------------ #
-    def parry(self, value: int):
-        pass
+    def heal(self, hp_restore):
+        self._attacker.heal_up(hp_restore)

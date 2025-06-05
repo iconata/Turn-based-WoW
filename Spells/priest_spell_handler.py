@@ -84,7 +84,7 @@ class ShadowPriestSpells(IBaseHero):
         return self.spell_attributes
 
     # ------------------------------------------------------------------------ #
-    def cast_flash_heal(self) -> None:
+    def cast_flash_heal(self) -> dict[str, int]:
         """
         Quick healing spell, healing for moderate amount. Healing restores you state of mind, removing 20 insanity.
         """
@@ -117,7 +117,7 @@ class ShadowPriestSpells(IBaseHero):
         return self.spell_attributes
 
     # ------------------------------------------------------------------------ #
-    def heal_up(self, heal_amount) -> None:
+    def heal_up(self, heal_amount: int) -> None:
         """
         Main healing spell logic. Checks the current health of the hero and also the incoming amount.
         If the incoming amount is overhealing, the current health will be set to the max health.
@@ -131,14 +131,14 @@ class ShadowPriestSpells(IBaseHero):
             self._curr_health = self.max_health
 
     # ------------------------------------------------------------------------ #
-    def add_specific_stat(self, stat_value) -> None:
+    def add_specific_stat(self, stat_value: int) -> None:
         self._curr_insanity += stat_value
 
         if self._curr_insanity > self._max_insanity:
             self._curr_insanity = self._max_insanity
 
     # ------------------------------------------------------------------------ #
-    def is_specific_stat_spent(self, stat_value) -> bool:
+    def is_specific_stat_spent(self, stat_value: int) -> bool:
         if self._curr_insanity == stat_value:
             return True
         else:
@@ -152,7 +152,7 @@ class ShadowPriestSpells(IBaseHero):
             self._curr_insanity = 0
 
     # ------------------------------------------------------------------------ #
-    def create_hero(self, hero_instance):
+    def create_hero(self, hero_instance: IBaseHero):
         if isinstance(hero_instance, ShadowPriestSpells):
             hero_instance.max_health = 750
             hero_instance.max_secondary_pool = 900

@@ -21,7 +21,7 @@ class MonkCommonSpells(IBaseHero):
         self._curr_energy = self.max_secondary_pool
 
     # ------------------------------------------------------------------------ #
-    def create_hero(self, hero_instance):
+    def create_hero(self, hero_instance: IBaseHero):
         if isinstance(hero_instance, WindwalkerMonkSpells):
             hero_instance.max_health = 800
             hero_instance.max_secondary_pool = 300
