@@ -48,7 +48,9 @@ class FireMageSpells(IBaseHero):
             spell_damage = (math.ceil(self.spell_power * 155 / 100)) * 2
 
         self.spell_attributes["cooldown"] = 3
-        self.spell_attributes["spell_cost"] = math.ceil(self.max_secondary_pool * 2 / 100)
+        self.spell_attributes["spell_cost"] = math.ceil(
+            self.max_secondary_pool * 2 / 100
+        )
         self.spell_attributes["spell_damage"] = spell_damage
         self._curr_mana -= self.spell_attributes["spell_cost"]
 
@@ -73,7 +75,9 @@ class FireMageSpells(IBaseHero):
 
         self.spell_attributes["turns_active"] = 3
         self.spell_attributes["damage_reduction"] = 15
-        self.spell_attributes["spell_cost"] = math.ceil(self.max_secondary_pool * 1 / 100)
+        self.spell_attributes["spell_cost"] = math.ceil(
+            self.max_secondary_pool * 1 / 100
+        )
         self.spell_attributes["spell_damage"] = spell_damage
         self._curr_mana -= self.spell_attributes["spell_cost"]
 
@@ -97,7 +101,9 @@ class FireMageSpells(IBaseHero):
 
         self.spell_attributes["turns_active"] = 3
         self.spell_attributes["cooldown"] = 5
-        self.spell_attributes["spell_cost"] = math.ceil(self.max_secondary_pool * 1 / 100)
+        self.spell_attributes["spell_cost"] = math.ceil(
+            self.max_secondary_pool * 1 / 100
+        )
         self.spell_attributes["spell_damage"] = spell_damage
         self._curr_mana -= self.spell_attributes["spell_cost"]
 
@@ -144,7 +150,7 @@ class FireMageSpells(IBaseHero):
         return self.spell_attributes
 
     # ------------------------------------------------------------------------ #
-    def heal_up(self, heal_amount) -> None:
+    def heal_up(self, heal_amount: int) -> None:
         """
         Main healing spell logic. Checks the current health of the hero and also the incoming amount.
         If the incoming amount is overhealing, the current health will be set to the max health.
@@ -191,7 +197,7 @@ class FireMageSpells(IBaseHero):
             return False
 
     # ------------------------------------------------------------------------ #
-    def create_hero(self, hero_instance):
+    def create_hero(self, hero_instance: IBaseHero):
         if isinstance(hero_instance, FireMageSpells):
             hero_instance.max_health = 700
             hero_instance.max_secondary_pool = 900

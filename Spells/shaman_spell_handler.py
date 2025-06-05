@@ -21,7 +21,7 @@ class ShamanCommonSpells(IBaseHero):
         self._curr_mana = self.max_secondary_pool
 
     # ------------------------------------------------------------------------ #
-    def create_hero(self, hero_instance):
+    def create_hero(self, hero_instance: IBaseHero):
         if isinstance(hero_instance, ElementalShamanSpells):
             hero_instance.max_health = 750
             hero_instance.max_secondary_pool = 750
@@ -37,7 +37,7 @@ class ShamanCommonSpells(IBaseHero):
 
     # ------------------------------------------------------------------------ #
     @staticmethod
-    def __is_flame_shock_active(active_spells: list) -> bool:
+    def __is_flame_shock_active(active_spells: list[str]) -> bool:
         if "flame_shock" in active_spells:
             return True
 
@@ -72,7 +72,9 @@ class ShamanCommonSpells(IBaseHero):
         """
         self.spell_attributes["cooldown"] = 5
         self.spell_attributes["turns_active"] = 3
-        self.spell_attributes["spell_cost"] = math.ceil(self.max_secondary_pool * 5 / 100)
+        self.spell_attributes["spell_cost"] = math.ceil(
+            self.max_secondary_pool * 5 / 100
+        )
         self.spell_attributes["initial_spell_damage"] = math.ceil(
             self.spell_power * 30 / 100
         )
@@ -102,7 +104,7 @@ class ShamanCommonSpells(IBaseHero):
         return self.spell_attributes
 
     # ------------------------------------------------------------------------ #
-    def cast_lava_burst(self, active_spells: list) -> dict[str, int]:
+    def cast_lava_burst(self, active_spells: list[str]) -> dict[str, int]:
         """
         Hurls a molten lava ball towards the target, dealing fire damage. Lava Burst will
         always critically strike if the target is affected by Flame Shock.
@@ -124,7 +126,7 @@ class ShamanCommonSpells(IBaseHero):
         return self.spell_attributes
 
     # ------------------------------------------------------------------------ #
-    def heal_up(self, heal_amount) -> None:
+    def heal_up(self, heal_amount: int) -> None:
         """
         Main healing spell logic. Checks the current health of the hero and also the incoming amount.
         If the incoming amount is overhealing, the current health will be set to the max health.

@@ -20,7 +20,7 @@ class WarriorCommonSpells(IBaseHero):
         self._max_rage = self.max_secondary_pool
 
     # ------------------------------------------------------------------------ #
-    def create_hero(self, hero_instance):
+    def create_hero(self, hero_instance: IBaseHero):
         if isinstance(hero_instance, FuryWarriorSpells):
             hero_instance.max_health = 1000
             hero_instance.max_secondary_pool = 200
@@ -80,6 +80,7 @@ class FuryWarriorSpells(WarriorCommonSpells):
     This class contains the spells and abilities of the Fury Warrior.
     It inherits from the IBaseHero class and implements the spells and abilities of the Fury Warrior.
     """
+
     # ------------------------------------------------------------------------ #
     def cast_bladestorm(self) -> dict[str, int]:
         """
@@ -92,7 +93,7 @@ class FuryWarriorSpells(WarriorCommonSpells):
         rage_generated = 10
         self.add_specific_stat(rage_generated)
 
-        self.spell_attributes["spell_cost"] = None
+        self.spell_attributes["spell_cost"] = 0
         self.spell_attributes["spell_damage"] = math.ceil(self.attack_power * 140 / 100)
         self.spell_attributes["cooldown"] = 8
 
@@ -132,7 +133,7 @@ class FuryWarriorSpells(WarriorCommonSpells):
         self.add_specific_stat(rage_generated)
         self.heal_up(health_restored)
 
-        self.spell_attributes["spell_cost"] = None
+        self.spell_attributes["spell_cost"] = 0
         self.spell_attributes["spell_damage"] = math.ceil(self.attack_power * 390 / 100)
         self.spell_attributes["cooldown"] = 3
 
@@ -150,7 +151,7 @@ class FuryWarriorSpells(WarriorCommonSpells):
         rage_generated = 12
         self.add_specific_stat(rage_generated)
 
-        self.spell_attributes["spell_cost"] = None
+        self.spell_attributes["spell_cost"] = 0
         self.spell_attributes["spell_damage"] = math.ceil(self.attack_power * 400 / 100)
         self.spell_attributes["cooldown"] = 4
 
@@ -164,6 +165,7 @@ class ProtectionWarriorSpells(WarriorCommonSpells):
     This class contains the spells and abilities of the Protection Warrior.
     It inherits from the IBaseHero class and implements the spells and abilities of the Protection Warrior.
     """
+
     # ------------------------------------------------------------------------ #
     def cast_charge(self) -> dict[str, int]:
         """
@@ -176,7 +178,7 @@ class ProtectionWarriorSpells(WarriorCommonSpells):
         rage_generated = 20
         self.add_specific_stat(rage_generated)
 
-        self.spell_attributes["spell_cost"] = None
+        self.spell_attributes["spell_cost"] = 0
         self.spell_attributes["spell_damage"] = math.ceil(self.attack_power * 50 / 100)
         self.spell_attributes["cooldown"] = 7
 
@@ -230,7 +232,7 @@ class ProtectionWarriorSpells(WarriorCommonSpells):
         rage_generated = 20
         self.add_specific_stat(rage_generated)
 
-        self.spell_attributes["spell_cost"] = None
+        self.spell_attributes["spell_cost"] = 0
         self.spell_attributes["spell_damage"] = math.ceil(self.attack_power * 420 / 100)
         self.spell_attributes["cooldown"] = 8
 
@@ -248,10 +250,8 @@ class ProtectionWarriorSpells(WarriorCommonSpells):
         rage_generated = 15
         self.add_specific_stat(rage_generated)
 
-        self.spell_attributes["spell_cost"] = None
-        self.spell_attributes["spell_damage"] = math.ceil(
-            self.attack_power * 130 / 100
-        )
+        self.spell_attributes["spell_cost"] = 0
+        self.spell_attributes["spell_damage"] = math.ceil(self.attack_power * 130 / 100)
         self.spell_attributes["cooldown"] = 2
 
         return self.spell_attributes
