@@ -11,6 +11,11 @@ from Heroes.hero_base_stats import IBaseHero
 #                                    Classes                                   #
 # ---------------------------------------------------------------------------- #
 class ShadowPriestSpells(IBaseHero):
+
+    # ------------------------------------------------------------------------ #
+    def get_name(self) -> str:
+        return "Shadow Priest"
+
     # ------------------------------------------------------------------------ #
     def __init__(self) -> None:
         super().__init__()

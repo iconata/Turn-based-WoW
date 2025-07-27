@@ -180,6 +180,10 @@ class EnhancementShamanSpells(ShamanCommonSpells):
     """
 
     # ------------------------------------------------------------------------ #
+    def get_name(self) -> str:
+        return "Enhancement Shaman"
+
+    # ------------------------------------------------------------------------ #
     def cast_stormstrike(self) -> dict[str, int]:
         """
         Energizes both weapons with lightning and delivers a massive blow to your target,
@@ -266,6 +270,10 @@ class ElementalShamanSpells(ShamanCommonSpells):
     Elemental Shaman Spells
     This class contains the spells and abilities of the Elemental Shaman.
     """
+
+    # ------------------------------------------------------------------------ #
+    def get_name(self) -> str:
+        return "Elemental Shaman"
 
     # ------------------------------------------------------------------------ #
     def cast_earth_shock(self):

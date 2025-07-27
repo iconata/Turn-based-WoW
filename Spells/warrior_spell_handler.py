@@ -82,6 +82,10 @@ class FuryWarriorSpells(WarriorCommonSpells):
     """
 
     # ------------------------------------------------------------------------ #
+    def get_name(self) -> str:
+        return "Fury Warrior"
+
+    # ------------------------------------------------------------------------ #
     def cast_bladestorm(self) -> dict[str, int]:
         """
         Become and unstoppable storm of destructive force, striking your enemy,
@@ -165,6 +169,10 @@ class ProtectionWarriorSpells(WarriorCommonSpells):
     This class contains the spells and abilities of the Protection Warrior.
     It inherits from the IBaseHero class and implements the spells and abilities of the Protection Warrior.
     """
+
+    # ------------------------------------------------------------------------ #
+    def get_name(self) -> str:
+        return "Protection Warrior"
 
     # ------------------------------------------------------------------------ #
     def cast_charge(self) -> dict[str, int]:

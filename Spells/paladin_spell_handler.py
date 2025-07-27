@@ -139,6 +139,10 @@ class RetributionPaladinSpells(PaladinCommonSpells):
     """
 
     # ------------------------------------------------------------------------ #
+    def get_name(self) -> str:
+        return "Retribution Paladin"
+
+    # ------------------------------------------------------------------------ #
     def cast_divine_protection(self) -> dict[str, int]:
         """
         Protection spell, which reduces the amount of incoming damage by 20%.
@@ -230,6 +234,10 @@ class ProtectionPaladinSpells(PaladinCommonSpells):
     """
     Class that handles the Protection Paladin spells.
     """
+
+    # ------------------------------------------------------------------------ #
+    def get_name(self) -> str:
+        return "Protection Paladin"
 
     # ------------------------------------------------------------------------ #
     def cast_consecration(self) -> dict[str, int]:

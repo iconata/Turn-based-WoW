@@ -121,6 +121,10 @@ class WindwalkerMonkSpells(MonkCommonSpells):
     """
 
     # ------------------------------------------------------------------------ #
+    def get_name(self) -> str:
+        return "Windwalker Monk"
+
+    # ------------------------------------------------------------------------ #
     def cast_tiger_palm(self) -> dict[str, int]:
         """
         Strike with the palm of you hand, dealing physical damage to the target. Generates 2 chi.
@@ -199,6 +203,10 @@ class BrewmasterMonkSpells(MonkCommonSpells):
         IBaseHero (cls): _base class for all hero stats
         CommonSpellsMixin (cls): _mixin class for common spells
     """
+
+    # ------------------------------------------------------------------------ #
+    def get_name(self) -> str:
+        return "Brewmaster Monk"
 
     # ------------------------------------------------------------------------ #
     def cast_rushing_jade_wind(self) -> dict[str, int]:

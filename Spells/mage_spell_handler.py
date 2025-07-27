@@ -22,6 +22,10 @@ class FireMageSpells(IBaseHero):
     """
 
     # ------------------------------------------------------------------------ #
+    def get_name(self) -> str:
+        return "Fire Mage"
+
+    # ------------------------------------------------------------------------ #
     def __init__(self) -> None:
         super().__init__()
         self._curr_fire_stacks = 0
