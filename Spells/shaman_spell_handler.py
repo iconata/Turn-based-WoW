@@ -22,12 +22,7 @@ class ShamanCommonSpells(IBaseHero):
 
     # ------------------------------------------------------------------------ #
     def create_hero(self, hero_instance: IBaseHero):
-        if isinstance(hero_instance, ElementalShamanSpells):
-            hero_instance.max_health = 750
-            hero_instance.max_secondary_pool = 750
-            hero_instance.spell_power = 100
-
-        elif isinstance(hero_instance, EnhancementShamanSpells):
+        if isinstance(hero_instance, EnhancementShamanSpells):
             hero_instance.max_health = 850
             hero_instance.max_secondary_pool = 300
             hero_instance.attack_power = 35
@@ -260,35 +255,5 @@ class EnhancementShamanSpells(ShamanCommonSpells):
             self.attack_power * 80 / 100
         ) + math.ceil(self.spell_power * 80 / 100)
         self._curr_mana -= self.spell_attributes["spell_cost"]
-
-        return self.spell_attributes
-
-
-# ---------------------------------------------------------------------------- #
-class ElementalShamanSpells(ShamanCommonSpells):
-    """
-    Elemental Shaman Spells
-    This class contains the spells and abilities of the Elemental Shaman.
-    """
-
-    # ------------------------------------------------------------------------ #
-    def get_name(self) -> str:
-        return "Elemental Shaman"
-
-    # ------------------------------------------------------------------------ #
-    def cast_earth_shock(self):
-        """
-        Instantly shocks the target with concussive force, dealing Nature damage.
-
-        Returns:
-            tuple: spell damage, cooldown
-        """
-
-        self.spell_attributes["cooldown"] = 3
-        self.spell_attributes["spell_cost"] = math.ceil(
-            self.max_secondary_pool * 10 / 100
-        )
-        self.spell_attributes["spell_damage"] = math.ceil(self.spell_power * 550 / 100)
-        self._curr_health -= self.spell_attributes["spell_cost"]
 
         return self.spell_attributes
