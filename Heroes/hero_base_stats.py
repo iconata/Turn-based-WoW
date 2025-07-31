@@ -35,6 +35,17 @@ class IBaseHero(ABC):
 
     # ------------------------------------------------------------------------ #
     @abstractmethod
+    def get_name(self) -> str:
+        """
+        Get the name of the hero class.
+
+        Returns:
+            str: name of the hero class
+        """
+        raise NotImplementedError
+
+    # ------------------------------------------------------------------------ #
+    @abstractmethod
     def create_hero(self, hero_instance: "IBaseHero"):
         """
         Create a hero based on the instance provided.
