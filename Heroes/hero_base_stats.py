@@ -108,6 +108,80 @@ class IBaseHero(ABC):
         """
         raise NotImplementedError
 
+    # -------------------------------------------------------------------- #
+    # Default concrete helpers (provide a stable, instance-based API)
+    # These are offered as defaults so other modules can rely on consistent
+    # hero methods without requiring every spell handler to reimplement them.
+    # -------------------------------------------------------------------- #
+    def get_current_health(self) -> int:
+        return getattr(self, "_curr_health", self.max_health)
+
+    def get_current_secondary_pool(self) -> int:
+        if hasattr(self, "_curr_mana"):
+            return self._curr_mana
+        return getattr(self, "_curr_secondary_pool", self.max_secondary_pool)
+
+    def get_current_spell_power(self) -> int:
+        return getattr(self, "spell_power", 0)
+
+    def get_current_attack_power(self) -> int:
+        return getattr(self, "attack_power", 0)
+
+    def get_current_damage_reduction(self) -> int:
+        return getattr(self, "damage_reduction", 0)
+
+    def get_current_spell_attributes(self) -> dict:
+        return dict(getattr(self, "spell_attributes", {}))
+
+    def set_health(self, value: int) -> None:
+        if not hasattr(self, "_curr_health"):
+            self._curr_health = self.max_health
+        self._curr_health = max(0, min(self.max_health, int(value)))
+
+    def set_secondary_pool(self, value: int) -> None:
+        if hasattr(self, "_curr_mana"):
+            self._curr_mana = max(0, int(value))
+        else:
+            self._curr_secondary_pool = max(0, int(value))
+
+    def set_spell_power(self, value: int) -> None:
+        self.spell_power = int(value)
+
+    def set_attack_power(self, value: int) -> None:
+        self.attack_power = int(value)
+
+    def set_damage_reduction(self, value: int) -> None:
+        self.damage_reduction = int(value)
+
+    def set_spell_attributes(self, value: dict, hero_instance: "IBaseHero" = None) -> None:
+        # Accept both dict-like values and copy them so callers don't mutate internals
+        self.spell_attributes = dict(value or {})
+
+    def is_secondary_pool_zero(self) -> bool:
+        return self.get_current_secondary_pool() <= 0
+
+    def is_damage_reduction_zero(self) -> bool:
+        return self.get_current_damage_reduction() <= 0
+
+    def is_alive(self) -> bool:
+        return self.get_current_health() > 0
+
+    def is_on_cooldown(self) -> bool:
+        # Basic fallback: check if spell_attributes expose a cooldown > 0
+        return bool(self.spell_attributes.get("cooldown", 0) > 0)
+
+    def apply_damage(self, amount: int) -> None:
+        amount = max(0, int(amount))
+        self.set_health(self.get_current_health() - amount)
+
+    def apply_heal(self, amount: int) -> None:
+        amount = max(0, int(amount))
+        self.set_health(self.get_current_health() + amount)
+
+    def reduce_secondary_pool(self, amount: int) -> None:
+        amount = max(0, int(amount))
+        self.set_secondary_pool(self.get_current_secondary_pool() - amount)
+
 
 # ---------------------------------------------------------------------------- #
 #                                    Getters                                   #

@@ -54,7 +54,7 @@ class ShamanCommonSpells(IBaseHero):
         self.spell_attributes["spell_damage"] = math.ceil(self.spell_power * 131 / 100)
         self._curr_mana -= self.spell_attributes["spell_cost"]
 
-        return self.spell_attributes
+        return dict(self.spell_attributes)
 
     # ------------------------------------------------------------------------ #
     def cast_flame_shock(self) -> dict[str, int]:
@@ -76,9 +76,10 @@ class ShamanCommonSpells(IBaseHero):
         self.spell_attributes["damage_over_time"] = math.ceil(
             self.spell_power * 120 / 100
         )
-        self._curr_health -= self.spell_attributes["spell_cost"]
+        # deduct cost from mana/secondary pool
+        self._curr_mana -= self.spell_attributes["spell_cost"]
 
-        return self.spell_attributes
+        return dict(self.spell_attributes)
 
     # ------------------------------------------------------------------------ #
     def cast_primordial_wave(self) -> dict[str, int]:
@@ -96,7 +97,7 @@ class ShamanCommonSpells(IBaseHero):
         self.spell_attributes["spell_damage"] = math.ceil(self.spell_power * 525 / 100)
         self._curr_mana -= self.spell_attributes["spell_cost"]
 
-        return self.spell_attributes
+        return dict(self.spell_attributes)
 
     # ------------------------------------------------------------------------ #
     def cast_lava_burst(self, active_spells: list[str]) -> dict[str, int]:
@@ -118,7 +119,7 @@ class ShamanCommonSpells(IBaseHero):
         if self.__is_flame_shock_active(active_spells):
             self.spell_attributes["spell_damage"] *= 2
 
-        return self.spell_attributes
+        return dict(self.spell_attributes)
 
     # ------------------------------------------------------------------------ #
     def heal_up(self, heal_amount: int) -> None:
@@ -196,7 +197,7 @@ class EnhancementShamanSpells(ShamanCommonSpells):
         self.spell_attributes["spell_damage"] = math.ceil(self.attack_power * 400 / 100)
         self._curr_mana -= self.spell_attributes["spell_cost"]
 
-        return self.spell_attributes
+        return dict(self.spell_attributes)
 
     # ------------------------------------------------------------------------ #
     def cast_lava_lash(self) -> dict[str, int]:
@@ -215,7 +216,7 @@ class EnhancementShamanSpells(ShamanCommonSpells):
         self.spell_attributes["spell_damage"] = math.ceil(self.attack_power * 240 / 100)
         self._curr_mana -= self.spell_attributes["spell_cost"]
 
-        return self.spell_attributes
+        return dict(self.spell_attributes)
 
     # ------------------------------------------------------------------------ #
     def cast_tempest(self) -> dict[str, int]:
@@ -234,7 +235,7 @@ class EnhancementShamanSpells(ShamanCommonSpells):
         self.spell_attributes["spell_damage"] = math.ceil(self.attack_power * 310 / 100)
         self._curr_mana -= self.spell_attributes["spell_cost"]
 
-        return self.spell_attributes
+        return dict(self.spell_attributes)
 
     # ------------------------------------------------------------------------ #
     def cast_feral_spirit(self) -> dict[str, int]:
@@ -256,4 +257,4 @@ class EnhancementShamanSpells(ShamanCommonSpells):
         ) + math.ceil(self.spell_power * 80 / 100)
         self._curr_mana -= self.spell_attributes["spell_cost"]
 
-        return self.spell_attributes
+        return dict(self.spell_attributes)

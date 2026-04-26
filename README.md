@@ -13,3 +13,27 @@ I'm planning to add in a future update:
 
 
 I'm doing this as a hobby and a learning opportunity.
+
+## Run & Test
+
+Quick instructions to run and test the project locally (recommended Python 3.11):
+
+```bash
+# create and activate a virtual environment
+python3.11 -m venv .venv
+source .venv/bin/activate
+
+# update pip and install test deps
+pip install -U pip
+pip install -r requirements.txt
+
+# run unit tests
+python -m pytest -q
+
+# run the interactive CLI
+python main.py
+```
+
+## Continuous Integration
+
+This repository includes a GitHub Actions workflow that runs the test suite on push and pull requests to `main` using Python 3.11. The workflow file is located at `.github/workflows/python-tests.yml`.

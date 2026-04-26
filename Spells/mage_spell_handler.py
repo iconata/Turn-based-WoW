@@ -58,7 +58,7 @@ class FireMageSpells(IBaseHero):
         self.spell_attributes["spell_damage"] = spell_damage
         self._curr_mana -= self.spell_attributes["spell_cost"]
 
-        return self.spell_attributes
+        return dict(self.spell_attributes)
 
     # ------------------------------------------------------------------------ #
     def cast_fire_blast(self) -> dict[str, int]:
@@ -85,7 +85,7 @@ class FireMageSpells(IBaseHero):
         self.spell_attributes["spell_damage"] = spell_damage
         self._curr_mana -= self.spell_attributes["spell_cost"]
 
-        return self.spell_attributes
+        return dict(self.spell_attributes)
 
     # ------------------------------------------------------------------------ #
     def cast_flamestrike(self) -> dict[str, int]:
@@ -111,7 +111,7 @@ class FireMageSpells(IBaseHero):
         self.spell_attributes["spell_damage"] = spell_damage
         self._curr_mana -= self.spell_attributes["spell_cost"]
 
-        return self.spell_attributes
+        return dict(self.spell_attributes)
 
     # ------------------------------------------------------------------------ #
     def cast_polymorph(self) -> dict[str, int]:
@@ -130,7 +130,7 @@ class FireMageSpells(IBaseHero):
         )
         self._curr_mana -= self.spell_attributes["spell_cost"]
 
-        return self.spell_attributes
+        return dict(self.spell_attributes)
 
     # ------------------------------------------------------------------------ #
     def cast_arcane_intellect(self) -> dict[str, int]:
@@ -151,7 +151,7 @@ class FireMageSpells(IBaseHero):
         )
         self._curr_mana -= self.spell_attributes["spell_cost"]
 
-        return self.spell_attributes
+        return dict(self.spell_attributes)
 
     # ------------------------------------------------------------------------ #
     def heal_up(self, heal_amount: int) -> None:
@@ -194,11 +194,11 @@ class FireMageSpells(IBaseHero):
             bool: returns True if the stacks are enough to double the damage, otherwise returns False
         """
 
-        if self._curr_fire_stacks == stat_value:
+        if self._curr_fire_stacks >= stat_value:
             self._curr_fire_stacks = 0
             return True
-        else:
-            return False
+
+        return False
 
     # ------------------------------------------------------------------------ #
     def create_hero(self, hero_instance: IBaseHero):

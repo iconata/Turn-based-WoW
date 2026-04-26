@@ -39,7 +39,7 @@ class ShadowPriestSpells(IBaseHero):
         self.spell_attributes["spell_damage"] = math.ceil(self.spell_power * 73 / 100)
         self._curr_mana -= self.spell_attributes["spell_cost"]
 
-        return self.spell_attributes
+        return dict(self.spell_attributes)
 
     # ------------------------------------------------------------------------ #
     def cast_shadow_word_death(self) -> dict[str, int]:
@@ -58,7 +58,7 @@ class ShadowPriestSpells(IBaseHero):
         self.spell_attributes["spell_damage"] = math.ceil(self.spell_power * 85 / 100)
         self._curr_mana -= self.spell_attributes["spell_cost"]
 
-        return self.spell_attributes
+        return dict(self.spell_attributes)
 
     # ------------------------------------------------------------------------ #
     def cast_devouring_plague(self) -> dict[str, int]:
@@ -86,7 +86,7 @@ class ShadowPriestSpells(IBaseHero):
         )
         self._curr_mana -= self.spell_attributes["spell_cost"]
 
-        return self.spell_attributes
+        return dict(self.spell_attributes)
 
     # ------------------------------------------------------------------------ #
     def cast_flash_heal(self) -> dict[str, int]:
@@ -101,7 +101,7 @@ class ShadowPriestSpells(IBaseHero):
         self.heal_up(amount_to_heal)
         self.remove_specific_stat(stat_value=20)
 
-        return self.spell_attributes
+        return dict(self.spell_attributes)
 
     # ------------------------------------------------------------------------ #
     def cast_power_word_shield(self) -> dict[str, int]:
@@ -119,7 +119,7 @@ class ShadowPriestSpells(IBaseHero):
         self.spell_attributes["turns_active"] = 2
         self._curr_mana -= self.spell_attributes["spell_cost"]
 
-        return self.spell_attributes
+        return dict(self.spell_attributes)
 
     # ------------------------------------------------------------------------ #
     def heal_up(self, heal_amount: int) -> None:
@@ -144,10 +144,11 @@ class ShadowPriestSpells(IBaseHero):
 
     # ------------------------------------------------------------------------ #
     def is_specific_stat_spent(self, stat_value: int) -> bool:
-        if self._curr_insanity == stat_value:
+        if self._curr_insanity >= stat_value:
+            self._curr_insanity -= stat_value
             return True
-        else:
-            return False
+
+        return False
 
     # ------------------------------------------------------------------------ #
     def remove_specific_stat(self, stat_value: int) -> None:

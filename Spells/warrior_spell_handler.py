@@ -101,7 +101,7 @@ class FuryWarriorSpells(WarriorCommonSpells):
         self.spell_attributes["spell_damage"] = math.ceil(self.attack_power * 140 / 100)
         self.spell_attributes["cooldown"] = 8
 
-        return self.spell_attributes
+        return dict(self.spell_attributes)
 
     # ------------------------------------------------------------------------ #
     def cast_rampage(self) -> dict[str, int] | None:
@@ -117,7 +117,7 @@ class FuryWarriorSpells(WarriorCommonSpells):
         self.spell_attributes["spell_damage"] = math.ceil(self.attack_power * 230 / 100)
 
         return (
-            self.spell_attributes
+            dict(self.spell_attributes)
             if self.is_specific_stat_spent(self.spell_attributes["spell_cost"])
             else None
         )
@@ -141,7 +141,7 @@ class FuryWarriorSpells(WarriorCommonSpells):
         self.spell_attributes["spell_damage"] = math.ceil(self.attack_power * 390 / 100)
         self.spell_attributes["cooldown"] = 3
 
-        return self.spell_attributes
+        return dict(self.spell_attributes)
 
     # ------------------------------------------------------------------------ #
     def cast_raging_blow(self) -> dict[str, int]:
@@ -159,7 +159,7 @@ class FuryWarriorSpells(WarriorCommonSpells):
         self.spell_attributes["spell_damage"] = math.ceil(self.attack_power * 400 / 100)
         self.spell_attributes["cooldown"] = 4
 
-        return self.spell_attributes
+        return dict(self.spell_attributes)
 
 
 # ---------------------------------------------------------------------------- #
@@ -190,7 +190,7 @@ class ProtectionWarriorSpells(WarriorCommonSpells):
         self.spell_attributes["spell_damage"] = math.ceil(self.attack_power * 50 / 100)
         self.spell_attributes["cooldown"] = 7
 
-        return self.spell_attributes
+        return dict(self.spell_attributes)
 
     # ------------------------------------------------------------------------ #
     def cast_shield_block(self) -> dict[str, int] | None:
@@ -207,7 +207,7 @@ class ProtectionWarriorSpells(WarriorCommonSpells):
             self.spell_attributes["damage_reduction"] = self.max_damage_reduction
             self.spell_attributes["cooldown"] = 2
 
-            return self.spell_attributes
+            return dict(self.spell_attributes)
 
         return None
 
@@ -226,7 +226,7 @@ class ProtectionWarriorSpells(WarriorCommonSpells):
         self.spell_attributes["spell_damage"] = math.ceil(self.attack_power * 240 / 100)
         self.spell_attributes["cooldown"] = 10
 
-        return self.spell_attributes
+        return dict(self.spell_attributes)
 
     # ------------------------------------------------------------------------ #
     def cast_shield_charge(self) -> dict[str, int]:
@@ -244,7 +244,7 @@ class ProtectionWarriorSpells(WarriorCommonSpells):
         self.spell_attributes["spell_damage"] = math.ceil(self.attack_power * 420 / 100)
         self.spell_attributes["cooldown"] = 8
 
-        return self.spell_attributes
+        return dict(self.spell_attributes)
 
     # ------------------------------------------------------------------------ #
     def cast_sheild_slam(self) -> dict[str, int]:
@@ -262,7 +262,7 @@ class ProtectionWarriorSpells(WarriorCommonSpells):
         self.spell_attributes["spell_damage"] = math.ceil(self.attack_power * 130 / 100)
         self.spell_attributes["cooldown"] = 2
 
-        return self.spell_attributes
+        return dict(self.spell_attributes)
 
     # ------------------------------------------------------------------------ #
     def cast_ignore_pain(self) -> dict[str, int] | None:
@@ -281,7 +281,7 @@ class ProtectionWarriorSpells(WarriorCommonSpells):
             self.spell_attributes["cooldown"] = 0
             self.spell_attributes["turns_active"] = 1
 
-            return self.spell_attributes
+            return dict(self.spell_attributes)
 
         return None
 

@@ -53,7 +53,7 @@ class PaladinCommonSpells(IBaseHero):
         self.spell_attributes["damage_reduction"] = self.max_damage_reduction
         self.spell_attributes["turns_active"] = 2
 
-        return self.spell_attributes
+        return dict(self.spell_attributes)
 
     # ------------------------------------------------------------------------ #
     def cast_judgement(self) -> dict[str, int]:
@@ -72,7 +72,7 @@ class PaladinCommonSpells(IBaseHero):
         self._curr_mana -= self.spell_attributes["spell_cost"]
         self.add_specific_stat(holy_power_generation)
 
-        return self.spell_attributes
+        return dict(self.spell_attributes)
 
     # ------------------------------------------------------------------------ #
     def cast_word_of_glory(self) -> None:
@@ -161,7 +161,7 @@ class RetributionPaladinSpells(PaladinCommonSpells):
         )
         self._curr_mana -= self.spell_attributes["spell_cost"]
 
-        return self.spell_attributes
+        return dict(self.spell_attributes)
 
     # ------------------------------------------------------------------------ #
     def cast_blade_of_justice(self) -> dict[str, int]:
@@ -182,7 +182,7 @@ class RetributionPaladinSpells(PaladinCommonSpells):
         self._curr_mana -= self.spell_attributes["spell_cost"]
         self.add_specific_stat(holy_power_generation)
 
-        return self.spell_attributes
+        return dict(self.spell_attributes)
 
     # ------------------------------------------------------------------------ #
     def cast_final_verdict(self) -> dict[str, int] | None:
@@ -203,9 +203,9 @@ class RetributionPaladinSpells(PaladinCommonSpells):
             )
             self._curr_mana -= self.spell_attributes["spell_cost"]
 
-            return self.spell_attributes
-        else:
-            return None
+            return dict(self.spell_attributes)
+
+        return None
 
     # ------------------------------------------------------------------------ #
     def cast_wake_of_ashes(self) -> dict[str, int]:
@@ -226,7 +226,7 @@ class RetributionPaladinSpells(PaladinCommonSpells):
 
         self.add_specific_stat(holy_power_generated)
 
-        return self.spell_attributes
+        return dict(self.spell_attributes)
 
 
 # ---------------------------------------------------------------------------- #
@@ -255,7 +255,7 @@ class ProtectionPaladinSpells(PaladinCommonSpells):
         )
         self._curr_mana -= self.spell_attributes["spell_cost"]
 
-        return self.spell_attributes
+        return dict(self.spell_attributes)
 
     # ------------------------------------------------------------------------ #
     def cast_blessed_hammer(self) -> dict[str, int]:
@@ -273,12 +273,13 @@ class ProtectionPaladinSpells(PaladinCommonSpells):
         self.spell_attributes["spell_cost"] = math.ceil(
             self.max_secondary_pool * 5 / 100
         )
-        self.damage_reduction = math.ceil(self.attack_power * 30 / 100)
+        # report damage reduction as part of the spell result
+        self.spell_attributes["damage_reduction"] = math.ceil(self.attack_power * 30 / 100)
         self._curr_mana -= self.spell_attributes["spell_cost"]
 
         self.add_specific_stat(holy_power_generation)
 
-        return self.spell_attributes
+        return dict(self.spell_attributes)
 
     # ------------------------------------------------------------------------ #
     def cast_shield_of_the_righteous(self) -> dict[str, int] | None:
@@ -299,9 +300,9 @@ class ProtectionPaladinSpells(PaladinCommonSpells):
             )
             self._curr_mana -= self.spell_attributes["spell_cost"]
 
-            return self.spell_attributes
-        else:
-            return None
+            return dict(self.spell_attributes)
+
+        return None
 
     # ------------------------------------------------------------------------ #
     def cast_crusader_strike(self) -> dict[str, int]:
@@ -319,4 +320,4 @@ class ProtectionPaladinSpells(PaladinCommonSpells):
         self._curr_mana -= self.spell_attributes["spell_cost"]
         self.add_specific_stat(holy_power_generation)
 
-        return self.spell_attributes
+        return dict(self.spell_attributes)
