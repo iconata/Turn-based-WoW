@@ -23,10 +23,12 @@ class FireMageSpells(IBaseHero):
 
     # ------------------------------------------------------------------------ #
     def get_name(self) -> str:
+        """Return the display name of this hero class."""
         return "Fire Mage"
 
     # ------------------------------------------------------------------------ #
     def __init__(self) -> None:
+        """Initialize Fire Mage with mana pool, health, and fire-stack counter."""
         super().__init__()
         self._curr_fire_stacks = 0
         self._max_fire_stacks = 8
@@ -51,14 +53,13 @@ class FireMageSpells(IBaseHero):
         if self.is_specific_stat_spent(self._max_fire_stacks):
             spell_damage = (math.ceil(self.spell_power * 155 / 100)) * 2
 
-        self.spell_attributes["cooldown"] = 3
-        self.spell_attributes["spell_cost"] = math.ceil(
-            self.max_secondary_pool * 2 / 100
-        )
-        self.spell_attributes["spell_damage"] = spell_damage
-        self._curr_mana -= self.spell_attributes["spell_cost"]
+        attrs = dict(self.spell_attributes)
+        attrs["cooldown"] = 3
+        attrs["spell_cost"] = math.ceil(self.max_secondary_pool * 2 / 100)
+        attrs["spell_damage"] = spell_damage
+        self._curr_mana -= attrs["spell_cost"]
 
-        return self.spell_attributes
+        return attrs
 
     # ------------------------------------------------------------------------ #
     def cast_fire_blast(self) -> dict[str, int]:
@@ -77,15 +78,14 @@ class FireMageSpells(IBaseHero):
         if self.is_specific_stat_spent(self._max_fire_stacks):
             spell_damage = (math.ceil(self.spell_power * 82 / 100)) * 2
 
-        self.spell_attributes["turns_active"] = 3
-        self.spell_attributes["damage_reduction"] = 15
-        self.spell_attributes["spell_cost"] = math.ceil(
-            self.max_secondary_pool * 1 / 100
-        )
-        self.spell_attributes["spell_damage"] = spell_damage
-        self._curr_mana -= self.spell_attributes["spell_cost"]
+        attrs = dict(self.spell_attributes)
+        attrs["turns_active"] = 3
+        attrs["damage_reduction"] = 15
+        attrs["spell_cost"] = math.ceil(self.max_secondary_pool * 1 / 100)
+        attrs["spell_damage"] = spell_damage
+        self._curr_mana -= attrs["spell_cost"]
 
-        return self.spell_attributes
+        return attrs
 
     # ------------------------------------------------------------------------ #
     def cast_flamestrike(self) -> dict[str, int]:
@@ -103,15 +103,14 @@ class FireMageSpells(IBaseHero):
         if self.is_specific_stat_spent(self._max_fire_stacks):
             spell_damage = (math.ceil(self.spell_power * 57 / 100)) * 2
 
-        self.spell_attributes["turns_active"] = 3
-        self.spell_attributes["cooldown"] = 5
-        self.spell_attributes["spell_cost"] = math.ceil(
-            self.max_secondary_pool * 1 / 100
-        )
-        self.spell_attributes["spell_damage"] = spell_damage
-        self._curr_mana -= self.spell_attributes["spell_cost"]
+        attrs = dict(self.spell_attributes)
+        attrs["turns_active"] = 3
+        attrs["cooldown"] = 5
+        attrs["spell_cost"] = math.ceil(self.max_secondary_pool * 1 / 100)
+        attrs["spell_damage"] = spell_damage
+        self._curr_mana -= attrs["spell_cost"]
 
-        return self.spell_attributes
+        return attrs
 
     # ------------------------------------------------------------------------ #
     def cast_polymorph(self) -> dict[str, int]:
@@ -123,14 +122,13 @@ class FireMageSpells(IBaseHero):
         Returns:
             tuple: cooldown of the spell, turns for which the spell is active
         """
-        self.spell_attributes["turns_active"] = 2
-        self.spell_attributes["cooldown"] = 5
-        self.spell_attributes["spell_cost"] = math.ceil(
-            self.max_secondary_pool * 1 / 100
-        )
-        self._curr_mana -= self.spell_attributes["spell_cost"]
+        attrs = dict(self.spell_attributes)
+        attrs["turns_active"] = 2
+        attrs["cooldown"] = 5
+        attrs["spell_cost"] = math.ceil(self.max_secondary_pool * 1 / 100)
+        self._curr_mana -= attrs["spell_cost"]
 
-        return self.spell_attributes
+        return attrs
 
     # ------------------------------------------------------------------------ #
     def cast_arcane_intellect(self) -> dict[str, int]:
@@ -143,15 +141,14 @@ class FireMageSpells(IBaseHero):
         Returns:
             tuple: cooldown of the spell, turns for which the spell is active
         """
-        self.spell_attributes["turns_active"] = 4
-        self.spell_attributes["cooldown"] = 4
+        attrs = dict(self.spell_attributes)
+        attrs["turns_active"] = 4
+        attrs["cooldown"] = 4
         self.spell_power += math.ceil(self.spell_power * 10 / 100)
-        self.spell_attributes["spell_cost"] = math.ceil(
-            self.max_secondary_pool * 4 / 100
-        )
-        self._curr_mana -= self.spell_attributes["spell_cost"]
+        attrs["spell_cost"] = math.ceil(self.max_secondary_pool * 4 / 100)
+        self._curr_mana -= attrs["spell_cost"]
 
-        return self.spell_attributes
+        return attrs
 
     # ------------------------------------------------------------------------ #
     def heal_up(self, heal_amount: int) -> None:
@@ -202,6 +199,7 @@ class FireMageSpells(IBaseHero):
 
     # ------------------------------------------------------------------------ #
     def create_hero(self, hero_instance: IBaseHero):
+        """Apply Fire Mage stat overrides (low health, large mana, high spell power)."""
         if isinstance(hero_instance, FireMageSpells):
             hero_instance.max_health = 700
             hero_instance.max_secondary_pool = 900

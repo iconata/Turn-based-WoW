@@ -1,3 +1,5 @@
+"""Spell handler library containing all Shaman spells (Enhancement)."""
+
 import math
 
 from Heroes.hero_base_stats import IBaseHero
@@ -14,6 +16,7 @@ class ShamanCommonSpells(IBaseHero):
 
     # ------------------------------------------------------------------------ #
     def __init__(self):
+        """Initialize shared Shaman stats: maelstrom stacks, health, and mana pool."""
         super().__init__()
         self._curr_maelstrom_stacks = 0
         self._max_maelstrom_stacks = 5
@@ -22,6 +25,7 @@ class ShamanCommonSpells(IBaseHero):
 
     # ------------------------------------------------------------------------ #
     def create_hero(self, hero_instance: IBaseHero):
+        """Apply Enhancement Shaman stat overrides (balanced attack and spell power)."""
         if isinstance(hero_instance, EnhancementShamanSpells):
             hero_instance.max_health = 850
             hero_instance.max_secondary_pool = 300
@@ -33,6 +37,7 @@ class ShamanCommonSpells(IBaseHero):
     # ------------------------------------------------------------------------ #
     @staticmethod
     def __is_flame_shock_active(active_spells: list[str]) -> bool:
+        """Return True when ``flame_shock`` is present in the active spells list."""
         if "flame_shock" in active_spells:
             return True
 
@@ -47,14 +52,13 @@ class ShamanCommonSpells(IBaseHero):
             tuple: spell damage, cooldown
 
         """
-        self.spell_attributes["cooldown"] = 1
-        self.spell_attributes["spell_cost"] = math.ceil(
-            self.max_secondary_pool * 4 / 100
-        )
-        self.spell_attributes["spell_damage"] = math.ceil(self.spell_power * 131 / 100)
-        self._curr_mana -= self.spell_attributes["spell_cost"]
+        attrs = dict(self.spell_attributes)
+        attrs["cooldown"] = 1
+        attrs["spell_cost"] = math.ceil(self.max_secondary_pool * 4 / 100)
+        attrs["spell_damage"] = math.ceil(self.spell_power * 131 / 100)
+        self._curr_mana -= attrs["spell_cost"]
 
-        return self.spell_attributes
+        return attrs
 
     # ------------------------------------------------------------------------ #
     def cast_flame_shock(self) -> dict[str, int]:
@@ -65,20 +69,16 @@ class ShamanCommonSpells(IBaseHero):
             tuple: initial spell damage, damage over time, cooldown, turns active
 
         """
-        self.spell_attributes["cooldown"] = 5
-        self.spell_attributes["turns_active"] = 3
-        self.spell_attributes["spell_cost"] = math.ceil(
-            self.max_secondary_pool * 5 / 100
-        )
-        self.spell_attributes["initial_spell_damage"] = math.ceil(
-            self.spell_power * 30 / 100
-        )
-        self.spell_attributes["damage_over_time"] = math.ceil(
-            self.spell_power * 120 / 100
-        )
-        self._curr_health -= self.spell_attributes["spell_cost"]
+        attrs = dict(self.spell_attributes)
+        attrs["cooldown"] = 5
+        attrs["turns_active"] = 3
+        attrs["spell_cost"] = math.ceil(self.max_secondary_pool * 5 / 100)
+        attrs["initial_spell_damage"] = math.ceil(self.spell_power * 30 / 100)
+        attrs["damage_over_time"] = math.ceil(self.spell_power * 120 / 100)
+        # subtract cost from mana, not health
+        self._curr_mana -= attrs["spell_cost"]
 
-        return self.spell_attributes
+        return attrs
 
     # ------------------------------------------------------------------------ #
     def cast_primordial_wave(self) -> dict[str, int]:
@@ -89,14 +89,13 @@ class ShamanCommonSpells(IBaseHero):
             tuple: spell damage, cooldown
 
         """
-        self.spell_attributes["cooldown"] = 7
-        self.spell_attributes["spell_cost"] = math.ceil(
-            self.max_secondary_pool * 5 / 100
-        )
-        self.spell_attributes["spell_damage"] = math.ceil(self.spell_power * 525 / 100)
-        self._curr_mana -= self.spell_attributes["spell_cost"]
+        attrs = dict(self.spell_attributes)
+        attrs["cooldown"] = 7
+        attrs["spell_cost"] = math.ceil(self.max_secondary_pool * 5 / 100)
+        attrs["spell_damage"] = math.ceil(self.spell_power * 525 / 100)
+        self._curr_mana -= attrs["spell_cost"]
 
-        return self.spell_attributes
+        return attrs
 
     # ------------------------------------------------------------------------ #
     def cast_lava_burst(self, active_spells: list[str]) -> dict[str, int]:
@@ -108,17 +107,16 @@ class ShamanCommonSpells(IBaseHero):
             tuple: spell damage, cooldown
 
         """
-        self.spell_attributes["cooldown"] = 2
-        self.spell_attributes["spell_cost"] = math.ceil(
-            self.max_secondary_pool * 5 / 100
-        )
-        self.spell_attributes["spell_damage"] = math.ceil(self.spell_power * 140 / 100)
-        self._curr_mana -= self.spell_attributes["spell_cost"]
+        attrs = dict(self.spell_attributes)
+        attrs["cooldown"] = 2
+        attrs["spell_cost"] = math.ceil(self.max_secondary_pool * 5 / 100)
+        attrs["spell_damage"] = math.ceil(self.spell_power * 140 / 100)
+        self._curr_mana -= attrs["spell_cost"]
 
         if self.__is_flame_shock_active(active_spells):
-            self.spell_attributes["spell_damage"] *= 2
+            attrs["spell_damage"] *= 2
 
-        return self.spell_attributes
+        return attrs
 
     # ------------------------------------------------------------------------ #
     def heal_up(self, heal_amount: int) -> None:
@@ -176,6 +174,7 @@ class EnhancementShamanSpells(ShamanCommonSpells):
 
     # ------------------------------------------------------------------------ #
     def get_name(self) -> str:
+        """Return the display name of this hero class."""
         return "Enhancement Shaman"
 
     # ------------------------------------------------------------------------ #
@@ -189,14 +188,13 @@ class EnhancementShamanSpells(ShamanCommonSpells):
 
         """
 
-        self.spell_attributes["cooldown"] = 2
-        self.spell_attributes["spell_cost"] = math.ceil(
-            self.max_secondary_pool * 5 / 100
-        )
-        self.spell_attributes["spell_damage"] = math.ceil(self.attack_power * 400 / 100)
-        self._curr_mana -= self.spell_attributes["spell_cost"]
+        attrs = dict(self.spell_attributes)
+        attrs["cooldown"] = 2
+        attrs["spell_cost"] = math.ceil(self.max_secondary_pool * 5 / 100)
+        attrs["spell_damage"] = math.ceil(self.attack_power * 400 / 100)
+        self._curr_mana -= attrs["spell_cost"]
 
-        return self.spell_attributes
+        return attrs
 
     # ------------------------------------------------------------------------ #
     def cast_lava_lash(self) -> dict[str, int]:
@@ -208,14 +206,13 @@ class EnhancementShamanSpells(ShamanCommonSpells):
 
         """
 
-        self.spell_attributes["cooldown"] = 2
-        self.spell_attributes["spell_cost"] = math.ceil(
-            self.max_secondary_pool * 3 / 100
-        )
-        self.spell_attributes["spell_damage"] = math.ceil(self.attack_power * 240 / 100)
-        self._curr_mana -= self.spell_attributes["spell_cost"]
+        attrs = dict(self.spell_attributes)
+        attrs["cooldown"] = 2
+        attrs["spell_cost"] = math.ceil(self.max_secondary_pool * 3 / 100)
+        attrs["spell_damage"] = math.ceil(self.attack_power * 240 / 100)
+        self._curr_mana -= attrs["spell_cost"]
 
-        return self.spell_attributes
+        return attrs
 
     # ------------------------------------------------------------------------ #
     def cast_tempest(self) -> dict[str, int]:
@@ -227,14 +224,13 @@ class EnhancementShamanSpells(ShamanCommonSpells):
 
         """
 
-        self.spell_attributes["cooldown"] = 5
-        self.spell_attributes["spell_cost"] = math.ceil(
-            self.max_secondary_pool * 3 / 100
-        )
-        self.spell_attributes["spell_damage"] = math.ceil(self.attack_power * 310 / 100)
-        self._curr_mana -= self.spell_attributes["spell_cost"]
+        attrs = dict(self.spell_attributes)
+        attrs["cooldown"] = 5
+        attrs["spell_cost"] = math.ceil(self.max_secondary_pool * 3 / 100)
+        attrs["spell_damage"] = math.ceil(self.attack_power * 310 / 100)
+        self._curr_mana -= attrs["spell_cost"]
 
-        return self.spell_attributes
+        return attrs
 
     # ------------------------------------------------------------------------ #
     def cast_feral_spirit(self) -> dict[str, int]:
@@ -246,14 +242,11 @@ class EnhancementShamanSpells(ShamanCommonSpells):
 
         """
 
-        self.spell_attributes["cooldown"] = 8
-        self.spell_attributes["turns_active"] = 4
-        self.spell_attributes["spell_cost"] = math.ceil(
-            self.max_secondary_pool * 5 / 100
-        )
-        self.spell_attributes["spell_damage"] = math.ceil(
-            self.attack_power * 80 / 100
-        ) + math.ceil(self.spell_power * 80 / 100)
-        self._curr_mana -= self.spell_attributes["spell_cost"]
+        attrs = dict(self.spell_attributes)
+        attrs["cooldown"] = 8
+        attrs["turns_active"] = 4
+        attrs["spell_cost"] = math.ceil(self.max_secondary_pool * 5 / 100)
+        attrs["spell_damage"] = math.ceil(self.attack_power * 80 / 100) + math.ceil(self.spell_power * 80 / 100)
+        self._curr_mana -= attrs["spell_cost"]
 
-        return self.spell_attributes
+        return attrs
