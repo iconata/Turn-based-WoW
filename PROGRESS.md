@@ -1,117 +1,84 @@
-# Project Progress — Detailed Update
+# Project progress
 
-Date: 2026-04-26 (Updated)
+This is the current repository snapshot. Future design belongs in [ARCHITECTURE.md](ARCHITECTURE.md) and planned work belongs in [ROADMAP.md](ROADMAP.md).
 
-Overview
---------
-This document records a verbose snapshot of recent work on the Turn-based WoW prototype, what changed in the codebase, current test status, and next steps. The goal of the last iteration was to stabilize the core battle engine (cooldowns, multi-turn effects, and spell contract consistency), harden the turn execution surface area, and improve the CLI experience so manual playtesting and automated tests behave deterministically.
+## Current branch snapshot
 
-High-level accomplishments
--------------------------
-- Centralized multi-turn state and cooldown tracking via `BattleState`.
-- Converted all per-class spell handlers to return a fresh attributes dict per cast (removed the shared `spell_attributes` mutation class-wide).
-- Hardened `Attacking.attack` to only pick zero-argument `cast_` methods by default and to gracefully handle signature errors when a cast cannot be invoked.
-- Fixed a number of concrete runtime bugs found during tests (for example: Shaman `cast_flame_shock` cost deducted from mana not health, several spells now consistently use returned attrs for cost/damage values).
-- Improved the CLI in `main.py` to list per-spell cooldowns, re-prompt when the player chooses a spell on cooldown, and skip the player's action when all spells are currently unavailable.
-- Added and refined AI logic (`SimpleHeuristicAI`, `RandomAI`) with simulation-based scoring that respects cooldowns when a `BattleState` is provided.
-- Replaced many placeholder docstrings with concise descriptions in core modules (hero API, battle state, hero factory, AI).
-- Kept the test suite green while making the above changes; current run shows all tests passing locally.
+- Source branch: `local-state`.
+- `local-state` is one commit ahead of the previous `main` branch and zero commits behind it.
+- It contains the current local implementation.
+- The branch consists of one large safety-snapshot commit rather than a series of small, reviewable changes.
 
-Files changed (representative)
------------------------------
-- [battle_state.py](battle_state.py) — central cooldown/effect manager and `tick()` logic.
-- [battles_handler.py](battles_handler.py) — `Attacking.attack` hardened, structured error return on bad signatures.
-- [main.py](main.py) — interactive CLI: per-spell cooldown display, re-prompt on cooldown, skip-turn behavior.
-- [ai_player.py](ai_player.py) — `SimpleHeuristicAI` and `RandomAI` with simulation and cooldown-awareness.
-- `Spells/*` (all handlers) — replaced in-place mutation of `self.spell_attributes` with per-call copies (`attrs = dict(self.spell_attributes)` and return `attrs`). Notable files changed: [Spells/paladin_spell_handler.py](Spells/paladin_spell_handler.py), [Spells/mage_spell_handler.py](Spells/mage_spell_handler.py), [Spells/shaman_spell_handler.py](Spells/shaman_spell_handler.py), [Spells/priest_spell_handler.py](Spells/priest_spell_handler.py), [Spells/warrior_spell_handler.py](Spells/warrior_spell_handler.py), [Spells/monk_spell_handler.py](Spells/monk_spell_handler.py).
-- [Heroes/hero_base_stats.py](Heroes/hero_base_stats.py) — cleaned up interface docstrings and clarified the `spell_attributes` template comment.
-- [Heroes/hero_factory.py](Heroes/hero_factory.py) — small docstring improvements.
-- `Tests/*` — added and adjusted tests to reflect the new behavior and the presence of `BattleState` (examples: [Tests/test_cooldowns.py](Tests/test_cooldowns.py), [Tests/test_battles.py](Tests/test_battles.py), [Tests/test_ai_player.py](Tests/test_ai_player.py), [Tests/test_paladin_spell_handler.py](Tests/test_paladin_spell_handler.py)).
-- [Tests/test_spell_contracts.py](Tests/test_spell_contracts.py) — comprehensive per-class spell contract tests (66 new tests covering all 6 classes).
-- [.github/workflows/python-tests.yml](.github/workflows/python-tests.yml) — CI workflow for automated testing and linting on push/PR.
+## Implemented state
 
-Detailed technical notes
-------------------------
-- BattleState
-  - Tracks cooldowns by hero object id and holds active effects (DOT, DR, buff/debuff).
-  - `register_spell_cast(attacker, defender, spell_name, info)` now records cooldowns and creates an effect dict when `turns_active` > 0. It applies damage reduction immediately when appropriate and marks whether DR was applied so it can be reverted when the effect expires.
-  - `tick()` applies DOT damage, decrements durations, reverts DR when effects expire, and decrements cooldowns.
+### Heroes and spells
 
-- Spells API
-  - Each `cast_*` now returns a fresh dictionary (copied from a shared template) so that multiple casts do not leak state between different spells or between tests.
-  - Spell return contract remains a mapping with keys such as `spell_cost`, `spell_damage`, `cooldown`, `turns_active`, `damage_over_time`, `damage_reduction`, `initial_spell_damage`, `health_leech`.
+- Six classes: Paladin, Warrior, Monk, Mage, Shaman, and Priest.
+- Nine supported specializations: Protection and Retribution Paladin; Protection and Fury Warrior; Brewmaster and Windwalker Monk; Fire Mage; Enhancement Shaman; and Shadow Priest.
+- `HeroFactory` constructs the supported class/specialization combinations.
+- Per-class spell-handler modules provide the current actions.
+- Classes maintain class-specific resources such as holy power, rage, chi, mana, fire stacks, maelstrom, and insanity.
+- Cast methods make fresh dictionary copies from the shared result template, preventing reuse of the same result dictionary between casts.
 
-- Attacking / Battles
-  - `Attacking.attack` now selects default spells only among zero-argument `cast_` methods (using `inspect.signature`) to avoid accidental invocation of spells that expect parameters.
-  - Invocation is wrapped to catch `TypeError` and return a structured info dict with an `error` field instead of raising; this reduces accidental crashes during interactive play and in tests.
+### Combat
 
-- CLI
-  - `main.py` lists each available zero-arg spell and shows remaining cooldowns next to spells; choosing a spell on cooldown prompts for another selection, and when no non-cooldown spells exist the player skips their action.
+- `Attacking` invokes spells and applies immediate damage; spell methods can apply healing directly.
+- `BattleState` tracks cooldowns and multi-turn effects.
+- Current effect support includes damage over time and damage-reduction changes.
+- The CLI advances turns by ticking battle state and swapping active/passive heroes.
+- The battle loop ends when either hero's health is no longer above zero.
 
-Test status (local)
--------------------
-- Test runner: `pytest` (local runs during development).
-- Last full run (local dev environment) result: **79 passed** (all tests green).
-- Test coverage now includes:
-  - Cooldown mechanics and multi-turn effects
-  - Battle damage application and healing
-  - AI decision-making (killing blows, healing priority)
-  - Per-class spell contracts for all 6 classes (Mage, Monk, Paladin, Priest, Shaman, Warrior)
-  - Resource management (mana, rage, chi, holy power, fire stacks, maelstrom, insanity)
-  - Spell return contract validation (all required keys present)
-  - Template immutability (spells return fresh dicts, not shared references)
+### CLI
 
-How to reproduce locally
-------------------------
-Create and activate a virtual environment and run the tests:
+- Interactive hero and specialization selection.
+- Local player-vs-player and player-vs-AI modes.
+- Spell selection with remaining cooldown display.
+- Health bars and combat-log messages.
+- Action skipping when no zero-argument spell is available or all listed spells are on cooldown.
+- `--show-classes` and `--show-roles` information flags.
 
-```bash
-python -m venv .venv
-source .venv/bin/activate
-# (optional) install pinned deps if you maintain requirements
-# pip install -r requirements.txt
-python -m pytest -q
-```
+### AI
 
-Current TODO list (tracked)
----------------------------
+- `SimpleHeuristicAI` and `RandomAI` strategies exist.
+- `SimpleHeuristicAI` simulates candidate casts on deep-copied hero objects and scores dictionary result fields.
+- `SimpleHeuristicAI` filters actions using `BattleState` cooldown state when supplied.
+- `RandomAI` accepts a `BattleState` argument but currently does not use it to filter cooldowns.
 
-# Todo List
+### Tests and tooling
 
-- [x] Add unit tests for cooldowns, heal reporting, and effect-targeting
-- [x] Add docstrings to public functions and remove AI comments
-- [x] Improve CLI UX in `main.py` (clear combat log, health bars, cooldown display)
-- [x] Implement AI player module and integrate into CLI
-- [x] Add unit tests for AI behavior (kill selection, healing selection)
-- [x] Run test suite and fix any regressions
-- [ ] Commit and push changes
-- [x] Stop reusing shared `spell_attributes` (per-spell result dicts)
-- [x] Harden `Attacking.attack` to validate spell signatures and handle TypeError
-- [x] Add per-spell unit tests to cover return contract and edge cases (all 6 classes)
-- [x] Add CI (GitHub Actions) to run tests and linter on push
+- Pytest tests cover AI choices, immediate battle behavior, cooldowns/effects, Paladin behavior, and spell-result contracts.
+- `requirements.txt` and `requirements-dev.txt` are present.
+- Pytest, pytest-cov, and Ruff are listed as development dependencies (and are also currently listed in `requirements.txt`).
+- Setup scripts exist for macOS/Linux (`setup.sh`) and Windows PowerShell (`setup.ps1`). They were inspected during this review but not executed end to end.
+- Latest recorded local run: 79 tests passed. During this review, `python -m pytest` passed on Python 3.14.4. A bare `pytest` invocation failed collection because local modules were not on its import path in this environment.
+- Ruff is configured, but `ruff check . --no-cache` currently reports 107 errors; lint is not passing.
+- A GitHub Actions workflow is present but has not yet been verified on a pull request.
+- Passing tests confirm only the behavior covered by those tests; they do not establish that the game rules are correct.
 
-Notes on TODOs:
-- Docstring sweep is complete: all auto-generated placeholders replaced with real docstrings.
-- Per-class spell contract tests added in `Tests/test_spell_contracts.py` covering all 6 classes (79 tests total).
-- CI workflow added in `.github/workflows/python-tests.yml` with pytest, ruff linting, and coverage reporting.
-- Ready for manual commit and push.
+## Current strengths
 
-Next steps (recommended priority)
---------------------------------
-1. ~~Finish docstring sweep and remove any remaining assistant-generated comments in public modules (low risk, cosmetic).~~ **DONE**
-   - ~~Files: `Heroes/hero_base_stats.py`, `ai_player.py`, `battle_state.py`, `Spells/*`~~
-2. ~~Add per-spell unit tests to cover return contract and edge cases (insufficient resources, signature mismatches).~~ **DONE**
-   - ~~Files: `Tests/test_spell_contracts.py`, `Tests/test_<class>.py` per specialization.~~
-3. ~~Add CI (GitHub Actions) to run tests and a linter on push, and optionally add `mypy` for type coverage.~~ **DONE**
-   - ~~Files: `.github/workflows/python-tests.yml`, `pyproject.toml` / `requirements.txt`.~~
-4. Balance & simulation harness (medium-term): create a small simulation harness to run many matches for telemetry and parameter tuning.
-   - Files: `tools/simulate.py` (new), `tools/metrics.md` (new).
-5. Optional: implement a TUI (Textual) or tiny web UI once the core engine and tests are stable.
+- A runnable vertical slice connects hero creation, spells, battle helpers, CLI interaction, and AI.
+- Characterization coverage provides a useful record of existing spell contracts.
+- `BattleState` is a centralized prototype for cooldown and multi-turn-effect handling.
+- CLI and AI exercise shared hero, spell, and battle-helper code.
+- The repository is a suitable baseline for incremental refactoring.
 
-**All immediate tasks complete!** The project is now ready for:
-- Manual commit and push
-- Opening a pull request
-- Further feature development (simulation harness, TUI, balance tuning)
+## Current limitations
 
----
-This file was updated automatically to reflect the current development snapshot.
+- Architecture and state mutation are tightly coupled.
+- Battle helpers, effects, spells, tests, and CLI directly access or mutate private state.
+- Spell and effect contracts are dictionaries rather than typed values.
+- Standard actions are discovered through method-name reflection.
+- The CLI owns orchestration as well as input and rendering.
+- Documentation overlaps and previously contained contradictory completion claims.
+- The current branch packages the safety snapshot into one large commit rather than small, reviewable changes.
+
+## Immediate next actions
+
+1. Reproduce pytest and Ruff from a clean checkout.
+2. Correct contradictory documentation.
+3. Add or restore CI.
+4. Audit and consolidate pyproject.toml, dependency files, test configuration, and Ruff configuration.
+5. Add deterministic acceptance coverage.
+6. Begin domain-invariant refactoring.
+7. Do not start FastAPI or React yet.

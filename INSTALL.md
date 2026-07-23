@@ -1,304 +1,176 @@
-# Installation Guide
+# Installation and development
 
-This guide will help you install and run the Turn-based WoW game using `uv`, a fast Python package installer and resolver.
+This is the authoritative setup guide for the current repository. Commands below match the checked-in entry point, dependency files, project configuration, and setup scripts.
 
 ## Prerequisites
 
-- Python 3.10 or higher
-- `uv` package manager (we'll install this first)
+- Git.
+- Python 3.10 or later. This minimum is declared by `pyproject.toml`; the documentation review successfully ran tests on Python 3.14.4, but did not test every declared Python version.
+- `pip`, or optionally [uv](https://docs.astral.sh/uv/).
 
-## Quick Start (Recommended)
-
-### 1. Install uv
-
-`uv` is a fast Python package installer written in Rust. Install it using one of these methods:
-
-**macOS and Linux:**
-```bash
-curl -LsSf https://astral.sh/uv/install.sh | sh
-```
-
-**Windows (PowerShell):**
-```powershell
-powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
-```
-
-**Using pip (if you already have Python):**
-```bash
-pip install uv
-```
-
-**Using Homebrew (macOS):**
-```bash
-brew install uv
-```
-
-After installation, verify it works:
-```bash
-uv --version
-```
-
-### 2. Clone the Repository
+## Clone
 
 ```bash
-git clone https://github.com/yourusername/Turn-based-WoW.git
+git clone https://github.com/iconata/Turn-based-WoW.git
 cd Turn-based-WoW
 ```
 
-### 3. Create a Virtual Environment and Install Dependencies
+The `local-state` command selects the source branch documented by this snapshot. If it has already been merged or removed, use the repository's current default branch instead.
 
-Using `uv`, this is incredibly fast:
+## Virtual environment
+
+With the standard library:
 
 ```bash
-# Create a virtual environment with Python 3.11 (or 3.10, 3.12)
-uv venv
-
-# Activate the virtual environment
-# On macOS/Linux:
+python -m venv .venv
 source .venv/bin/activate
-
-# On Windows:
-.venv\Scripts\activate
-
-# Install the project with development dependencies
-uv pip install -e ".[dev]"
 ```
 
-**Alternative:** If you just want to install dependencies without installing the project as a package:
+With uv:
+
+```bash
+uv venv
+source .venv/bin/activate
+```
+
+On Windows PowerShell, activate either environment with:
+
+```powershell
+.\.venv\Scripts\Activate.ps1
+```
+
+## Install runtime dependencies
+
+The game currently uses only the Python standard library, so no third-party runtime package is required. Note that the current `requirements.txt` also lists development tools despite its “Core dependencies” comment:
+
+```bash
+python -m pip install -r requirements.txt
+```
+
+Or with uv:
+
 ```bash
 uv pip install -r requirements.txt
 ```
 
-### 4. Verify Installation
-
-Run the test suite to make sure everything is working:
+## Install development dependencies
 
 ```bash
-pytest
+python -m pip install -r requirements-dev.txt
 ```
 
-You should see:
-```
-============================== 79 passed in 0.XX s ==============================
+Or:
+
+```bash
+uv pip install -r requirements-dev.txt
 ```
 
-### 5. Run the Game
+The current project metadata also declares a `dev` extra, but editable/package installation should be treated cautiously until packaging is verified from a clean checkout.
+
+## Run game
 
 ```bash
 python main.py
 ```
 
-Or if you installed the project as a package:
-```bash
-turn-based-wow
-```
-
-## Alternative Installation Methods
-
-### Using Standard pip (without uv)
-
-If you prefer not to use `uv`, you can use standard Python tools:
+Information-only commands:
 
 ```bash
-# Create virtual environment
-python -m venv .venv
-
-# Activate it
-source .venv/bin/activate  # macOS/Linux
-# or
-.venv\Scripts\activate  # Windows
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Run the game
-python main.py
-```
-
-### Development Installation
-
-For development work with all tools:
-
-```bash
-# Using uv (recommended)
-uv pip install -e ".[dev]"
-
-# Or using pip
-pip install -r requirements-dev.txt
-```
-
-This installs:
-- `pytest` - Testing framework
-- `pytest-cov` - Coverage reporting
-- `ruff` - Fast Python linter
-
-## Running Tests
-
-```bash
-# Run all tests
-pytest
-
-# Run with verbose output
-pytest -v
-
-# Run with coverage report
-pytest --cov=. --cov-report=term-missing
-
-# Run specific test file
-pytest Tests/test_spell_contracts.py
-
-# Run specific test class
-pytest Tests/test_spell_contracts.py::TestFireMageSpells
-
-# Run specific test
-pytest Tests/test_spell_contracts.py::TestFireMageSpells::test_fireball_contract
-```
-
-## Code Quality Checks
-
-```bash
-# Run linter
-ruff check .
-
-# Run linter with auto-fix
-ruff check . --fix
-
-# Format code
-ruff format .
-```
-
-## Playing the Game
-
-### Command-line Options
-
-```bash
-# Show available classes
 python main.py --show-classes
-
-# Show available roles
 python main.py --show-roles
+```
 
-# Start the game (interactive mode)
+## Run tests
+
+Use module invocation from the repository root:
+
+```bash
+python -m pytest
+```
+
+Latest recorded local run: 79 tests passed. During this review, bare `pytest` failed import collection in the active environment while `python -m pytest` passed, so the module form is the documented command. Passing tests do not prove that game rules are correct.
+
+## Run coverage
+
+```bash
+python -m pytest --cov=. --cov-report=term-missing
+```
+
+Coverage was not run during this documentation task.
+
+## Run Ruff
+
+```bash
+ruff check .
+```
+
+Ruff is configured in `pyproject.toml`. It was run during this review and currently reports 107 errors; a clean lint run remains planned work. Use `--fix` only when intentionally performing a separate code-change task.
+
+## Windows PowerShell setup
+
+The checked-in script performs these operations: checks for uv, offers to install it, creates `.venv`, activates it, installs `requirements.txt`, and runs `pytest -q`.
+
+```powershell
+.\setup.ps1
+```
+
+The script was inspected but not executed during this review. Because it invokes bare `pytest`, its verification step may encounter the import-path issue observed in the current macOS environment.
+
+For a manual PowerShell setup:
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install -r requirements-dev.txt
+python -m pytest
 python main.py
 ```
 
-### Gameplay
+## macOS/Linux setup
 
-1. Choose your class (Warrior, Mage, Paladin, Shaman, Monk, Priest)
-2. Choose your role (Tank, Damage)
-3. The game will create an AI opponent
-4. Take turns casting spells
-5. Each spell has:
-   - Damage/healing effects
-   - Resource costs (mana, rage, chi, holy power, etc.)
-   - Cooldowns
-   - Multi-turn effects (DOT, damage reduction, buffs)
+The checked-in script performs these operations: checks for uv, offers to install it with `curl`, creates `.venv`, activates it, installs `requirements.txt`, and runs `pytest -q`.
 
-## Project Structure
-
+```bash
+./setup.sh
 ```
-Turn-based-WoW/
-├── Heroes/              # Hero base classes and factory
-│   ├── hero_base_stats.py
-│   └── hero_factory.py
-├── Spells/              # Spell handlers for each class
-│   ├── mage_spell_handler.py
-│   ├── monk_spell_handler.py
-│   ├── paladin_spell_handler.py
-│   ├── priest_spell_handler.py
-│   ├── shaman_spell_handler.py
-│   └── warrior_spell_handler.py
-├── Tests/               # Test suite (79 tests)
-│   ├── test_ai_player.py
-│   ├── test_battles.py
-│   ├── test_cooldowns.py
-│   ├── test_paladin_spell_handler.py
-│   └── test_spell_contracts.py
-├── ai_player.py         # AI decision-making
-├── battle_state.py      # Cooldown and effect tracking
-├── battles_handler.py   # Combat mechanics
-├── main.py              # CLI entry point
-├── pyproject.toml       # Project configuration
-├── requirements.txt     # Dependencies
-└── README.md            # Project overview
+
+The script was inspected but not executed during this review. It downloads uv when missing, and its bare `pytest` verification may encounter the import-path issue observed during this task.
+
+For a manual setup:
+
+```bash
+python -m venv .venv
+source .venv/bin/activate
+python -m pip install -r requirements-dev.txt
+python -m pytest
+python main.py
 ```
 
 ## Troubleshooting
 
-### "uv: command not found"
+### Local modules are not found during test collection
 
-Make sure `uv` is in your PATH. After installation, you may need to:
-- Restart your terminal
-- Run `source ~/.bashrc` or `source ~/.zshrc` (macOS/Linux)
-- Add `~/.cargo/bin` to your PATH manually
-
-### "Python version not found"
-
-Ensure you have Python 3.10 or higher:
-```bash
-python --version
-```
-
-If you need to install Python, visit [python.org](https://www.python.org/downloads/) or use:
-- **macOS:** `brew install python@3.11`
-- **Ubuntu/Debian:** `sudo apt install python3.11`
-- **Windows:** Download from python.org
-
-### Tests failing
-
-Make sure you're in the project root directory and have activated the virtual environment:
-```bash
-cd Turn-based-WoW
-source .venv/bin/activate  # or .venv\Scripts\activate on Windows
-pytest
-```
-
-### Import errors
-
-If you see import errors, make sure you've installed the dependencies:
-```bash
-uv pip install -r requirements.txt
-```
-
-## Uninstallation
-
-To remove the virtual environment and clean up:
+Run tests from the repository root with:
 
 ```bash
-# Deactivate the virtual environment
-deactivate
-
-# Remove the virtual environment directory
-rm -rf .venv
-
-# Remove Python cache files (optional)
-find . -type d -name "__pycache__" -exec rm -rf {} +
-find . -type d -name "*.egg-info" -exec rm -rf {} +
+python -m pytest
 ```
 
-## Contributing
+This avoids the import-path failure observed with the bare `pytest` executable in the review environment.
 
-If you want to contribute to the project:
+### `uv` is not found
 
-1. Fork the repository
-2. Create a feature branch
-3. Install development dependencies: `uv pip install -e ".[dev]"`
-4. Make your changes
-5. Run tests: `pytest`
-6. Run linter: `ruff check .`
-7. Submit a pull request
+Either install uv using its official instructions or use the standard-library `venv` and `pip` commands above. Restart the shell after installing uv if its executable is not yet on `PATH`.
 
-## Support
+### PowerShell blocks activation
 
-For issues or questions:
-- Open an issue on GitHub
-- Check the [README.md](README.md) for project overview
-- Review [PROGRESS.md](PROGRESS.md) for development status
+Use an execution policy appropriate for your environment, or invoke the virtual environment's Python directly:
 
-## License
+```powershell
+.\.venv\Scripts\python.exe -m pytest
+.\.venv\Scripts\python.exe main.py
+```
 
-MIT License - see LICENSE file for details
+### Ruff fails
 
----
-
-**Enjoy the game!** ⚔️🔥🛡️
+The current snapshot has known lint findings. A Ruff failure is not necessarily an installation failure; fixing it is separate planned work.

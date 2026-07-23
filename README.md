@@ -1,105 +1,50 @@
-# Turn-based WoW
-This is a simple turn based terminal game, based on World of Warcraft.
+# Turn-based-WoW
 
-## Quick Start
+## Project summary
 
-### Automated Setup (Recommended)
+Turn-based-WoW is a hobby and hands-on software-engineering learning project. The current product is a terminal-based turn-combat game with six classes and their currently supported specializations, player-vs-player and player-vs-AI modes, spells, cooldowns, multi-turn effects, and combat logs.
 
-**macOS/Linux:**
-```bash
-./setup.sh
+The developer implements the work manually. AI tools are used for guidance, code review, explanations, repository inspection, and test assistance; they are not intended to implement entire backlog items autonomously.
+
+## Current direction
+
+The immediate architecture is a standalone, pure-Python combat engine. The later user-facing product is a browser game using FastAPI and React:
+
+```text
+React frontend
+    ↓
+FastAPI application/API adapter
+    ↓
+Standalone Python combat engine
 ```
 
-**Windows (PowerShell):**
-```powershell
-.\setup.ps1
-```
+Option D—the standalone engine—is the current architecture direction. Option B—the browser product—is the later product direction. FastAPI and React are intentionally not immediate work.
 
-The setup script will:
-- Install `uv` if not already installed
-- Create a virtual environment
-- Install all dependencies
-- Run tests to verify everything works
+## Quick start
 
-### Manual Setup
-
-See [INSTALL.md](INSTALL.md) for detailed installation instructions.
-
-## Features
-
-The game has:
-- 6 classes to choose from - Paladin, Warrior, Priest, Monk, Mage, Shaman
-- 3 roles for the classes  - Ranged DPS, Melee DPS, Tank
-- The ability to read the input from terminal
-- Turn-based play style
-- Cooldown system for spells
-- Multi-turn effects (DOT, damage reduction, buffs)
-- AI opponents with strategic decision-making
-
-## Playing the Game
+Python 3.10 or later is declared in the project configuration.
 
 ```bash
-# Activate virtual environment (if not already active)
-source .venv/bin/activate  # macOS/Linux
-# or
-.venv\Scripts\activate  # Windows
-
-# Run the game
+python -m venv .venv
+source .venv/bin/activate
+python -m pip install -r requirements.txt
 python main.py
 ```
 
-## Development
+Windows activation and development commands are in [INSTALL.md](INSTALL.md).
 
-### Running Tests
+## Current status
 
-```bash
-pytest                    # Run all tests
-pytest -v                 # Verbose output
-pytest --cov=.           # With coverage report
-```
+Repository inspection confirms a runnable terminal entry point, `HeroFactory`, six classes with nine supported specializations, local PvP and player-vs-AI selection, spell selection, immediate damage and healing, cooldown/effect tracking, turn progression, health display, and a combat log.
 
-**Test Status:** ✅ 79 tests passing
+Latest recorded local run: 79 tests passed. This was reproduced during the documentation review with `python -m pytest`, but passing tests characterize tested behavior; they do not prove that all game rules are correct. The result should also be reproduced from a clean checkout.
 
-### Code Quality
+A GitHub Actions workflow is present but has not yet been verified on a pull request.
 
-```bash
-ruff check .             # Run linter
-ruff check . --fix       # Auto-fix issues
-ruff format .            # Format code
-```
+## Documentation
 
-## Project Status
-
-- ✅ Core battle engine (stable)
-- ✅ 6 classes with unique spells
-- ✅ AI opponents
-- ✅ Comprehensive test suite (79 tests)
-- ✅ CI/CD pipeline (GitHub Actions)
-
-See [PROGRESS.md](PROGRESS.md) for detailed development status.
-
-## Future Plans
-
-I'm planning to add in a future update:
-- UI
-- More complex actions like the ability to enter a combo (for example, combo of 4 moves - Crusader Strike, Judgement, Blade of Justice, Templar Strike)
-- Simulation harness for balance tuning
-- TUI (Textual) or web interface
-
-## Contributing
-
-Contributions are welcome! Please:
-1. Fork the repository
-2. Create a feature branch
-3. Install dev dependencies: `uv pip install -e ".[dev]"`
-4. Make your changes
-5. Run tests and linter
-6. Submit a pull request
-
-## License
-
-MIT License
-
-## About
-
-I'm doing this as a hobby and a learning opportunity.
+- [Installation and development](INSTALL.md)
+- [Current progress](PROGRESS.md)
+- [Architecture](ARCHITECTURE.md)
+- [Technical debt](TECHNICAL_DEBT.md)
+- [Roadmap](ROADMAP.md)
