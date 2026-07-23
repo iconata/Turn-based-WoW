@@ -1,12 +1,12 @@
 import argparse
+import inspect
 from typing import Optional
 
-from Heroes.hero_base_stats import IBaseHero
-from Heroes.hero_factory import HeroFactory
-from battles_handler import Attacking, Defending
 from ai_player import SimpleHeuristicAI
 from battle_state import BattleState
-import inspect
+from battles_handler import Attacking
+from Heroes.hero_base_stats import IBaseHero
+from Heroes.hero_factory import HeroFactory
 
 # --------------------------------- Constants -------------------------------- #
 AVAILABLE_CLASSES = ["Warrior", "Mage", "Paladin", "Shaman", "Monk", "Priest"]

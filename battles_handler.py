@@ -7,11 +7,11 @@ state mutation local and minimal so unit tests can exercise individual
 spells and simple attacks without a full ``BattleState`` manager.
 """
 
-from typing import Any, Optional, Tuple
 import inspect
+from typing import Any, Optional, Tuple
 
-from Heroes.hero_base_stats import IBaseHero
 from battle_state import BattleState
+from Heroes.hero_base_stats import IBaseHero
 
 
 class Attacking:

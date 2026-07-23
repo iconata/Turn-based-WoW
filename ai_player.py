@@ -19,8 +19,8 @@ import inspect
 from abc import ABC, abstractmethod
 from typing import Optional
 
-from Heroes.hero_base_stats import IBaseHero
 from battle_state import BattleState
+from Heroes.hero_base_stats import IBaseHero
 
 
 class IAIPlayer(ABC):
