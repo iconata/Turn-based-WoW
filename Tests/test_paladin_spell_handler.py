@@ -1,4 +1,5 @@
 import unittest
+
 from Spells.paladin_spell_handler import (
     ProtectionPaladinSpells,
     RetributionPaladinSpells,

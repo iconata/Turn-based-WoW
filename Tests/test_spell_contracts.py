@@ -11,11 +11,13 @@ import pytest
 
 from Spells.mage_spell_handler import FireMageSpells
 from Spells.monk_spell_handler import BrewmasterMonkSpells, WindwalkerMonkSpells
-from Spells.paladin_spell_handler import ProtectionPaladinSpells, RetributionPaladinSpells
+from Spells.paladin_spell_handler import (
+    ProtectionPaladinSpells,
+    RetributionPaladinSpells,
+)
 from Spells.priest_spell_handler import ShadowPriestSpells
 from Spells.shaman_spell_handler import EnhancementShamanSpells
 from Spells.warrior_spell_handler import FuryWarriorSpells, ProtectionWarriorSpells
-
 
 # ---------------------------------------------------------------------------- #
 # Helpers

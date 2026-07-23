@@ -1,6 +1,6 @@
-from Heroes.hero_factory import HeroFactory
 from battle_state import BattleState
 from battles_handler import Attacking
+from Heroes.hero_factory import HeroFactory
 
 
 def test_spell_sets_cooldown_and_blocks_recast():

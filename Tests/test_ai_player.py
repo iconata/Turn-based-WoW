@@ -1,6 +1,6 @@
-from Heroes.hero_factory import HeroFactory
 from ai_player import SimpleHeuristicAI
 from battles_handler import Attacking
+from Heroes.hero_factory import HeroFactory
 
 
 def test_ai_prefers_killing_blow():
