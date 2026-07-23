@@ -2,6 +2,7 @@
 __pycache__/
 *.py[cod]
 *$py.class
+.github/prompts
 
 # C extensionss
 *.so
@@ -214,7 +215,6 @@ cmake-build-*/
 
 # File-based project format
 *.iws
-*.toml
 
 # IntelliJ
 out/

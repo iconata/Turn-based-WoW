@@ -1,7 +1,0 @@
-# Development and testing dependencies
--r requirements.txt
-
-# Additional dev tools
-pytest>=9.0.0
-pytest-cov>=4.1.0
-ruff>=0.15.0
