@@ -36,6 +36,7 @@ def _run_battle(
     active = first_hero
     passive = second_hero
     turns = 0
+    action_history = []
 
     while _current_health(first_hero) > 0 and _current_health(second_hero) > 0:
         turns += 1
@@ -50,6 +51,7 @@ def _run_battle(
         )
 
         if selected_action is not None:
+            action_history.append(selected_action)
             handler = Attacking(active, passive, battle_state=battle_state)
             passive, _ = handler.attack(selected_action)
 
@@ -67,6 +69,7 @@ def _run_battle(
         "winner": winner,
         "loser": loser,
         "turns": turns,
+        "actions": action_history,
     }
 
 
@@ -93,9 +96,13 @@ def test_battle_reaches_a_winner_with_deterministic_actions():
         second_actions,
     )
 
-    assert result["winner"] in (first_hero, second_hero)
-    assert _current_health(result["winner"]) > 0
+    assert result["winner"] is first_hero
     assert _current_health(result["loser"]) == 0
-    assert result["turns"] <= MAX_TURNS
-    assert 0 <= _current_health(first_hero) <= first_hero.max_health
-    assert 0 <= _current_health(second_hero) <= second_hero.max_health
+    assert _current_health(first_hero) == 29
+    assert result["turns"] == 79
+    assert result["actions"][:4] == [
+        "cast_bloodbath",
+        "cast_raging_blow",
+        "cast_raging_blow",
+        "cast_bloodbath",
+    ]
