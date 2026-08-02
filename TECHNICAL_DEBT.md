@@ -74,7 +74,7 @@ These findings come from inspection of the `local-state` repository snapshot. De
 
 ## 8. Testing strategy
 
-**Current observation:** Latest recorded local run: 79 tests passed. Many are spell-contract or characterization tests. Tests live under `Tests/`. Coverage helps preserve behavior but also encodes the dictionary design.
+**Current observation:** Latest verified local run: 80 tests passed, including one deterministic full-battle acceptance scenario. Many tests are spell-contract or characterization tests. Tests live under `Tests/`. Coverage helps preserve behavior but also encodes the dictionary design.
 
 **Risk:** Implementation-specific assertions can obstruct refactoring; passing tests may preserve incorrect gameplay; acceptance boundaries are missing. Passing tests do not prove the game rules are correct.
 
@@ -91,4 +91,3 @@ These findings come from inspection of the `local-state` repository snapshot. De
 **Desired direction:** Use `README.md` as the entry point, `INSTALL.md` for setup, `PROGRESS.md` for the current snapshot, `ARCHITECTURE.md` for design, this file for findings, and `ROADMAP.md` for planned phases.
 
 **Migration notes:** Review these obsolete candidates for later deletion, but do not delete them in this task: `INSTALLATION_COMPLETE.md`, `INSTALLATION_SUMMARY.md`, `QUICKSTART.md`, and `SUMMARY.md`.
-

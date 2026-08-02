@@ -88,7 +88,7 @@ Use module invocation from the repository root:
 python -m pytest
 ```
 
-Latest recorded local run: 79 tests passed. During this review, bare `pytest` failed import collection in the active environment while `python -m pytest` passed, so the module form is the documented command. Passing tests do not prove that game rules are correct.
+Latest verified local run: 80 tests passed on Python 3.14.4 with `uv run python -m pytest`. During an earlier review, bare `pytest` failed import collection in the active environment while module invocation passed, so the module form remains the documented command. Passing tests do not prove that game rules are correct.
 
 ## Run coverage
 
@@ -104,7 +104,7 @@ Coverage was not run during this documentation task.
 ruff check .
 ```
 
-Ruff is configured in `pyproject.toml`. It was run during this review and currently reports 107 errors; a clean lint run remains planned work. Use `--fix` only when intentionally performing a separate code-change task.
+Ruff is configured in `pyproject.toml`. The latest recorded full-repository run reported 107 errors; the preserved snapshot is not lint-clean. If the project is revisited, use `--fix` only as part of an intentional code-change task.
 
 ## Windows PowerShell setup
 
@@ -173,4 +173,4 @@ Use an execution policy appropriate for your environment, or invoke the virtual 
 
 ### Ruff fails
 
-The current snapshot has known lint findings. A Ruff failure is not necessarily an installation failure; fixing it is separate planned work.
+The preserved snapshot has known lint findings. A Ruff failure is not necessarily an installation failure.

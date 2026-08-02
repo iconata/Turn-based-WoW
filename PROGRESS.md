@@ -1,84 +1,62 @@
-# Project progress
+# Final project snapshot
 
-This is the current repository snapshot. Future design belongs in [ARCHITECTURE.md](ARCHITECTURE.md) and planned work belongs in [ROADMAP.md](ROADMAP.md).
+## Final status
 
-## Current branch snapshot
+Active development of Turn-based-WoW has ended. The repository is preserved for reference and may be revisited later, but no FastAPI or React application, package migration, major combat-engine rewrite, or other roadmap phase is currently planned.
 
-- Source branch: `local-state`.
-- `local-state` is one commit ahead of the previous `main` branch and zero commits behind it.
-- It contains the current local implementation.
-- The branch consists of one large safety-snapshot commit rather than a series of small, reviewable changes.
+This snapshot records the implementation on the `local-state` branch. The implementation and tests remain the source of truth; [ARCHITECTURE.md](ARCHITECTURE.md), [TECHNICAL_DEBT.md](TECHNICAL_DEBT.md), and the archived [ROADMAP.md](ROADMAP.md) include ideas that were not completed and are not current commitments.
 
-## Implemented state
+## Implemented functionality
 
 ### Heroes and spells
 
 - Six classes: Paladin, Warrior, Monk, Mage, Shaman, and Priest.
 - Nine supported specializations: Protection and Retribution Paladin; Protection and Fury Warrior; Brewmaster and Windwalker Monk; Fire Mage; Enhancement Shaman; and Shadow Priest.
-- `HeroFactory` constructs the supported class/specialization combinations.
-- Per-class spell-handler modules provide the current actions.
-- Classes maintain class-specific resources such as holy power, rage, chi, mana, fire stacks, maelstrom, and insanity.
-- Cast methods make fresh dictionary copies from the shared result template, preventing reuse of the same result dictionary between casts.
+- `HeroFactory` constructs the supported class and specialization combinations.
+- Per-class spell handlers provide the current actions.
+- Heroes maintain class-specific resources including holy power, rage, chi, mana, fire stacks, maelstrom, and insanity.
+- Cast methods return fresh dictionary copies of the shared spell-result template.
 
-### Combat
+### Combat and terminal interface
 
-- `Attacking` invokes spells and applies immediate damage; spell methods can apply healing directly.
-- `BattleState` tracks cooldowns and multi-turn effects.
-- Current effect support includes damage over time and damage-reduction changes.
-- The CLI advances turns by ticking battle state and swapping active/passive heroes.
-- The battle loop ends when either hero's health is no longer above zero.
-
-### CLI
-
-- Interactive hero and specialization selection.
-- Local player-vs-player and player-vs-AI modes.
-- Spell selection with remaining cooldown display.
-- Health bars and combat-log messages.
-- Action skipping when no zero-argument spell is available or all listed spells are on cooldown.
-- `--show-classes` and `--show-roles` information flags.
+- `Attacking` invokes spells and applies immediate damage; some spell methods apply healing directly.
+- `BattleState` tracks cooldowns, damage-over-time effects, and damage-reduction changes.
+- The terminal loop ticks battle state, alternates the active and passive heroes, and ends when a hero's health is no longer above zero.
+- Interactive selection supports local player-vs-player and player-vs-AI modes.
+- The interface lists spells and remaining cooldowns, displays health and combat messages, and skips an action when no zero-argument spell is available.
+- `--show-classes` and `--show-roles` provide information without starting a battle.
 
 ### AI
 
-- `SimpleHeuristicAI` and `RandomAI` strategies exist.
-- `SimpleHeuristicAI` simulates candidate casts on deep-copied hero objects and scores dictionary result fields.
-- `SimpleHeuristicAI` filters actions using `BattleState` cooldown state when supplied.
-- `RandomAI` accepts a `BattleState` argument but currently does not use it to filter cooldowns.
+- `SimpleHeuristicAI` and `RandomAI` strategies are present.
+- `SimpleHeuristicAI` evaluates zero-argument actions on copied heroes and filters cooldown-bound actions when given `BattleState`.
+- `RandomAI` chooses among reflected zero-argument actions but does not filter them using the supplied cooldown state.
 
-### Tests and tooling
+## Final verification
 
-- Pytest tests cover AI choices, immediate battle behavior, cooldowns/effects, Paladin behavior, and spell-result contracts.
-- `requirements.txt` and `requirements-dev.txt` are present.
-- Pytest, pytest-cov, and Ruff are listed as development dependencies (and are also currently listed in `requirements.txt`).
-- Setup scripts exist for macOS/Linux (`setup.sh`) and Windows PowerShell (`setup.ps1`). They were inspected during this review but not executed end to end.
-- Latest recorded local run: 79 tests passed. During this review, `python -m pytest` passed on Python 3.14.4. A bare `pytest` invocation failed collection because local modules were not on its import path in this environment.
-- Ruff is configured, but `ruff check . --no-cache` currently reports 107 errors; lint is not passing.
-- A GitHub Actions workflow is present but has not yet been verified on a pull request.
-- Passing tests confirm only the behavior covered by those tests; they do not establish that the game rules are correct.
+- Latest verified local test run: `uv run python -m pytest` completed with **80 tests passing** on Python 3.14.4.
+- `Tests/test_full_battle.py` characterizes a deterministic battle between two Fury Warriors using fixed preferred and fallback actions. The first warrior wins on turn 79 with 29 health, and the test records the initial cooldown-driven action sequence.
+- Tests also cover AI choices, immediate battle behavior, cooldowns and effects, Paladin behavior, and spell-result contracts. These tests characterize covered behavior but do not establish that every combat rule is correct.
+- Ruff is configured in `pyproject.toml`. The latest recorded full-repository run, `ruff check . --no-cache`, reported 107 findings; repository-wide lint is not passing. A later focused Ruff check on the full-battle test passed, but it did not re-evaluate the rest of the repository.
+- `.github/workflows/python-tests.yml` is tracked. It is configured for pushes and pull requests targeting `main`, `master`, and `develop`, runs Python 3.10–3.12, performs a blocking limited Ruff check, a non-blocking full Ruff check, and pytest with coverage. Its current remote result was not verified for this snapshot.
+- `setup.sh` and `setup.ps1` are present and were inspected previously, but they were not executed end to end. Their bare `pytest` verification step may behave differently from the documented module invocation in some environments.
+- Only Python 3.14.4 was used for the latest local test run; the full declared Python range was not tested locally.
 
-## Current strengths
+## Known limitations
 
-- A runnable vertical slice connects hero creation, spells, battle helpers, CLI interaction, and AI.
-- Characterization coverage provides a useful record of existing spell contracts.
-- `BattleState` is a centralized prototype for cooldown and multi-turn-effect handling.
-- CLI and AI exercise shared hero, spell, and battle-helper code.
-- The repository is a suitable baseline for incremental refactoring.
+- Battle orchestration remains distributed across `main.py`, `Attacking`, `BattleState`, spell handlers, and the terminal loop.
+- Battle helpers, effects, spells, tests, and CLI code still read or mutate private hero state directly.
+- Spell results and active effects remain dictionary contracts rather than typed values.
+- Standard actions are discovered through `cast_` method-name reflection and signature inspection.
+- The CLI combines input, rendering, metadata, hero creation, AI selection, and battle orchestration.
+- Some effect timing, stacking, targeting, mitigation, invalid-action, and defeat semantics are not formally specified or comprehensively tested.
+- Broad exception handling remains in parts of the CLI and AI flow and can obscure programming errors.
+- Repository-wide Ruff findings remain unresolved.
 
-## Current limitations
+These limitations are retained as part of the preserved prototype. The project is not being further refactored to address them.
 
-- Architecture and state mutation are tightly coupled.
-- Battle helpers, effects, spells, tests, and CLI directly access or mutate private state.
-- Spell and effect contracts are dictionaries rather than typed values.
-- Standard actions are discovered through method-name reflection.
-- The CLI owns orchestration as well as input and rendering.
-- Documentation overlaps and previously contained contradictory completion claims.
-- The current branch packages the safety snapshot into one large commit rather than small, reviewable changes.
+## Closure note
 
-## Immediate next actions
+The repository remains useful as a record of experimentation with turn-based spell design, terminal interaction, heuristic AI, characterization testing, incremental refactoring, AI-assisted development, and architectural tradeoffs.
 
-1. Reproduce pytest and Ruff from a clean checkout.
-2. Correct contradictory documentation.
-3. Add or restore CI.
-4. Audit and consolidate pyproject.toml, dependency files, test configuration, and Ruff configuration.
-5. Add deterministic acceptance coverage.
-6. Begin domain-invariant refactoring.
-7. Do not start FastAPI or React yet.
+If development resumes, the first step should be to inspect and re-verify the preserved implementation, then establish clear ownership of hero state and battle resolution. Future work should not assume that the archived roadmap or target architecture is still the right plan.

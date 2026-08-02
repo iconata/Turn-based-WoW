@@ -1,6 +1,8 @@
 # Roadmap
 
-This is planned work, not a description of completed implementation. FastAPI and React remain deferred until the engine and application boundaries are established.
+> **Archived:** This roadmap records previous architectural intentions. It is not an active delivery plan. The proposed engine rewrite, package migration, FastAPI adapter, and React frontend are deferred indefinitely.
+
+The phases below are retained for historical context and do not describe commitments or completed implementation. See [PROGRESS.md](PROGRESS.md) for the final project snapshot.
 
 ## Phase 0 — Reproducible baseline
 
@@ -80,4 +82,3 @@ POST /battles/{battle_id}/actions
 6. Hero invariant tests.
 7. Controlled `Hero` state API.
 8. Typed `ActionResult` design and vertical slice.
-

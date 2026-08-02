@@ -2,49 +2,37 @@
 
 ## Project summary
 
-Turn-based-WoW is a hobby and hands-on software-engineering learning project. The current product is a terminal-based turn-combat game with six classes and their currently supported specializations, player-vs-player and player-vs-AI modes, spells, cooldowns, multi-turn effects, and combat logs.
+Turn-based-WoW is a terminal-based hobby and software-engineering learning project inspired by World of Warcraft combat. It provides six playable classes across nine supported specializations, local player-vs-player and player-vs-AI modes, class resources, spells, immediate damage and healing, cooldowns, multi-turn effects, health displays, and combat logs.
 
-The developer implements the work manually. AI tools are used for guidance, code review, explanations, repository inspection, and test assistance; they are not intended to implement entire backlog items autonomously.
+## Project status
 
-## Current direction
+Active development has ended. This repository is preserved as a learning prototype and a record of its implementation and design experiments. It is not a production application or an actively maintained game.
 
-The immediate architecture is a standalone, pure-Python combat engine. The later user-facing product is a browser game using FastAPI and React:
+The current Python implementation remains in place. Earlier ideas for a reorganized combat engine, FastAPI adapter, and React frontend were not implemented and are deferred indefinitely.
 
-```text
-React frontend
-    ↓
-FastAPI application/API adapter
-    ↓
-Standalone Python combat engine
-```
+## Verification status
 
-Option D—the standalone engine—is the current architecture direction. Option B—the browser product—is the later product direction. FastAPI and React are intentionally not immediate work.
+The latest verified local run completed with **80 tests passing** on Python 3.14.4 using `uv run python -m pytest`. The suite includes a deterministic full-battle acceptance test that characterizes the current outcome of a selected Fury Warrior scenario, including its winner, duration, surviving health, and initial cooldown-driven action sequence.
 
-## Quick start
+Passing tests describe covered behavior; they do not prove that every gameplay rule or timing decision is correct. The latest recorded full-repository Ruff run reported 107 findings, so repository-wide lint is not clean.
 
-Python 3.10 or later is declared in the project configuration.
+A tracked GitHub Actions workflow runs tests on Python 3.10, 3.11, and 3.12 for configured push and pull-request branches. Its current remote status has not been verified as part of this final snapshot.
+
+## Run and test
+
+From a prepared environment:
 
 ```bash
-python -m venv .venv
-source .venv/bin/activate
-python -m pip install -r requirements.txt
 python main.py
+uv run python -m pytest
 ```
 
-Windows activation and development commands are in [INSTALL.md](INSTALL.md).
-
-## Current status
-
-Repository inspection confirms a runnable terminal entry point, `HeroFactory`, six classes with nine supported specializations, local PvP and player-vs-AI selection, spell selection, immediate damage and healing, cooldown/effect tracking, turn progression, health display, and a combat log.
-
-Latest recorded local run: 79 tests passed. This was reproduced during the documentation review with `python -m pytest`, but passing tests characterize tested behavior; they do not prove that all game rules are correct. The result should also be reproduced from a clean checkout.
-
-A GitHub Actions workflow is present but has not yet been verified on a pull request.
+See [INSTALL.md](INSTALL.md) for prerequisites, environment setup, platform-specific commands, and troubleshooting.
 
 ## Documentation
 
-- [Installation and development](INSTALL.md)
-- [Current progress](PROGRESS.md)
-- [Architecture](ARCHITECTURE.md)
-- [Technical debt](TECHNICAL_DEBT.md)
-- [Roadmap](ROADMAP.md)
+- [Final project snapshot](PROGRESS.md)
+- [Installation and development commands](INSTALL.md)
+- [Architecture](ARCHITECTURE.md) — current structure plus historical, unimplemented design ideas
+- [Technical debt](TECHNICAL_DEBT.md) — known limitations and previously considered improvements
+- [Archived roadmap](ROADMAP.md) — previous intentions, not an active delivery plan
