@@ -1,6 +1,6 @@
-from ai_player import SimpleHeuristicAI
-from battles_handler import Attacking
-from Heroes.hero_factory import HeroFactory
+from turn_based_wow.ai.ai_player import SimpleHeuristicAI
+from turn_based_wow.combat.battles_handler import Attacking
+from turn_based_wow.heroes.hero_factory import HeroFactory
 
 
 def test_ai_prefers_killing_blow():

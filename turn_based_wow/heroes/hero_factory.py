@@ -2,16 +2,16 @@
 Hero Factory which creates a hero based on the input.
 """
 
-from Heroes.hero_base_stats import IBaseHero
-from Spells.mage_spell_handler import FireMageSpells
-from Spells.monk_spell_handler import BrewmasterMonkSpells, WindwalkerMonkSpells
-from Spells.paladin_spell_handler import (
+from turn_based_wow.heroes.hero_base_stats import IBaseHero
+from turn_based_wow.spells.mage_spell_handler import FireMageSpells
+from turn_based_wow.spells.monk_spell_handler import BrewmasterMonkSpells, WindwalkerMonkSpells
+from turn_based_wow.spells.paladin_spell_handler import (
     ProtectionPaladinSpells,
     RetributionPaladinSpells,
 )
-from Spells.priest_spell_handler import ShadowPriestSpells
-from Spells.shaman_spell_handler import EnhancementShamanSpells
-from Spells.warrior_spell_handler import FuryWarriorSpells, ProtectionWarriorSpells
+from turn_based_wow.spells.priest_spell_handler import ShadowPriestSpells
+from turn_based_wow.spells.shaman_spell_handler import EnhancementShamanSpells
+from turn_based_wow.spells.warrior_spell_handler import FuryWarriorSpells, ProtectionWarriorSpells
 
 
 # ---------------------------------------------------------------------------- #

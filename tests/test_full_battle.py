@@ -1,6 +1,6 @@
-from battle_state import BattleState
-from battles_handler import Attacking
-from Heroes.hero_factory import HeroFactory
+from turn_based_wow.combat.battle_state import BattleState
+from turn_based_wow.combat.battles_handler import Attacking
+from turn_based_wow.heroes.hero_factory import HeroFactory
 
 MAX_TURNS = 100
 

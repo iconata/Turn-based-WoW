@@ -19,8 +19,8 @@ import inspect
 from abc import ABC, abstractmethod
 from typing import Optional
 
-from battle_state import BattleState
-from Heroes.hero_base_stats import IBaseHero
+from turn_based_wow.combat.battle_state import BattleState
+from turn_based_wow.heroes.hero_base_stats import IBaseHero
 
 
 class IAIPlayer(ABC):
