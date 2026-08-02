@@ -1,3 +1,5 @@
+"""Spell handler library containing all Monk spells (Windwalker and Brewmaster)."""
+
 import math
 
 from Heroes.hero_base_stats import IBaseHero
@@ -14,6 +16,7 @@ class MonkCommonSpells(IBaseHero):
 
     # ------------------------------------------------------------------------ #
     def __init__(self) -> None:
+        """Initialize shared Monk stats: chi pool, health, and energy."""
         super().__init__()
         self._curr_chi = 0
         self._max_chi = 5
@@ -22,6 +25,7 @@ class MonkCommonSpells(IBaseHero):
 
     # ------------------------------------------------------------------------ #
     def create_hero(self, hero_instance: IBaseHero):
+        """Apply spec-specific stat overrides for Windwalker and Brewmaster Monks."""
         if isinstance(hero_instance, WindwalkerMonkSpells):
             hero_instance.max_health = 800
             hero_instance.max_secondary_pool = 300
@@ -84,20 +88,20 @@ class MonkCommonSpells(IBaseHero):
         Returns:
             _type_: _description_
         """
-        self.spell_attributes["cooldown"] = 2
-        self.spell_attributes["spell_cost"] = 40
-        self.spell_attributes["spell_damage"] = math.ceil(self.attack_power * 40 / 100)
-        self._curr_energy -= self.spell_attributes["spell_cost"]
+        attrs = dict(self.spell_attributes)
+        attrs["cooldown"] = 2
+        attrs["spell_cost"] = 40
+        attrs["spell_damage"] = math.ceil(self.attack_power * 40 / 100)
+        self._curr_energy -= attrs["spell_cost"]
 
-        return self.spell_attributes
+        return attrs
 
     # ------------------------------------------------------------------------ #
     def cast_vivify(self) -> None:
-        """
-        Causes a surge of invigorating mists, healing the target for a certain amount of health.
-        The amount of health healed is based on the spell power of the player.
-        The spell costs 30 energy and heals for 258% of the spell power.
-        The spell can only be cast if the player has enough energy to cast it.
+        """Heal the caster for 258% of spell power, costing 30 energy.
+
+        The spell is silently skipped when the caster does not have enough
+        energy to pay the cost.
         """
 
         energy_cost = 30
@@ -122,6 +126,7 @@ class WindwalkerMonkSpells(MonkCommonSpells):
 
     # ------------------------------------------------------------------------ #
     def get_name(self) -> str:
+        """Return the display name of this hero class."""
         return "Windwalker Monk"
 
     # ------------------------------------------------------------------------ #
@@ -133,15 +138,14 @@ class WindwalkerMonkSpells(MonkCommonSpells):
             tuple: spell damage, cooldown
         """
         generated_chi = 2
-        self.spell_attributes["cooldown"] = 1
-        self.spell_attributes["spell_cost"] = math.ceil(
-            self.max_secondary_pool * 12 / 100
-        )
-        self.spell_attributes["spell_damage"] = math.ceil(self.attack_power * 28 / 100)
-        self._curr_energy -= self.spell_attributes["spell_cost"]
+        attrs = dict(self.spell_attributes)
+        attrs["cooldown"] = 1
+        attrs["spell_cost"] = math.ceil(self.max_secondary_pool * 12 / 100)
+        attrs["spell_damage"] = math.ceil(self.attack_power * 28 / 100)
+        self._curr_energy -= attrs["spell_cost"]
         self.add_specific_stat(generated_chi)
 
-        return self.spell_attributes
+        return attrs
 
     # ------------------------------------------------------------------------ #
     def cast_rising_sun_kick(self) -> dict[str, int]:
@@ -151,14 +155,13 @@ class WindwalkerMonkSpells(MonkCommonSpells):
         Returns:
             tuple: spell damage, cooldown
         """
-        self.spell_attributes["cooldown"] = 1
+        attrs = dict(self.spell_attributes)
+        attrs["cooldown"] = 1
         chi_cost = 2
         if self.is_specific_stat_spent(chi_cost):
-            self.spell_attributes["spell_damage"] = math.ceil(
-                self.attack_power * 28 / 100
-            )
+            attrs["spell_damage"] = math.ceil(self.attack_power * 28 / 100)
 
-        return self.spell_attributes
+        return attrs
 
     # ------------------------------------------------------------------------ #
     def cast_fists_of_fury(self) -> dict[str, int]:
@@ -169,13 +172,12 @@ class WindwalkerMonkSpells(MonkCommonSpells):
             tuple: spell damage, cooldown
         """
         chi_cost = 3
-        self.spell_attributes["cooldown"] = 2
+        attrs = dict(self.spell_attributes)
+        attrs["cooldown"] = 2
         if self.is_specific_stat_spent(chi_cost):
-            self.spell_attributes["spell_damage"] = math.ceil(
-                self.attack_power * 138 / 100
-            )
+            attrs["spell_damage"] = math.ceil(self.attack_power * 138 / 100)
 
-        return self.spell_attributes
+        return attrs
 
     # ------------------------------------------------------------------------ #
     def cast_whirling_dragon_punch(self) -> dict[str, int]:
@@ -185,10 +187,11 @@ class WindwalkerMonkSpells(MonkCommonSpells):
         Returns:
             tuple: spell damage, cooldown
         """
-        self.spell_attributes["cooldown"] = 5
-        self.spell_attributes["spell_damage"] = math.ceil(self.attack_power * 230 / 100)
+        attrs = dict(self.spell_attributes)
+        attrs["cooldown"] = 5
+        attrs["spell_damage"] = math.ceil(self.attack_power * 230 / 100)
 
-        return self.spell_attributes
+        return attrs
 
 
 # ---------------------------------------------------------------------------- #
@@ -206,6 +209,7 @@ class BrewmasterMonkSpells(MonkCommonSpells):
 
     # ------------------------------------------------------------------------ #
     def get_name(self) -> str:
+        """Return the display name of this hero class."""
         return "Brewmaster Monk"
 
     # ------------------------------------------------------------------------ #
@@ -217,13 +221,12 @@ class BrewmasterMonkSpells(MonkCommonSpells):
             tuple: spell damage, cooldown
         """
         chi_cost = 1
-        self.spell_attributes["cooldown"] = 1
+        attrs = dict(self.spell_attributes)
+        attrs["cooldown"] = 1
         if self.is_specific_stat_spent(chi_cost):
-            self.spell_attributes["spell_damage"] = math.ceil(
-                self.attack_power * 14 / 100
-            )
+            attrs["spell_damage"] = math.ceil(self.attack_power * 14 / 100)
 
-        return self.spell_attributes
+        return attrs
 
     # ------------------------------------------------------------------------ #
     def cast_chi_burst(self) -> dict[str, int]:
@@ -233,29 +236,29 @@ class BrewmasterMonkSpells(MonkCommonSpells):
         Returns:
             tuple: spell damage, cooldown
         """
-        self.spell_attributes["cooldown"] = 7
-        self.spell_attributes["spell_damage"] = math.ceil(self.attack_power * 280 / 100)
+        attrs = dict(self.spell_attributes)
+        attrs["cooldown"] = 7
+        attrs["spell_damage"] = math.ceil(self.attack_power * 280 / 100)
 
-        return self.spell_attributes
+        return attrs
 
     # ------------------------------------------------------------------------ #
     def cast_keg_smash(self) -> dict[str, int]:
-        """
-        Smash the target with your keg, dealing damage to the target and reducing the damage taken by 30% for 1 turn.
+        """Smash the target with your keg, dealing damage and reducing incoming damage by 30% for 1 turn.
 
         Returns:
-            tuple: spell damage, cooldown
+            dict: spell_cost, spell_damage, cooldown, damage_reduction
         """
-        # TODO: reset the damage reduction after 1 turn
 
         spell_cost = 40
-        self.spell_attributes["spell_cost"] = spell_cost
-        self.spell_attributes["cooldown"] = 3
-        self.spell_attributes["spell_damage"] = math.ceil(self.attack_power * 100 / 100)
+        attrs = dict(self.spell_attributes)
+        attrs["spell_cost"] = spell_cost
+        attrs["cooldown"] = 3
+        attrs["spell_damage"] = math.ceil(self.attack_power * 100 / 100)
         self._curr_energy -= spell_cost
-        self.spell_attributes["damage_reduction"] = 30
+        attrs["damage_reduction"] = 30
 
-        return self.spell_attributes
+        return attrs
 
     # ------------------------------------------------------------------------ #
     def cast_blackout_kick(self) -> dict[str, int]:
@@ -266,13 +269,12 @@ class BrewmasterMonkSpells(MonkCommonSpells):
             tuple: spell damage, cooldown
         """
         chi_cost = 3
-        self.spell_attributes["cooldown"] = 1
+        attrs = dict(self.spell_attributes)
+        attrs["cooldown"] = 1
         if self.is_specific_stat_spent(chi_cost):
-            self.spell_attributes["spell_damage"] = math.ceil(
-                self.attack_power * 85 / 100
-            )
+            attrs["spell_damage"] = math.ceil(self.attack_power * 85 / 100)
 
-        return self.spell_attributes
+        return attrs
 
     # ------------------------------------------------------------------------ #
     def cast_breath_of_fire(self) -> dict[str, int]:
@@ -282,7 +284,8 @@ class BrewmasterMonkSpells(MonkCommonSpells):
         Returns:
             tuple: spell damage, cooldown
         """
-        self.spell_attributes["cooldown"] = 5
-        self.spell_attributes["spell_damage"] = math.ceil(self.attack_power * 54 / 100)
+        attrs = dict(self.spell_attributes)
+        attrs["cooldown"] = 5
+        attrs["spell_damage"] = math.ceil(self.attack_power * 54 / 100)
 
-        return self.spell_attributes
+        return attrs

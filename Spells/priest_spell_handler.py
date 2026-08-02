@@ -11,13 +11,18 @@ from Heroes.hero_base_stats import IBaseHero
 #                                    Classes                                   #
 # ---------------------------------------------------------------------------- #
 class ShadowPriestSpells(IBaseHero):
+    """Shadow Priest spell handler.
 
-    # ------------------------------------------------------------------------ #
+    Ranged DPS spec that builds Insanity through shadow spells and spends it
+    on empowered abilities. Relies on a large mana pool and high spell power.
+    """
     def get_name(self) -> str:
+        """Return the display name of this hero class."""
         return "Shadow Priest"
 
     # ------------------------------------------------------------------------ #
     def __init__(self) -> None:
+        """Initialize Shadow Priest with mana pool, health, and insanity counter."""
         super().__init__()
         self._curr_health = self.max_health
         self._curr_mana = self.max_secondary_pool
@@ -32,14 +37,13 @@ class ShadowPriestSpells(IBaseHero):
         Returns:
             tuple: damage of the spell, cooldown of the spell
         """
-        self.spell_attributes["cooldown"] = 3
-        self.spell_attributes["spell_cost"] = math.ceil(
-            self.max_secondary_pool * 4 / 100
-        )
-        self.spell_attributes["spell_damage"] = math.ceil(self.spell_power * 73 / 100)
-        self._curr_mana -= self.spell_attributes["spell_cost"]
+        attrs = dict(self.spell_attributes)
+        attrs["cooldown"] = 3
+        attrs["spell_cost"] = math.ceil(self.max_secondary_pool * 4 / 100)
+        attrs["spell_damage"] = math.ceil(self.spell_power * 73 / 100)
+        self._curr_mana -= attrs["spell_cost"]
 
-        return self.spell_attributes
+        return attrs
 
     # ------------------------------------------------------------------------ #
     def cast_shadow_word_death(self) -> dict[str, int]:
@@ -51,14 +55,13 @@ class ShadowPriestSpells(IBaseHero):
         Returns:
             tuple: damage of the spell, cooldown of the spell
         """
-        self.spell_attributes["cooldown"] = 3
-        self.spell_attributes["spell_cost"] = math.ceil(
-            self.max_secondary_pool * 1 / 100
-        )
-        self.spell_attributes["spell_damage"] = math.ceil(self.spell_power * 85 / 100)
-        self._curr_mana -= self.spell_attributes["spell_cost"]
+        attrs = dict(self.spell_attributes)
+        attrs["cooldown"] = 3
+        attrs["spell_cost"] = math.ceil(self.max_secondary_pool * 1 / 100)
+        attrs["spell_damage"] = math.ceil(self.spell_power * 85 / 100)
+        self._curr_mana -= attrs["spell_cost"]
 
-        return self.spell_attributes
+        return attrs
 
     # ------------------------------------------------------------------------ #
     def cast_devouring_plague(self) -> dict[str, int]:
@@ -70,38 +73,30 @@ class ShadowPriestSpells(IBaseHero):
             tuple: initial spell damage, damage over time, amount of health restored
             to the caster, cooldown of the spell, turns for which the spell is active
         """
-        self.spell_attributes["cooldown"] = 4
-        self.spell_attributes["turns_active"] = 3
-        self.spell_attributes["spell_cost"] = math.ceil(
-            self.max_secondary_pool * 10 / 100
-        )
-        self.spell_attributes["initial_spell_damage"] = math.ceil(
-            self.spell_power * 155 / 100
-        )
-        self.spell_attributes["health_leech"] = math.ceil(
-            self.spell_attributes["initial_spell_damage"] * 30 / 100
-        )
-        self.spell_attributes["damage_over_time"] = math.ceil(
-            self.spell_attributes["initial_spell_damage"] * 13 / 100
-        )
-        self._curr_mana -= self.spell_attributes["spell_cost"]
+        attrs = dict(self.spell_attributes)
+        attrs["cooldown"] = 4
+        attrs["turns_active"] = 3
+        attrs["spell_cost"] = math.ceil(self.max_secondary_pool * 10 / 100)
+        attrs["initial_spell_damage"] = math.ceil(self.spell_power * 155 / 100)
+        attrs["health_leech"] = math.ceil(attrs["initial_spell_damage"] * 30 / 100)
+        attrs["damage_over_time"] = math.ceil(attrs["initial_spell_damage"] * 13 / 100)
+        self._curr_mana -= attrs["spell_cost"]
 
-        return self.spell_attributes
+        return attrs
 
     # ------------------------------------------------------------------------ #
     def cast_flash_heal(self) -> dict[str, int]:
         """
         Quick healing spell, healing for moderate amount. Healing restores you state of mind, removing 20 insanity.
         """
-        self.spell_attributes["spell_cost"] = math.ceil(
-            self.max_secondary_pool * 10 / 100
-        )
+        attrs = dict(self.spell_attributes)
+        attrs["spell_cost"] = math.ceil(self.max_secondary_pool * 10 / 100)
         amount_to_heal = math.ceil(self.spell_power * 203 / 100)
-        self._curr_mana -= self.spell_attributes["spell_cost"]
+        self._curr_mana -= attrs["spell_cost"]
         self.heal_up(amount_to_heal)
         self.remove_specific_stat(stat_value=20)
 
-        return self.spell_attributes
+        return attrs
 
     # ------------------------------------------------------------------------ #
     def cast_power_word_shield(self) -> dict[str, int]:
@@ -111,15 +106,14 @@ class ShadowPriestSpells(IBaseHero):
         Returns:
             tuple: amount of damage that will be absorbed, cooldown of the spell
         """
-        self.spell_attributes["cooldown"] = 5
-        self.spell_attributes["spell_cost"] = math.ceil(
-            self.max_secondary_pool * 10 / 100
-        )
-        self.spell_attributes["damage_reduction"] = self.max_damage_reduction
-        self.spell_attributes["turns_active"] = 2
-        self._curr_mana -= self.spell_attributes["spell_cost"]
+        attrs = dict(self.spell_attributes)
+        attrs["cooldown"] = 5
+        attrs["spell_cost"] = math.ceil(self.max_secondary_pool * 10 / 100)
+        attrs["damage_reduction"] = self.max_damage_reduction
+        attrs["turns_active"] = 2
+        self._curr_mana -= attrs["spell_cost"]
 
-        return self.spell_attributes
+        return attrs
 
     # ------------------------------------------------------------------------ #
     def heal_up(self, heal_amount: int) -> None:
@@ -137,6 +131,11 @@ class ShadowPriestSpells(IBaseHero):
 
     # ------------------------------------------------------------------------ #
     def add_specific_stat(self, stat_value: int) -> None:
+        """Add insanity, clamping at the maximum of 100.
+
+        Args:
+            stat_value: amount of insanity to add.
+        """
         self._curr_insanity += stat_value
 
         if self._curr_insanity > self._max_insanity:
@@ -144,6 +143,11 @@ class ShadowPriestSpells(IBaseHero):
 
     # ------------------------------------------------------------------------ #
     def is_specific_stat_spent(self, stat_value: int) -> bool:
+        """Return True when current insanity equals ``stat_value`` exactly.
+
+        Args:
+            stat_value: insanity threshold to check against.
+        """
         if self._curr_insanity == stat_value:
             return True
         else:
@@ -151,6 +155,11 @@ class ShadowPriestSpells(IBaseHero):
 
     # ------------------------------------------------------------------------ #
     def remove_specific_stat(self, stat_value: int) -> None:
+        """Subtract insanity, clamping at zero.
+
+        Args:
+            stat_value: amount of insanity to remove.
+        """
         self._curr_insanity -= stat_value
 
         if self._curr_insanity < 0:
@@ -158,6 +167,7 @@ class ShadowPriestSpells(IBaseHero):
 
     # ------------------------------------------------------------------------ #
     def create_hero(self, hero_instance: IBaseHero):
+        """Apply Shadow Priest stat overrides (large mana pool, high spell power)."""
         if isinstance(hero_instance, ShadowPriestSpells):
             hero_instance.max_health = 750
             hero_instance.max_secondary_pool = 900

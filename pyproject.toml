@@ -1,0 +1,54 @@
+[project]
+name = "turn-based-wow"
+version = "0.1.0"
+description = "A turn-based terminal RPG inspired by World of Warcraft"
+readme = "README.md"
+requires-python = ">=3.10, <=3.15"
+license = {text = "MIT"}
+authors = [
+    {name = "iconata"}
+]
+keywords = ["game", "rpg", "wow", "turn-based", "terminal"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=9.0.0",
+    "pytest-cov>=4.1.0",
+    "ruff>=0.15.0",
+]
+
+[project.scripts]
+turn-based-wow = "main:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.pytest.ini_options]
+testpaths = ["Tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = "-v --tb=short"
+
+[tool.ruff]
+line-length = 120
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "N"]
+ignore = []
+
+[tool.ruff.lint.per-file-ignores]
+"Tests/*.py" = ["F401"]
+
+[tool.uv]
+package = false

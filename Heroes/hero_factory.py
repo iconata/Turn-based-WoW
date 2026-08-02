@@ -39,6 +39,12 @@ class HeroFactory:
 
     # ------------------------------------------------------------------------ #
     def create_hero(self, hero_class: str, hero_role: str) -> IBaseHero:
+        """Instantiate a concrete hero class from a (class, role) pair.
+
+        The factory accepts case-insensitive `hero_class` and `hero_role`
+        and returns a ready-to-use hero instance whose per-spec stats are
+        initialized by the concrete spell-handler class.
+        """
         key = (hero_class.lower(), hero_role.lower())
         hero_cls = self._hero_registry.get(key)
         if not hero_cls:

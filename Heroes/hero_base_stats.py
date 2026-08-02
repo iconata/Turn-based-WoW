@@ -16,6 +16,12 @@ class IBaseHero(ABC):
 
     # ------------------------------------------------------------------------ #
     def __init__(self) -> None:
+        """Initialize the base hero stats and default spell template.
+
+        Sets sensible defaults for health, secondary resource pool and
+        basic combat stats. Also creates a template ``spell_attributes``
+        dictionary which individual spells copy and return when cast.
+        """
         self.max_health: int = 1000
         self.max_secondary_pool: int = 500
         self.spell_power: int = 10
@@ -113,34 +119,49 @@ class IBaseHero(ABC):
 #                                    Getters                                   #
 # ---------------------------------------------------------------------------- #
 class ICommonGetters(ABC):
+    """Interface for read-only accessors to a hero's runtime state.
+
+    Implementations should return values such as the hero's current
+    health, secondary resource (mana/rage), and offensive stats.
+    """
     # ------------------------------------------------------------------------ #
     @abstractmethod
     def get_current_health(self, hero_instance: IBaseHero) -> int:
+        """Return the hero's current health.
+
+        Concrete implementations should return the current health value for the
+        provided hero instance.
+        """
         pass
 
     # ------------------------------------------------------------------------ #
     @abstractmethod
     def get_current_secondary_pool(self, hero_instance: IBaseHero) -> int:
+        """Return the current value of the hero's secondary resource (mana, rage, etc.)."""
         pass
 
     # ------------------------------------------------------------------------ #
     @abstractmethod
     def get_current_spell_power(self, hero_instance: IBaseHero) -> int:
+        """Return the current spell power/stat used for spell damage calculations."""
         pass
 
     # ------------------------------------------------------------------------ #
     @abstractmethod
     def get_current_attack_power(self, hero_instance: IBaseHero) -> int:
+        """Return the current attack power value for the hero instance."""
         pass
 
     # ------------------------------------------------------------------------ #
     @abstractmethod
     def get_current_damage_reduction(self, hero_instance: IBaseHero) -> int:
+        """Return the hero's current damage reduction value (flat amount)."""
         pass
 
     # ------------------------------------------------------------------------ #
     @abstractmethod
     def get_current_spell_attributes(self, hero_instance: IBaseHero) -> dict[str, int]:
+        """Return the dictionary of current spell attributes for the hero."""
         pass
 
 
@@ -148,28 +169,38 @@ class ICommonGetters(ABC):
 #                                    Setters                                   #
 # ---------------------------------------------------------------------------- #
 class ICommonSetters(ABC):
+    """Interface for mutating a hero's runtime state.
+
+    Methods allow setting health, resource pools, stats and the
+    per-hero spell attribute dictionary.
+    """
     @abstractmethod
     def set_health(self, value: int, hero_instance: IBaseHero) -> None:
+        """Set the hero's current health to ``value`` (clamped to max health)."""
         pass
 
     # ------------------------------------------------------------------------ #
     @abstractmethod
     def set_secondary_pool(self, value: int, hero_instance: IBaseHero) -> None:
+        """Set the hero's secondary resource (mana/rage) to ``value``."""
         pass
 
     # ------------------------------------------------------------------------ #
     @abstractmethod
     def set_spell_power(self, value: int, hero_instance: IBaseHero) -> None:
+        """Set the hero's spell power value to ``value``."""
         pass
 
     # ------------------------------------------------------------------------ #
     @abstractmethod
     def set_attack_power(self, value: int, hero_instance: IBaseHero) -> None:
+        """Set the hero's attack power value to ``value``."""
         pass
 
     # ------------------------------------------------------------------------ #
     @abstractmethod
     def set_damage_reduction(self, value: int, hero_instance: IBaseHero) -> None:
+        """Set the hero's damage reduction to ``value`` (clamped if needed)."""
         pass
 
     # ------------------------------------------------------------------------ #
@@ -177,6 +208,7 @@ class ICommonSetters(ABC):
     def set_spell_attributes(
         self, value: dict[str, int], hero_instance: IBaseHero
     ) -> None:
+        """Replace the hero's current spell attributes dictionary with ``value``."""
         pass
 
 
@@ -184,22 +216,31 @@ class ICommonSetters(ABC):
 #                                   Checkers                                   #
 # ---------------------------------------------------------------------------- #
 class ICommonCheckers(ABC):
+    """Interface exposing boolean checks about a hero's state.
+
+    Examples include whether the hero is alive, low on resource, or
+    currently prevented from casting by cooldowns.
+    """
     # ------------------------------------------------------------------------ #
     @abstractmethod
     def is_secondary_pool_zero(self, hero_instance: IBaseHero) -> bool:
+        """Return True if the hero's secondary resource pool is zero."""
         pass
 
     # ------------------------------------------------------------------------ #
     @abstractmethod
     def is_damage_reduction_zero(self, hero_instance: IBaseHero) -> bool:
+        """Return True if the hero currently has zero damage reduction."""
         pass
 
     # ------------------------------------------------------------------------ #
     @abstractmethod
     def is_alive(self, hero_instance: IBaseHero) -> bool:
+        """Return True if the hero's current health is greater than zero."""
         pass
 
     # ------------------------------------------------------------------------ #
     @abstractmethod
     def is_on_cooldown(self, hero_instance: IBaseHero) -> bool:
+        """Return True if the hero has active cooldowns preventing spell casts."""
         pass
