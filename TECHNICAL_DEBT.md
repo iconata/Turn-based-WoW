@@ -34,7 +34,7 @@ These findings come from inspection of the `local-state` repository snapshot. De
 
 ## 4. Battle engine
 
-**Current observation:** `Attacking` applies immediate damage, `BattleState` applies DOT and effect state, `main.py` advances turns, and `Defending` calculates mitigation separately. Resolution is distributed across modules. `Attacking` catches `TypeError` and treats it as an invalid signature.
+**Current observation:** `Attacking` applies immediate damage, `BattleState` applies DOT and effect state, `turn_based_wow/cli.py` advances turns, and `Defending` calculates mitigation separately. Resolution is distributed across modules. `Attacking` catches `TypeError` and treats it as an invalid signature.
 
 **Risk:** Ordering is ambiguous; effects may be doubled or missed; programming bugs can be hidden; partial changes are possible; acceptance testing is difficult.
 
@@ -54,7 +54,7 @@ These findings come from inspection of the `local-state` repository snapshot. De
 
 ## 6. CLI coupling
 
-**Current observation:** `main.py` handles parsing, metadata, input, hero creation, AI selection, action discovery, battle looping, logging, and rendering. `input()`, `print()`, and `exit()` occur in reusable functions. Class/role metadata is duplicated, and helper functions catch broad exceptions.
+**Current observation:** `turn_based_wow/cli.py` handles parsing, metadata, input, hero creation, AI selection, action discovery, battle looping, logging, and rendering. `input()`, `print()`, and `exit()` occur in reusable functions. Class/role metadata is duplicated, and helper functions catch broad exceptions.
 
 **Risk:** Testing and a future FastAPI adapter become difficult, metadata gains competing sources of truth, and domain behavior leaks into presentation.
 
@@ -74,7 +74,7 @@ These findings come from inspection of the `local-state` repository snapshot. De
 
 ## 8. Testing strategy
 
-**Current observation:** Latest verified local run: 80 tests passed, including one deterministic full-battle acceptance scenario. Many tests are spell-contract or characterization tests. Tests live under `Tests/`. Coverage helps preserve behavior but also encodes the dictionary design.
+**Current observation:** Latest verified local run: 80 tests passed, including one deterministic full-battle acceptance scenario. Many tests are spell-contract or characterization tests. Tests live under `tests/`. Coverage helps preserve behavior but also encodes the dictionary design.
 
 **Risk:** Implementation-specific assertions can obstruct refactoring; passing tests may preserve incorrect gameplay; acceptance boundaries are missing. Passing tests do not prove the game rules are correct.
 

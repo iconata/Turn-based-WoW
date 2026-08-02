@@ -23,7 +23,7 @@ A tracked GitHub Actions workflow runs tests on Python 3.10, 3.11, and 3.12 for 
 From a prepared environment:
 
 ```bash
-python main.py
+uv run python -m turn_based_wow
 uv run python -m pytest
 ```
 
