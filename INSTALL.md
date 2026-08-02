@@ -31,14 +31,14 @@ This installs the `dev` extra declared in `pyproject.toml`, including pytest, py
 ## Run the game
 
 ```bash
-uv run python main.py
+uv run python -m turn_based_wow
 ```
 
 Information-only commands:
 
 ```bash
-uv run python main.py --show-classes
-uv run python main.py --show-roles
+uv run python -m turn_based_wow --show-classes
+uv run python -m turn_based_wow --show-roles
 ```
 
 ## Run tests
@@ -74,7 +74,7 @@ Use the direct uv commands above on macOS, Linux, or Windows PowerShell:
 ```text
 uv sync --extra dev
 uv run python -m pytest
-uv run python main.py
+uv run python -m turn_based_wow
 ```
 
 ## Troubleshooting

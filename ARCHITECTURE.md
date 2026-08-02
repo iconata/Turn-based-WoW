@@ -7,7 +7,9 @@ This document distinguishes the verified current structure from the agreed targe
 The current flow is approximately:
 
 ```text
-main.py
+turn_based_wow/__main__.py
+    ↓
+turn_based_wow/cli.py
     ↓
 HeroFactory / hero classes
     ↓
@@ -16,7 +18,7 @@ Attacking + BattleState
 Spell handlers
 ```
 
-The CLI owns argument parsing, metadata, terminal input/output, hero creation, AI selection, action discovery, the battle loop, logging, and rendering. Actions are discovered by reflecting over `cast_` method names and inspecting signatures; parameterized cast methods are excluded from normal CLI/AI discovery. Spell results and active effects are dictionaries. Hero health, resources, and damage reduction are often mutated directly by spells or battle helpers.
+The application code is grouped in the lowercase `turn_based_wow` package, with `combat`, `heroes`, `spells`, and `ai` subpackages. The CLI still owns argument parsing, metadata, terminal input/output, hero creation, AI selection, action discovery, the battle loop, logging, and rendering. Actions are discovered by reflecting over `cast_` method names and inspecting signatures; parameterized cast methods are excluded from normal CLI/AI discovery. Spell results and active effects are dictionaries. Hero health, resources, and damage reduction are often mutated directly by spells or battle helpers.
 
 ## Agreed architecture direction
 
@@ -142,4 +144,3 @@ Invalid actions must not partially mutate state.
 - No framework dependency in domain code.
 - Avoid pattern-driven overengineering.
 - No broad rewrite.
-

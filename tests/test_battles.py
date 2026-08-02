@@ -1,5 +1,5 @@
-from battles_handler import Attacking
-from Heroes.hero_factory import HeroFactory
+from turn_based_wow.combat.battles_handler import Attacking
+from turn_based_wow.heroes.hero_factory import HeroFactory
 
 
 def test_attack_applies_damage_and_heal():

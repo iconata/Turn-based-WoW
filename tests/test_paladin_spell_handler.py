@@ -1,6 +1,6 @@
 import unittest
 
-from Spells.paladin_spell_handler import (
+from turn_based_wow.spells.paladin_spell_handler import (
     ProtectionPaladinSpells,
     RetributionPaladinSpells,
 )

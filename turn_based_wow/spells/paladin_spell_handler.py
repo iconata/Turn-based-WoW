@@ -4,7 +4,7 @@ Handler library, used to cast different types of Paladin spells, based on the se
 
 import math
 
-from Heroes.hero_base_stats import IBaseHero
+from turn_based_wow.heroes.hero_base_stats import IBaseHero
 
 
 # ---------------------------------------------------------------------------- #
